@@ -4,4 +4,4 @@
 # Learn about CODEOWNERS file format:
 # https://help.github.com/en/articles/about-code-owners
 
-* @open-telemetry/semconv-mainframe-approvers
+* @open-telemetry/sig-mainframe-approvers

@@ -2,7 +2,8 @@
 
 ## Maintainers
 
-- TODO
+- [Greg Shriver](https://github.com/gshriver), Broadcom
+- [Ruediger Schulze](https://github.com/rrschulze), IBM
 
 For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
 
