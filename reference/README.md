@@ -1,6 +1,6 @@
 # Semantic Conventions Mainframe Reference Implementations
 
-Validates [OpenTelemetry Semantic Conventions for Mainframe](https://opentelemetry.io/docs/specs/semconv/mainframe/)
+Validates OpenTelemetry Semantic Conventions for Mainframe <!-- TODO [OpenTelemetry Semantic Conventions for Mainframe](https://opentelemetry.io/docs/specs/semconv/mainframe/) -->
 against representative, synthetic telemetry, showing entities and attributes supported for supported feature of the mainframe, software and infrastructure.
 
 Each feature under [scenarios/](scenarios/) contains a small reference implementation
