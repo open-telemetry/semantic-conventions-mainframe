@@ -20,6 +20,10 @@ WEAVER := docker run --rm \
 	-e HOME=/tmp \
 	$(WEAVER_IMAGE)
 
+# Shared docs template from opentelemetry-weaver-packages, pinned to the same
+# commit as the policy repo so a single renovate PR bumps both in lock-step.
+WEAVER_PACKAGES_TEMPLATE := https://github.com/open-telemetry/opentelemetry-weaver-packages.git@$(WEAVER_PACKAGES_REF)[templates/docs]
+
 # Local cache of policies fetched from upstream (gitignored)
 LOCAL_POLICIES := .build/weaver-policies
 LOCAL_POLICY_STAMP := $(LOCAL_POLICIES)/.$(POLICY_REPO_REF)
@@ -59,10 +63,6 @@ SC_UPSTREAM_MIGRATED_GROUPS := # aws/registry.yaml:registry.aws.bedrock
 
 .PHONY: check-policies generate-registry generate-docs generate-json-schemas generate-all clean filter-upstream package-dev \
 	generate-reference-reports
-
-# Pinned upstream GitHub URL base, passed to templates as `upstream_docs_base`
-# so cross-registry links to upstream pages resolve to the pinned version.
-UPSTREAM_DOCS_BASE := https://github.com/open-telemetry/semantic-conventions/blob/$(SEMCONV_VERSION)
 
 # Release version = last path segment of the top-level schema_url in
 # model/manifest.yaml. E.g. `mainframe-dev/1.42.0-dev` -> `1.42.0-dev`.
@@ -122,27 +122,26 @@ check-policies: $(LOCAL_POLICY_STAMP) $(SC_UPSTREAM_STAMP)
 		--policy policies/check/json-schema-annotations
 		--baseline-registry '$(BASELINE_REGISTRY)' \ uncomment after removing deprecated entries
 
-# Generate the attribute registry pages under docs/registry/ from local
-# templates that consume the v2 resolved registry.
+# Generate the attribute registry pages under docs/registry/ from the shared
+# upstream weaver-packages markdown template.
 generate-registry: $(SC_UPSTREAM_STAMP)
 	$(WEAVER) registry generate \
 		-r ./model \
 		--v2 \
-		-t ./templates/registry \
-		--param upstream_docs_base=$(UPSTREAM_DOCS_BASE) \
+		-t '$(WEAVER_PACKAGES_TEMPLATE)' \
+		--param registry_base_url=/docs/registry \
 		markdown \
 		./docs/registry
 
 # Refresh the weaver snippet tables embedded in hand-written signal docs under
-# docs/gen-ai/ (rewritten in place between <!-- weaver ... --> markers).
+# docs/ (rewritten in place between <!-- weaver ... --> markers).
 generate-docs: $(SC_UPSTREAM_STAMP)
 	$(WEAVER) registry update-markdown \
 		-r ./model \
 		--v2 \
-		-t ./templates \
+		-t '$(WEAVER_PACKAGES_TEMPLATE)' \
 		--target markdown \
-		--param registry_base_url=/docs/registry/ \
-		--param upstream_docs_base=$(UPSTREAM_DOCS_BASE) \
+		--param registry_base_url=/docs/registry \
 		docs
 
 # Regenerate the JSON schemas under model/gen-ai/ from the pydantic models in

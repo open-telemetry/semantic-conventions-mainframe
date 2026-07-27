@@ -6,6 +6,7 @@ entities:
       Central Processing Complex (CPC) — the mainframe equivalent of a
       bare-metal server.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: host.name
         note: >
@@ -39,6 +40,7 @@ entities:
       connects the Central Processing Complex (CPC) to peripheral devices
       — the mainframe equivalent of a network or storage interface card port.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: mainframe.channel.name
     description:
@@ -53,6 +55,7 @@ entities:
       connects the Central Processing Complex (CPC) to networks, storage, or
       provides cryptographic and acceleration services.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: mainframe.adapter.name
     description:
@@ -66,6 +69,7 @@ entities:
       A physical mainframe processor within the Central Processing Complex (CPC)
       — the mainframe equivalent of a CPU core in a distributed server.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: mainframe.cpu.name
     description:
@@ -78,6 +82,7 @@ entities:
       equivalent of a virtual machine (VM). Each LPAR can run an independent
       operating system such as z/OS, Linux, or z/VM.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: mainframe.partition.name
     description:

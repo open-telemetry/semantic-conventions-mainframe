@@ -9,6 +9,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -62,6 +63,7 @@ metrics:
     instrument: gauge
     unit: "MiBy"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -133,6 +135,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -153,6 +156,7 @@ metrics:
     instrument: gauge
     unit: "Cel"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -201,6 +205,7 @@ metrics:
     instrument: gauge
     unit: "J/h"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -219,6 +224,7 @@ metrics:
     instrument: gauge
     unit: "W"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -237,6 +243,7 @@ metrics:
     instrument: gauge
     unit: "W"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -249,7 +256,7 @@ metrics:
         requirement_level: required
 
   # Status
-  - name: mainframe.host.status
+  - name: mainframe.host.status.code
     brief: "The operational status of the mainframe system as a numeric code."
     note: >
       Reported by the IBM Z HMC Web Services API CPC object field `status`.
@@ -301,6 +308,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double

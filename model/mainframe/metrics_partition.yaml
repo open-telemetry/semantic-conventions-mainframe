@@ -11,6 +11,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -30,6 +31,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -48,6 +50,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -66,6 +69,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -76,7 +80,7 @@ metrics:
         requirement_level: required
 
   # Partition weight
-  - name: mainframe.partition.cpu.weight
+  - name: mainframe.partition.cpu.weight.value
     brief: "The processor scheduling weight of the active logical partition (LPAR)."
     note: >
       The weight determines the proportion of available processor cycles
