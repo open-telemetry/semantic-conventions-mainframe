@@ -1,89 +1,89 @@
-groups:
-  - id: entity.mainframe.host
-    type: entity
+file_format: definition/2
+entities:
+  - type: mainframe.host
+    brief: >
+      A mainframe host, representing the physical machine known as the
+      Central Processing Complex (CPC) — the mainframe equivalent of a
+      bare-metal server.
     stability: development
-    name: mainframe.host
-    brief: A mainframe host, representing the pyhsical machine, also known as the Central Processor Complex (CPC). 
-    attributes:
+    identity:
       - ref: host.name
-        role: identifying
-        requirement_level: required
-        examples: ["CPC01"]
+        note: >
+          The name of the Central Processing Complex (CPC) as configured on
+          the HMC. Reported by the HMC Web Services API CPC object field `name`.
+    description:
       - ref: host.id
         requirement_level: recommended
-        role: descriptive
         note: >
-          The host.id SHOULD be the object-id UUID of the Central Processor Complex (CPC) as defined by the Hardware Management Console (HMC) Web Services API.
-        examples: ["d9c47445-64df-39f6-9d74-6376701508b5"]
+          The host.id SHOULD be the object-id UUID of the Central Processing
+          Complex (CPC) as defined by the HMC Web Services API CPC object.
       - ref: host.type
-        role: descriptive
         requirement_level: recommended
         note: >
-          The host.type SHOULD be the concatenation of the IBM machine type and model of the Central Processor Complex (CPC).
-        examples: ["9175-ME1"]      
+          SHOULD be the concatenation of the IBM machine type and model of the
+          Central Processing Complex (CPC), e.g., "9175-ME1".
       - ref: host.arch
-        role: descriptive
         requirement_level: recommended
-        examples: ["s390x"]
+        note: >
+          SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
       - ref: mainframe.host.serial_number
-        role: descriptive
         requirement_level: recommended
-        examples: ["0000000ABCDE"]
       - ref: mainframe.host.machine_type
-        role: descriptive
         requirement_level: recommended
-        examples: ["9175"]
       - ref: mainframe.host.machine_model
-        role: descriptive
         requirement_level: recommended
-        examples: ["ME1"]
-  - id: entity.mainframe.channel
-    type: entity
+
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
     stability: development
-    name: mainframe.channel
-    brief: A mainframe channel, representing the physical I/O channel that connects the Central Processor Complex (CPC) to peripheral devices. 
-    attributes:
+    identity:
       - ref: mainframe.channel.name
-        role: identifying
-        requirement_level: required
-        examples: ["0.00", "0.2D", "1.E3"]
+    description:
       - ref: mainframe.channel.mode
-        role: descriptive
         requirement_level: required
-        examples: ["dedicated", "shared"]
       - ref: mainframe.channel.owning.partition
-        role: descriptive
         requirement_level: recommended
-        examples: ["LPAR01", "shared"]
-  - id: entity.mainframe.adapter
-    type: entity
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
     stability: development
-    name: mainframe.adapter
-    brief: A mainframe adapter, representing the physical I/O adapter that connects the Central Processor Complex (CPC) to peripheral devices. 
-    attributes:
+    identity:
       - ref: mainframe.adapter.name
-        role: identifying
-        requirement_level: required
-        examples: ["0.00", "0.2D", "1.E3"]
+    description:
       - ref: mainframe.adapter.type
-        role: descriptive
         requirement_level: required
-        examples: ["dedicated", "shared"]
-      - ref: mainframe.channel.owning.partition
-        role: descriptive
+      - ref: mainframe.adapter.owning.partition
         requirement_level: recommended
-        examples: ["LPAR01", "shared"]
-  - id: entity.mainframe.cpu
-    type: entity
+
+  - type: mainframe.cpu
+    brief: >
+      A physical mainframe processor within the Central Processing Complex (CPC)
+      — the mainframe equivalent of a CPU core in a distributed server.
     stability: development
-    name: mainframe.cpu
-    brief: A mainframe CPU, representing the physical CPU within the Central Processor Complex (CPC). 
-    attributes:
+    identity:
       - ref: mainframe.cpu.name
-        role: identifying
-        requirement_level: required
-        examples: ["CP01", "IFL01"]
+    description:
       - ref: mainframe.cpu.type
-        role: descriptive
         requirement_level: required
-        examples: ["cp", "icf", "ifl", "iip"]
+
+  - type: mainframe.partition
+    brief: >
+      A logical partition (LPAR) running on the mainframe — the mainframe
+      equivalent of a virtual machine (VM). Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+    stability: development
+    identity:
+      - ref: mainframe.partition.name
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that hosts this
+          logical partition (LPAR). Reported by the HMC Web Services API
+          partition object field `parent-object-uri`.

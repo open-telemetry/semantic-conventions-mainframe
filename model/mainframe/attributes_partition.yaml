@@ -1,0 +1,34 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.partition.name
+    type: string
+    stability: development
+    brief: "The name of the logical partition (LPAR) running on the mainframe."
+    examples: ["LPAR01", "PRODZ", "TEST1"]
+    note: >
+      A logical partition (LPAR) is the mainframe equivalent of a virtual machine
+      (VM) in distributed cloud environments. Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+      Reported by the HMC Web Services API partition object field `name`.
+
+  - key: mainframe.partition.weight.type
+    stability: development
+    brief: "The scheduling weight type that determines how processor time is allocated to the logical partition (LPAR)."
+    type:
+      members:
+        - id: initial
+          value: "initial"
+          brief: "The initial processor weight assigned to the partition at activation, representing its baseline entitlement."
+          stability: development
+        - id: minimum
+          value: "minimum"
+          brief: "The minimum processor weight guaranteed to the partition, below which its allocation will not fall."
+          stability: development
+        - id: current
+          value: "current"
+          brief: "The current processor weight actively in use by the partition at the time of observation."
+          stability: development
+        - id: maximum
+          value: "maximum"
+          brief: "The maximum processor weight the partition may consume when spare capacity is available."
+          stability: development

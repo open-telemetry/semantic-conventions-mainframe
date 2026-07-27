@@ -1,90 +1,107 @@
-groups:
-# Active processors
-  - id: metric.mainframe.partition.cpu.virtual.count
-    type: metric
-    metric_name: mainframe.partition.cpu.virtual.count
+file_format: definition/2
+metrics:
+  # Partition virtual processor count. One possible source is the partition
+  # metrics of the IBM Z HMC Web Services API.
+  - name: mainframe.partition.cpu.virtual.count
+    brief: "The number of virtual processors of the specified type allocated to an active logical partition (LPAR)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object. In
+      distributed systems terms, this is analogous to the vCPU count
+      of a virtual machine.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: int
-    stability: development
-    brief: "The number of virtual processors allocated to an active partition."
-    instrument: updowncounter
-    unit: "{cpu}"
-    extends: metric.system.cpu.physical.count
     entity_associations:
       - mainframe.partition
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
-# Processor capping metrics
-  - id: metric.mainframe.partition.cpu.is_capped
-    type: metric
-    metric_name: mainframe.partition.cpu.is_capped
+
+  # Processor capping metrics
+  - name: mainframe.partition.cpu.is_capped
+    brief: "Indicates whether absolute capping is enabled for processors of the specified type allocated to the logical partition (LPAR) (0=false, 1=true)."
+    note: >
+      When absolute capping is enabled the partition cannot exceed the capped
+      processor count regardless of spare capacity on the system. Reported by
+      the IBM Z HMC Web Services API partition object.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: bool
-    stability: development
-    brief: "Indicates whether absolute capping is enabled the processors of the specified type allocated to a partition (0=false, 1=true)."
-    instrument: updowncounter
-    unit: "{cpu}"
     entity_associations:
       - mainframe.partition
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
-  - id: metric.mainframe.partition.cpu.capped.count
-    type: metric
-    metric_name: mainframe.partition.cpu.capped.count
+
+  - name: mainframe.partition.cpu.capped.count
+    brief: "The maximum number of processors of the specified type the logical partition (LPAR) may use when absolute capping is enabled, otherwise 0."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object.
+      A value of 0 indicates that absolute capping is not enabled for
+      this processor type.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: int
-    stability: development
-    brief: "Maximum number of processors of the specified typethat can be used if absolute capping is enabled, otherwise 0"
-    instrument: updowncounter
-    unit: "{cpu}"
     entity_associations:
       - mainframe.partition
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
-# Reserved processors
-  - id: metric.mainframe.partition.cpu.reserved.count
-    type: metric
-    metric_name: mainframe.partition.cpu.reserved.count
+
+  # Reserved processors
+  - name: mainframe.partition.cpu.reserved.count
+    brief: "The number of processors of the specified type reserved for the active logical partition (LPAR)."
+    note: >
+      Reserved processors are allocated to the partition but not yet in active
+      use. Reported by the IBM Z HMC Web Services API partition object.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: int
-    stability: development
-    brief: "The number of processors of the specified type reserved for the active partition."
-    instrument: updowncounter
-    unit: "{cpu}"
     entity_associations:
       - mainframe.partition
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
-# Partition weight
-  - id: metric.mainframe.partition.cpu.weight
-    type: metric
-    metric_name: mainframe.partition.cpu.weight
+
+  # Partition weight
+  - name: mainframe.partition.cpu.weight
+    brief: "The processor scheduling weight of the active logical partition (LPAR)."
+    note: >
+      The weight determines the proportion of available processor cycles
+      allocated to this partition relative to other partitions. Reported by
+      the IBM Z HMC Web Services API partition object.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: int
-    stability: development
-    brief: "The weight of the active partition."
-    instrument: updowncounter
-    unit: "{cpu}"
     entity_associations:
       - mainframe.partition
-  - id: metric.mainframe.partition.cpu.weight.is_capped
-    type: metric
-    metric_name: mainframe.partition.cpu.weight.is_capped
+
+  - name: mainframe.partition.cpu.weight.is_capped
+    brief: "Indicates whether the initial central processor (CP) processing weight of the logical partition (LPAR) is capped (0=false, 1=true)."
+    note: >
+      When capped, the partition cannot exceed its initial weight even when
+      spare capacity is available. Reported by the IBM Z HMC Web Services API
+      partition object.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
     annotations:
       code_generation:
         metric_value_type: bool
-    stability: development
-    brief: "Indicating whether the initial CP processing weight is capped (0=false, 1=true)."
-    instrument: updowncounter
-    unit: "{cpu}"
     entity_associations:
       - mainframe.partition
