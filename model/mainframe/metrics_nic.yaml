@@ -1,0 +1,226 @@
+file_format: definition/2
+metrics:
+  # Partition-attached NIC metrics.
+  # Source: partition-attached-network-interface metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.13.1).
+  # Prometheus exporter prefix: zhmc_nic_
+
+  - name: mainframe.nic.bytes.sent
+    brief: "The total number of bytes in unicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.bytes.received
+    brief: "The total number of bytes in unicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.packets.sent
+    brief: "The total number of unicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.packets.received
+    brief: "The total number of unicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.packets.dropped
+    brief: "The total number of packets dropped on the virtual network interface card (NIC) attached to the partition due to resource shortage."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped`
+      and `packets-received-dropped`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received drops.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.nic.packets.discarded
+    brief: "The total number of malformed packets discarded on the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded`
+      and `packets-received-discarded`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received discards.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.nic.multicast.packets.sent
+    brief: "The total number of multicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.multicast.packets.received
+    brief: "The total number of multicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.broadcast.packets.sent
+    brief: "The total number of broadcast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.broadcast.packets.received
+    brief: "The total number of broadcast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.data.sent
+    brief: "The number of bytes sent through the virtual network interface card (NIC) during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.data.received
+    brief: "The number of bytes received through the virtual network interface card (NIC) during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.data.rate.sent
+    brief: "The data transmission rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.nic
+
+  - name: mainframe.nic.data.rate.received
+    brief: "The data reception rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.nic

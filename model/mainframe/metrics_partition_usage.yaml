@@ -1,0 +1,250 @@
+file_format: definition/2
+metrics:
+  # Classic-mode partition CPU utilization metrics.
+  # Source: logical-partition-usage metric group of the HMC Web Services API.
+  # Prometheus exporter equivalents: zhmc_partition_cp_processor_usage_ratio,
+  # zhmc_partition_ifl_processor_usage_ratio, etc.
+  - name: mainframe.partition.cpu.utilization
+    brief: "The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy executing work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-usage metric
+      group (classic mode) or partition-usage metric group (DPM mode).
+      Available per-type breakdowns: cp, ifl, icf, iip, cbp, aap.
+      In distributed systems terms, this is analogous to the CPU utilization
+      of a virtual machine (VM) or container, per vCPU type.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+        note: >
+          One of: cp, ifl, icf, iip, cbp, aap — identifies the processor type
+          being reported. Use the `all` member to represent aggregate utilization
+          across all processor types.
+
+  # DPM-mode partition adapter utilization metrics.
+  # Source: partition-usage metric group of the HMC Web Services API (DPM mode).
+  # Prometheus exporter equivalents: zhmc_partition_network_adapter_usage_ratio,
+  # zhmc_partition_storage_adapter_usage_ratio, etc.
+  - name: mainframe.partition.adapter.utilization
+    brief: "The fraction of time adapters of the specified type attached to the logical partition (LPAR) were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-usage metric group
+      (DPM mode only, HMC ≥ 2.13.1). The fields network-usage, storage-usage,
+      accelerator-usage, and crypto-usage each map to one value of
+      `mainframe.adapter.type`. A value of -1 indicates that no adapters of
+      the specified type are attached to the partition.
+      In distributed systems terms, this is analogous to the NIC or HBA
+      utilization attributed to a specific virtual machine.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.partition
+    attributes:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+        note: >
+          Identifies the adapter type being reported: network, storage,
+          accelerator, or crypto.
+
+  # z/VM paging rate metric.
+  # Source: logical-partition-usage metric group (classic mode, z/VM partitions only).
+  # Prometheus exporter: zhmc_partition_zvm_paging_rate_pages_per_second.
+  - name: mainframe.partition.zvm.paging.rate
+    brief: "The z/VM paging rate for the logical partition (LPAR), in pages per second."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-usage metric
+      group (classic mode only) for partitions running z/VM. A non-zero value
+      indicates active paging activity. In distributed systems terms, this is
+      analogous to the page fault rate or swap rate of a virtual machine.
+      Only relevant for z/VM partitions; 0 for all others.
+    instrument: gauge
+    unit: "{page}/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.partition
+
+  # Partition power consumption.
+  # Source: logical-partition-usage metric group (classic mode, environmental-metrics feature).
+  # Prometheus exporter: zhmc_partition_power_watt.
+  - name: mainframe.partition.power.usage
+    brief: "The power consumption of the logical partition (LPAR) in Watts."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-usage metric
+      group (classic mode only, requires the `environmental-metrics` Support
+      Element feature, HMC ≥ 2.13.1). Covers CPU, memory, and I/O adapter
+      power attributed to the partition.
+    instrument: gauge
+    unit: "W"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.partition
+
+  # Partition status metrics.
+  # Source: logical-partition-resource (classic mode) and partition-resource (DPM mode).
+  - name: mainframe.partition.status.code
+    brief: "The operational status of the logical partition (LPAR) as a numeric code."
+    note: >
+      Classic mode values (logical-partition-resource): 0=operating, 1=not-operating,
+      2=not-activated, 10=exceptions, 99=unknown.
+      DPM mode values (partition-resource): 0=active, 1=degraded, 10=paused,
+      11=stopped, 12=starting, 13=stopping, 20=reservation-error, 21=terminated,
+      22=communications-not-active, 23=status-check, 99=unknown.
+      Reported by the IBM Z HMC Web Services API partition object field `status`.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+    attributes:
+      - ref: mainframe.partition.status
+        requirement_level: opt_in
+        note: >
+          The string status value reported by the HMC API, carried as a label
+          alongside the integer code. Use to decorate time series with the
+          human-readable status string.
+
+  - name: mainframe.partition.status.unacceptable
+    brief: "Indicates whether the logical partition (LPAR) is in an unacceptable status (1=true, 0=false)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object field
+      `has-unacceptable-status`. An unacceptable status means the partition
+      requires operator attention.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+
+  # Partition memory size metrics (classic mode via logical-partition-resource,
+  # DPM mode via partition-resource).
+  # Prometheus exporter: zhmc_partition_initial_central_memory_mib,
+  # zhmc_partition_current_central_memory_mib, etc.
+  - name: mainframe.partition.memory.size
+    brief: "The size of the specified memory allocation for the logical partition (LPAR), in mebibytes."
+    note: >
+      In classic mode, reported by the IBM Z HMC Web Services API
+      logical-partition-resource metric group fields storage-central-allocation
+      and storage-expanded-allocation (initial/current/maximum).
+      In DPM mode, reported via partition-resource fields initial-memory,
+      reserved-memory, maximum-memory.
+      For IBM Virtual Flash Memory (VFM) allocations, the unit is gibibytes;
+      use the `vfm-initial`, `vfm-current`, and `vfm-maximum` members of
+      `mainframe.partition.memory.type` accordingly.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+    attributes:
+      - ref: mainframe.partition.memory.type
+        requirement_level: required
+
+  # Partition defined capacity (classic mode, WLM).
+  # Prometheus exporter: zhmc_partition_defined_capacity_msu_per_hour.
+  - name: mainframe.partition.capacity.defined
+    brief: "The defined capacity of the classic-mode logical partition (LPAR) expressed in Millions of Service Units (MSU) per hour."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-resource metric
+      group field `defined-capacity` (classic mode only). The defined capacity is
+      used by z/OS Workload Manager (WLM) to manage workload goals. A value of 0
+      means no defined capacity is set.
+      In distributed systems terms, this is analogous to a CPU quota specified
+      in capacity units rather than processor cores.
+    instrument: gauge
+    unit: "{MSU}/h"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+
+  # Partition WLM enabled flag (classic mode).
+  # Prometheus exporter: zhmc_partition_workload_manager_is_enabled.
+  - name: mainframe.partition.wlm.enabled
+    brief: "Indicates whether the z/OS Workload Manager (WLM) is permitted to adjust the processor weight properties of the classic-mode logical partition (LPAR) (1=true, 0=false)."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-resource metric
+      group field `workload-manager-enabled` (classic mode only). When enabled,
+      z/OS WLM can dynamically adjust the partition's processing weights to meet
+      workload goals.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+
+  # DPM partition processor mode.
+  # Prometheus exporter: zhmc_partition_processor_mode_int.
+  - name: mainframe.partition.cpu.mode
+    brief: "The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-resource metric group
+      field `processor-mode` (DPM mode only). In shared mode, processor cycles
+      are shared across partitions; in dedicated mode, processors are exclusively
+      assigned to the partition.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition
+
+  # DPM threads per processor.
+  # Prometheus exporter: zhmc_partition_threads_per_processor_ratio.
+  - name: mainframe.partition.cpu.threads_per_processor
+    brief: "The number of simultaneous multithreading (SMT) threads per processor that the operating system in the DPM partition is configured to use."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-resource metric group
+      field `threads-per-processor` (DPM mode only). Typical values are 1 (SMT
+      disabled) or 2 (SMT enabled with two hardware threads per physical processor).
+    instrument: gauge
+    unit: "{thread}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.partition

@@ -1,0 +1,170 @@
+file_format: definition/2
+metrics:
+  # Storage group resource metrics.
+  # Source: storagegroup-resource metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.14.1).
+  # Prometheus exporter prefix: zhmc_storagegroup_
+
+  - name: mainframe.storage.group.status.code
+    brief: "The fulfillment state of the DPM storage group as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagegroup-resource metric
+      group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1).
+      Encoded as: 0=complete, 1=pending, 2=pending-with-mismatches,
+      3=checking-migration, 4=incomplete, 99=unknown.
+      In distributed systems terms, this is analogous to the binding phase
+      of a Kubernetes Persistent Volume Claim.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.group
+    attributes:
+      - ref: mainframe.storage.fulfillment.state
+        requirement_level: opt_in
+        note: >
+          The string fulfillment state label from the HMC API, carried alongside
+          the integer code.
+
+  - name: mainframe.storage.group.shared
+    brief: "Indicates whether the DPM storage group is shared across multiple partitions (1=shared, 0=not shared)."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagegroup-resource metric
+      group field `shared` (DPM mode only, HMC ≥ 2.14.1).
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.group
+
+  - name: mainframe.storage.group.max.partitions
+    brief: "The maximum number of DPM partitions to which the FCP-type storage group can be simultaneously attached."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagegroup-resource metric
+      group field `max-partitions` (DPM mode only, FCP-type storage groups only,
+      HMC ≥ 2.14.1). Not applicable to FC or NVMe storage groups.
+    instrument: gauge
+    unit: "{partition}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.group
+
+  # Storage volume resource metrics.
+  # Source: storagevolume-resource metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.14.1).
+  # Prometheus exporter prefix: zhmc_storagevolume_
+
+  - name: mainframe.storage.volume.status.code
+    brief: "The fulfillment state of the DPM storage volume as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagevolume-resource metric
+      group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1).
+      Encoded as: 0=complete, 1=configuration-error, 2=deleting, 3=incomplete,
+      4=overprovisioned, 5=pending, 6=pending-with-mismatches, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.volume
+    attributes:
+      - ref: mainframe.storage.fulfillment.state
+        requirement_level: opt_in
+        note: >
+          The string fulfillment state label from the HMC API, carried alongside
+          the integer code.
+
+  - name: mainframe.storage.volume.size
+    brief: "The size of the DPM storage volume in gibibytes."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagevolume-resource metric
+      group field `size` (DPM mode only, HMC ≥ 2.14.1). For ECKD alias volumes
+      this value is 0.
+    instrument: gauge
+    unit: "GiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.storage.volume
+
+  - name: mainframe.storage.volume.cylinders
+    brief: "The size of the DPM ECKD storage volume in cylinders."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagevolume-resource metric
+      group field `cylinders` (DPM mode only, FC-type storage groups only,
+      HMC ≥ 2.14.1). A cylinder is the basic unit of IBM ECKD Direct Access
+      Storage Device (DASD) capacity. Not applicable to FCP or NVMe volumes.
+    instrument: gauge
+    unit: "{cylinder}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.volume
+
+  # Adapter resource status metrics.
+  # Source: adapter-resource metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.13.1).
+  # Prometheus exporter: zhmc_adapter_status_int, zhmc_adapter_physical_channel_status_int
+
+  - name: mainframe.adapter.status.code
+    brief: "The operational status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API adapter-resource metric group
+      field `status` (DPM mode only, HMC ≥ 2.13.1).
+      Encoded as: 0=active, 1=not-active, 2=not-detected, 3=exceptions,
+      4=service, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.status
+        requirement_level: opt_in
+        note: >
+          The string status value reported by the HMC API, carried as a label
+          alongside the integer code.
+
+  - name: mainframe.adapter.physical_channel.status.code
+    brief: "The physical channel status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API adapter-resource metric group
+      field `physical-channel-status` (DPM mode only, HMC ≥ 2.13.1).
+      Encoded as: 0=operating, 1=no-power, 2=service, 3=stopped, 4=not-defined,
+      5=definition-error, 6=suspended, 7=check-stopped, 8=wrap-block,
+      9=permanent-error, 10=loss-of-signal, 11=loss-of-synchronization,
+      12=not-operational-link, and other error codes up to 24, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.adapter

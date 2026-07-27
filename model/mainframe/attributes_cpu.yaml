@@ -42,6 +42,10 @@ attributes:
           value: "sap"
           brief: "System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads."
           stability: development
+        - id: cbp
+          value: "cbp"
+          brief: "Coupling Bus Processor (CBP), a processor dedicated to high-speed coupling facility (CF) bus communication between systems in a sysplex. Present only in HMC versions 2.14.0 through 2.15.0."
+          stability: development
 
   - key: mainframe.cpu.sharing.mode
     stability: development

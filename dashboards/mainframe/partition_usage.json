@@ -1,0 +1,127 @@
+{
+  "__inputs": [{"name":"DS_PROMETHEUS","label":"Prometheus","type":"datasource","pluginId":"prometheus"}],
+  "__requires": [
+    {"type":"grafana","id":"grafana","name":"Grafana","version":"11.0.0"},
+    {"type":"datasource","id":"prometheus","name":"Prometheus","version":"1.0.0"}
+  ],
+  "uid": "mainframe-partition-usage",
+  "title": "Mainframe — mainframe partition usage",
+  "description": "Auto-generated from mainframe semantic conventions. Entity: mainframe.partition.",
+  "tags": ["mainframe","semconv","mainframe"],
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {"from":"now-1h","to":"now"},
+  "panels": [
+    {
+      "id": 1,
+      "title": "Fraction of time processors of the specified type allocated to the LPAR were busy",
+      "description": "Metric: mainframe.partition.cpu.utilization. Unit: 1 (ratio 0-1). Classic+DPM mode.",
+      "type": "gauge",
+      "gridPos": {"x":0,"y":0,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_cpu_utilization{job=~\".+\"}","legendFormat":"{{partition}} / {{mainframe_cpu_type}}"}],
+      "fieldConfig": {"defaults":{"unit":"percentunit","min":0,"max":1,"custom":{}}}
+    },
+    {
+      "id": 2,
+      "title": "Fraction of time adapters of the specified type attached to the DPM partition were busy",
+      "description": "Metric: mainframe.partition.adapter.utilization. Unit: 1 (ratio 0-1). DPM mode only. -1 = no adapters of this type.",
+      "type": "gauge",
+      "gridPos": {"x":12,"y":0,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_adapter_utilization{job=~\".+\"}","legendFormat":"{{partition}} / {{mainframe_adapter_type}}"}],
+      "fieldConfig": {"defaults":{"unit":"percentunit","min":-1,"max":1,"custom":{}}}
+    },
+    {
+      "id": 3,
+      "title": "z/VM paging rate for the logical partition in pages per second",
+      "description": "Metric: mainframe.partition.zvm.paging.rate. Unit: {page}/s. Classic mode z/VM partitions only.",
+      "type": "timeseries",
+      "gridPos": {"x":0,"y":8,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_zvm_paging_rate{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    },
+    {
+      "id": 4,
+      "title": "Power consumption of the logical partition in Watts",
+      "description": "Metric: mainframe.partition.power.usage. Unit: W. Classic mode with environmental-metrics feature.",
+      "type": "gauge",
+      "gridPos": {"x":12,"y":8,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_power_usage{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"watt","custom":{}}}
+    },
+    {
+      "id": 5,
+      "title": "Operational status of the logical partition as a numeric code",
+      "description": "Metric: mainframe.partition.status.code. Unit: 1. Classic: 0=operating, 1=not-operating, 2=not-activated, 10=exceptions. DPM: 0=active, 1=degraded, 10=paused, 11=stopped, etc.",
+      "type": "stat",
+      "gridPos": {"x":0,"y":16,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_status_code{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    },
+    {
+      "id": 6,
+      "title": "Indicates whether the logical partition (LPAR) is in an unacceptable status",
+      "description": "Metric: mainframe.partition.status.unacceptable. Unit: 1 (0=OK, 1=unacceptable).",
+      "type": "stat",
+      "gridPos": {"x":8,"y":16,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_status_unacceptable{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"OK","color":"green"},"1":{"text":"UNACCEPTABLE","color":"red"}}}],"custom":{}}}
+    },
+    {
+      "id": 7,
+      "title": "Size of the specified memory allocation for the logical partition in mebibytes",
+      "description": "Metric: mainframe.partition.memory.size. Unit: MiBy.",
+      "type": "stat",
+      "gridPos": {"x":16,"y":16,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_memory_size{job=~\".+\"}","legendFormat":"{{partition}} / {{mainframe_partition_memory_type}}"}],
+      "fieldConfig": {"defaults":{"unit":"mebibytes","custom":{}}}
+    },
+    {
+      "id": 8,
+      "title": "Defined capacity of the classic-mode logical partition in MSU per hour",
+      "description": "Metric: mainframe.partition.capacity.defined. Unit: {MSU}/h. Classic mode only.",
+      "type": "stat",
+      "gridPos": {"x":0,"y":24,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_capacity_defined{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    },
+    {
+      "id": 9,
+      "title": "Indicates whether z/OS WLM is permitted to adjust processor weights of the logical partition",
+      "description": "Metric: mainframe.partition.wlm.enabled. Unit: 1 (0=disabled, 1=enabled). Classic mode only.",
+      "type": "stat",
+      "gridPos": {"x":8,"y":24,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_wlm_enabled{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"disabled"},"1":{"text":"enabled","color":"green"}}}],"custom":{}}}
+    },
+    {
+      "id": 10,
+      "title": "Processor allocation mode of the DPM partition (0=shared, 1=dedicated)",
+      "description": "Metric: mainframe.partition.cpu.mode. Unit: 1. DPM mode only.",
+      "type": "stat",
+      "gridPos": {"x":16,"y":24,"w":8,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_cpu_mode{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"shared"},"1":{"text":"dedicated"}}}],"custom":{}}}
+    },
+    {
+      "id": 11,
+      "title": "Number of SMT threads per processor the DPM partition OS is configured to use",
+      "description": "Metric: mainframe.partition.cpu.threads_per_processor. Unit: {thread}. DPM mode only.",
+      "type": "stat",
+      "gridPos": {"x":0,"y":32,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_partition_cpu_threads_per_processor{job=~\".+\"}","legendFormat":"{{partition}}"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    }
+  ]
+}

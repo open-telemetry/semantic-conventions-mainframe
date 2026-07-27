@@ -1,0 +1,69 @@
+file_format: definition/2
+metrics:
+  # Classic-mode crypto adapter utilization metrics.
+  # Source: crypto-usage metric group of the HMC Web Services API (classic mode only,
+  # HMC >= 2.12.0).
+  # Prometheus exporter: zhmc_crypto_adapter_usage_ratio (label: adapter_pchid).
+  # Note: The existing mainframe.adapter.utilization metric covers DPM per-adapter
+  # utilization. This metric group covers classic-mode crypto adapters specifically
+  # identified by their physical channel ID (PCHID).
+  - name: mainframe.adapter.crypto.utilization
+    brief: "The fraction of time the classic-mode cryptographic adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API crypto-usage metric group
+      (classic mode only, HMC ≥ 2.12.0). Each data point is labelled with
+      the adapter's physical channel identifier (PCHID). A cryptographic (CEX)
+      adapter provides hardware-accelerated encryption, decryption, and key
+      management services. In distributed systems terms, this is analogous to
+      the utilization of a Hardware Security Module (HSM) card.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.adapter
+
+  # Classic-mode flash memory adapter utilization metrics.
+  # Source: flash-memory-usage metric group of the HMC Web Services API
+  # (classic mode only, HMC >= 2.12.0).
+  # Prometheus exporter: zhmc_flash_memory_adapter_usage_ratio (label: adapter_pchid).
+  - name: mainframe.adapter.flash.utilization
+    brief: "The fraction of time the classic-mode Flash Express adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API flash-memory-usage metric group
+      (classic mode only, HMC ≥ 2.12.0). A Flash Express adapter provides
+      solid-state storage for IBM Virtual Flash Memory (VFM). In distributed
+      systems terms, this is analogous to the utilization of an NVMe flash card.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.adapter
+
+  # Classic-mode RoCE adapter utilization metrics.
+  # Source: roce-usage metric group of the HMC Web Services API
+  # (classic mode only, HMC >= 2.12.1).
+  # Prometheus exporter: zhmc_roce_adapter_usage_ratio (label: adapter_pchid).
+  - name: mainframe.adapter.roce.utilization
+    brief: "The fraction of time the classic-mode RDMA over Converged Ethernet (RoCE) adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API roce-usage metric group
+      (classic mode only, HMC ≥ 2.12.1). A RoCE adapter provides low-latency
+      RDMA networking over Ethernet. In distributed systems terms, this is
+      analogous to the utilization of an InfiniBand or RDMA NIC.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - mainframe.adapter

@@ -95,6 +95,13 @@ metrics:
         metric_value_type: int
     entity_associations:
       - mainframe.partition
+    attributes:
+      - ref: mainframe.partition.weight.type
+        requirement_level: required
+        note: >
+          Identifies the weight category: initial (baseline weight at activation),
+          minimum (floor), current (active weight), or maximum (ceiling when spare
+          capacity is available).
 
   - name: mainframe.partition.cpu.weight.is_capped
     brief: "Indicates whether the initial central processor (CP) processing weight of the logical partition (LPAR) is capped (0=false, 1=true)."

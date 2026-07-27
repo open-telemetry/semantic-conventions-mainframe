@@ -1,0 +1,107 @@
+{
+  "__inputs": [{"name":"DS_PROMETHEUS","label":"Prometheus","type":"datasource","pluginId":"prometheus"}],
+  "__requires": [
+    {"type":"grafana","id":"grafana","name":"Grafana","version":"11.0.0"},
+    {"type":"datasource","id":"prometheus","name":"Prometheus","version":"1.0.0"}
+  ],
+  "uid": "mainframe-port",
+  "title": "Mainframe — mainframe port",
+  "description": "Auto-generated from mainframe semantic conventions. Entity: mainframe.port.",
+  "tags": ["mainframe","semconv","mainframe"],
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {"from":"now-1h","to":"now"},
+  "panels": [
+    {
+      "id": 1,
+      "title": "Fraction of the available bandwidth currently in use on the physical network adapter port",
+      "description": "Metric: mainframe.port.bandwidth.utilization. Unit: 1 (ratio 0-1).",
+      "type": "gauge",
+      "gridPos": {"x":0,"y":0,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_port_bandwidth_utilization{job=~\".+\"}","legendFormat":"{{adapter}}/{{port}}"}],
+      "fieldConfig": {"defaults":{"unit":"percentunit","min":0,"max":1,"custom":{}}}
+    },
+    {
+      "id": 2,
+      "title": "Data transmission rate of the physical network adapter port sent",
+      "description": "Metric: mainframe.port.data.rate.sent. Unit: By/s.",
+      "type": "timeseries",
+      "gridPos": {"x":12,"y":0,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_port_data_rate_sent{job=~\".+\"}","legendFormat":"{{adapter}}/{{port}} tx"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
+    },
+    {
+      "id": 3,
+      "title": "Data reception rate of the physical network adapter port received",
+      "description": "Metric: mainframe.port.data.rate.received. Unit: By/s.",
+      "type": "timeseries",
+      "gridPos": {"x":0,"y":8,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_port_data_rate_received{job=~\".+\"}","legendFormat":"{{adapter}}/{{port}} rx"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
+    },
+    {
+      "id": 4,
+      "title": "Total number of bytes in unicast packets sent through the physical network adapter port",
+      "description": "Metric: mainframe.port.bytes.sent. Unit: By. Counter.",
+      "type": "timeseries",
+      "gridPos": {"x":12,"y":8,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"rate(mainframe_port_bytes_sent{job=~\".+\"}[5m])","legendFormat":"{{adapter}}/{{port}} bytes-tx/s"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
+    },
+    {
+      "id": 5,
+      "title": "Total number of bytes in unicast packets received through the physical network adapter port",
+      "description": "Metric: mainframe.port.bytes.received. Unit: By. Counter.",
+      "type": "timeseries",
+      "gridPos": {"x":0,"y":16,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"rate(mainframe_port_bytes_received{job=~\".+\"}[5m])","legendFormat":"{{adapter}}/{{port}} bytes-rx/s"}],
+      "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
+    },
+    {
+      "id": 6,
+      "title": "Total number of packets dropped on the physical network adapter port due to resource shortage",
+      "description": "Metric: mainframe.port.packets.dropped. Unit: {packet}. Counter.",
+      "type": "timeseries",
+      "gridPos": {"x":12,"y":16,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"rate(mainframe_port_packets_dropped{job=~\".+\"}[5m])","legendFormat":"{{adapter}}/{{port}} {{network_io_direction}} dropped/s"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    },
+    {
+      "id": 7,
+      "title": "Total number of malformed packets discarded on the physical network adapter port",
+      "description": "Metric: mainframe.port.packets.discarded. Unit: {packet}. Counter.",
+      "type": "timeseries",
+      "gridPos": {"x":0,"y":24,"w":12,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"rate(mainframe_port_packets_discarded{job=~\".+\"}[5m])","legendFormat":"{{adapter}}/{{port}} {{network_io_direction}} discarded/s"}],
+      "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
+    },
+    {
+      "id": 8,
+      "title": "Number of bytes sent through the physical network adapter port during the last collection interval",
+      "description": "Metric: mainframe.port.data.sent. Unit: By.",
+      "type": "stat",
+      "gridPos": {"x":12,"y":24,"w":6,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_port_data_sent{job=~\".+\"}","legendFormat":"{{adapter}}/{{port}}"}],
+      "fieldConfig": {"defaults":{"unit":"bytes","custom":{}}}
+    },
+    {
+      "id": 9,
+      "title": "Number of bytes received through the physical network adapter port during the last collection interval",
+      "description": "Metric: mainframe.port.data.received. Unit: By.",
+      "type": "stat",
+      "gridPos": {"x":18,"y":24,"w":6,"h":8},
+      "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
+      "targets": [{"expr":"mainframe_port_data_received{job=~\".+\"}","legendFormat":"{{adapter}}/{{port}}"}],
+      "fieldConfig": {"defaults":{"unit":"bytes","custom":{}}}
+    }
+  ]
+}
