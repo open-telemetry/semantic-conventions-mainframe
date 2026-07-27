@@ -231,3 +231,37 @@ groups:
     unit: "1"
     entity_associations:
       - mainframe.host
+# DPM system overview adapter utilization metrics. Source: dpm-system-usage-overview metric group
+# of the IBM Z HMC Web Services API (SC27-2646-00 Chapter 9). Fields: network-usage,
+# storage-usage, accelerator-usage, crypto-usage. Collected every 15 seconds by the HMC.
+# Prometheus exporter equivalents: zhmc_cpc_accelerator_adapter_usage_ratio,
+# zhmc_cpc_crypto_adapter_usage_ratio, zhmc_cpc_network_adapter_usage_ratio,
+# zhmc_cpc_storage_adapter_usage_ratio. Available in Dynamic Partition Manager (DPM) mode only.
+  - id: metric.mainframe.host.adapter.utilization
+    type: metric
+    metric_name: mainframe.host.adapter.utilization
+    annotations:
+      code_generation:
+        metric_value_type: double
+    stability: development
+    brief: "The fraction of time adapters of the specified type on the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z Hardware Management Console (HMC) Web Services API under the
+      dpm-system-usage-overview metric group (SC27-2646-00 Chapter 9). The fields
+      network-usage, storage-usage, accelerator-usage, and crypto-usage each map to one
+      value of `mainframe.adapter.type`. The metric is only available in Dynamic Partition
+      Manager (DPM) mode. A value of -1 indicates that no adapters of the specified type
+      are present on the system. Collected by the HMC at 15-second intervals.
+      In distributed systems terms, this is analogous to the aggregate utilization of all
+      NICs, HBAs, or accelerator cards of a given type in a server.
+    instrument: gauge
+    unit: "1"
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+        note: >
+          Identifies the adapter type being reported. One of: network (maps to HMC field
+          network-usage), storage (storage-usage), accelerator (accelerator-usage), or
+          crypto (crypto-usage).
