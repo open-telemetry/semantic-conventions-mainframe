@@ -113,7 +113,7 @@ groups:
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
-      - ref: mainframe.cpu.mode
+      - ref: mainframe.cpu.sharing.mode
         requirement_level: required
 # Temperature metrics. One possible source is the CPC metric group of the IBM Z HMC Web Services API.
   - id: metric.mainframe.host.temperature

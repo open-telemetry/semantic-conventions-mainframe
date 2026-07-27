@@ -79,11 +79,11 @@ groups:
     name: mainframe.cpu
     brief: A mainframe CPU, representing the physical CPU within the Central Processor Complex (CPC). 
     attributes:
-      - ref: mainframe.processor.name
+      - ref: mainframe.cpu.name
         role: identifying
         requirement_level: required
         examples: ["CP01", "IFL01"]
-      - ref: mainframe.processor.type
+      - ref: mainframe.cpu.type
         role: descriptive
         requirement_level: required
         examples: ["cp", "icf", "ifl", "iip"]

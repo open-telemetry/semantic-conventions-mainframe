@@ -40,6 +40,50 @@ The percentage of time the channel was processing I/O.
 
 
 
+## `mainframe.cpu.smt_mode.utilization` ![Development](https://img.shields.io/badge/-development-blue)
+
+The percentage of time the processor is running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported by the mainframe.
+
+
+**Instrument**: `gauge`
+
+**Unit**: `1`
+
+
+
+## `mainframe.cpu.thread-0.utilization` ![Development](https://img.shields.io/badge/-development-blue)
+
+The percent usage of thread 0 when the processor is running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported by the mainframe.
+
+
+**Instrument**: `gauge`
+
+**Unit**: `{cpu}`
+
+
+
+## `mainframe.cpu.thread-1.utilization` ![Development](https://img.shields.io/badge/-development-blue)
+
+The percent usage of thread 1 when the processor is running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported by the mainframe.
+
+
+**Instrument**: `gauge`
+
+**Unit**: `{cpu}`
+
+
+
+## `mainframe.cpu.utilization` ![Development](https://img.shields.io/badge/-development-blue)
+
+The percentage of time the CPU was processing I/O.
+
+
+**Instrument**: `gauge`
+
+**Unit**: `1`
+
+
+
 ## `mainframe.host.channel.utilization` ![Development](https://img.shields.io/badge/-development-blue)
 
 The average percentage of time the channels of the mainframe system were processing I/O.
@@ -105,7 +149,7 @@ The utilization percentage for processors of the specified type. Set to -1 when 
 
 | Attribute | Type | Requirement Level | Description |
 |-----------|------|-------------------|-------------|
-| `mainframe.cpu.mode` | Enum | Required | Mode the processor is operating in. The mode can be either 'dedicated' or 'shared'. |
+| `mainframe.cpu.sharing.mode` | Enum | Required | Mode the processor is operating in. The mode can be either 'dedicated' or 'shared'. |
 | `mainframe.cpu.type` | Enum | Required | Type of mainframe processor. |
 | `cpu.mode` | Enum | Recommended | The mode of the CPU |
 | `cpu.logical_number` | `int` | Opt-In | The logical CPU number [0..n-1] |
@@ -226,6 +270,28 @@ Power usage of the mainframe system in Watts.
 | Attribute | Type | Requirement Level | Description |
 |-----------|------|-------------------|-------------|
 | `mainframe.host.power.usage.type` | Enum | Required | Type of power usage measurement for the Central Processor Complex (CPC). |
+
+
+
+## `mainframe.host.status` ![Development](https://img.shields.io/badge/-development-blue)
+
+The status of the mainframe system.
+
+
+**Instrument**: `gauge`
+
+**Unit**: `1`
+
+
+
+## `mainframe.host.status.unacceptable` ![Development](https://img.shields.io/badge/-development-blue)
+
+Indicating whether the CPC has an unacceptable status.
+
+
+**Instrument**: `updowncounter`
+
+**Unit**: `1`
 
 
 

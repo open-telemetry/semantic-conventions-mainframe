@@ -13,9 +13,9 @@
 | <a id="mainframe-channel-mode" href="#mainframe-channel-mode">`mainframe.channel.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Mode the I/O channel is operating in. The mode can be either 'dedicated' or 'shared'. | `dedicated`; `shared` |
 | <a id="mainframe-channel-name" href="#mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. | `0.00`; `0.2D`; `1.E3` |
 | <a id="mainframe-channel-owning-partition" href="#mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The partition that owns the I/O channel, in case the channel is dedicated to a specific partition. If the channel is shared, this attribute is set to 'shared'. | `LPAR01`; `shared` |
-| <a id="mainframe-cpu-mode" href="#mainframe-cpu-mode">`mainframe.cpu.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Mode the processor is operating in. The mode can be either 'dedicated' or 'shared'. | `all`; `dedicated`; `shared` |
 | <a id="mainframe-cpu-name" href="#mainframe-cpu-name">`mainframe.cpu.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the processor in the form processor-type + processor ID. | `IFL01` |
-| <a id="mainframe-cpu-type" href="#mainframe-cpu-type">`mainframe.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Type of mainframe processor. | `all`; `CP`; `ICF` |
+| <a id="mainframe-cpu-sharing-mode" href="#mainframe-cpu-sharing-mode">`mainframe.cpu.sharing.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Mode the processor is operating in. The mode can be either 'dedicated' or 'shared'. | `all`; `dedicated`; `shared` |
+| <a id="mainframe-cpu-type" href="#mainframe-cpu-type">`mainframe.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Type of mainframe processor. | `all`; `cp`; `icf` |
 | <a id="mainframe-host-heatload-type" href="#mainframe-host-heatload-type">`mainframe.host.heatload.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Type of heat load measurement for the Central Processor Complex (CPC). | `total`; `forced-air`; `water` |
 | <a id="mainframe-host-machine-model" href="#mainframe-host-machine-model">`mainframe.host.machine_model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | IBM machine model of the Central Processor Complex (CPC). | `ME1`; `ML1`; `A01`; `LA1` |
 | <a id="mainframe-host-machine-type" href="#mainframe-host-machine-type">`mainframe.host.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Four-digit IBM machine type of the Central Processor Complex (CPC). | `9175`; `3931` |
@@ -51,7 +51,7 @@
 
 ---
 
-`mainframe.cpu.mode` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+`mainframe.cpu.sharing.mode` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
 
 | Value | Description | Stability |
 | --- | --- | --- |
@@ -65,12 +65,13 @@
 
 | Value | Description | Stability |
 | --- | --- | --- |
+| `aap` | Application Assist Processor (AAP) is a processor that is dedicated to running workloads related to Java and XML processing for database workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `all` | All types of mainframe processors. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `CP` | Central Processor (CP) is the main processor of the central processing complex that hosts a mainframe operating system. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `ICF` | Integrated Coupling Facility (ICF) is a processor that is dedicated to running workloads related to the coupling facility, which is used for high-speed communication between mainframe systems in a sysplex. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `IFL` | Integrated Facility for Linux (IFL) is a processor that is dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `SAP` | System Assist Processor (SAP) is a processor that is dedicated to running workloads related to system management and I/O processing on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `zIIP` | z Integrated Information Processor (zIIP) is a processor that is dedicated to running specific workloads on the mainframe, such as Java applications. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cp` | Central Processor (CP) is the main processor of the central processing complex that hosts a mainframe operating system. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `icf` | Integrated Coupling Facility (ICF) is a processor that is dedicated to running workloads related to the coupling facility, which is used for high-speed communication between mainframe systems in a sysplex. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ifl` | Integrated Facility for Linux (IFL) is a processor that is dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `iip` | z Integrated Information Processor (zIIP) is a processor that is dedicated to running specific workloads on the mainframe, such as Java applications. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `sap` | System Assist Processor (SAP) is a processor that is dedicated to running workloads related to system management and I/O processing on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
 

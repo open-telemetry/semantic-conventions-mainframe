@@ -62,6 +62,34 @@ A mainframe channel, representing the physical I/O channel that connects the Cen
 
 
 
+## `mainframe.cpu` ![Development](https://img.shields.io/badge/-development-blue)
+
+A mainframe CPU, representing the physical CPU within the Central Processor Complex (CPC).
+
+
+| Property | Value |
+|----------|-------|
+| Stability | Development |
+
+
+
+
+### Identity
+
+| Attribute | Type | Requirement Level | Description |
+|-----------|------|-------------------|-------------|
+| `mainframe.cpu.name` | `string` | Required | The name of the processor in the form processor-type + processor ID. |
+
+
+
+### Description
+
+| Attribute | Type | Requirement Level | Description |
+|-----------|------|-------------------|-------------|
+| `mainframe.cpu.type` | Enum | Required | Type of mainframe processor. |
+
+
+
 ## `mainframe.host` ![Development](https://img.shields.io/badge/-development-blue)
 
 A mainframe host, representing the pyhsical machine, also known as the Central Processor Complex (CPC).

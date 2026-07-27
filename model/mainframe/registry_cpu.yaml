@@ -42,7 +42,7 @@ groups:
               value: "sap"
               brief: "System Assist Processor (SAP) is a processor that is dedicated to running workloads related to system management and I/O processing on the mainframe."
               stability: development
-      - id: mainframe.cpu.shareing.mode
+      - id: mainframe.cpu.sharing.mode
         stability: development
         brief: "Mode the processor is operating in. The mode can be either 'dedicated' or 'shared'."
         type: 
