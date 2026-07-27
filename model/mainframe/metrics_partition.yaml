@@ -27,12 +27,12 @@ metrics:
       When absolute capping is enabled the partition cannot exceed the capped
       processor count regardless of spare capacity on the system. Reported by
       the IBM Z HMC Web Services API partition object.
-    instrument: updowncounter
-    unit: "{cpu}"
+    instrument: gauge
+    unit: "1"
     stability: development
     annotations:
       code_generation:
-        metric_value_type: bool
+        metric_value_type: int
     entity_associations:
       - mainframe.partition
     attributes:
@@ -82,9 +82,10 @@ metrics:
       The weight determines the proportion of available processor cycles
       allocated to this partition relative to other partitions. Reported by
       the IBM Z HMC Web Services API partition object.
-    instrument: updowncounter
-    unit: "{cpu}"
+    instrument: gauge
+    unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -97,11 +98,12 @@ metrics:
       When capped, the partition cannot exceed its initial weight even when
       spare capacity is available. Reported by the IBM Z HMC Web Services API
       partition object.
-    instrument: updowncounter
-    unit: "{cpu}"
+    instrument: gauge
+    unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
-        metric_value_type: bool
+        metric_value_type: int
     entity_associations:
       - mainframe.partition

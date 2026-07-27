@@ -13,6 +13,10 @@ attributes:
   - key: mainframe.adapter.type
     stability: development
     brief: "The type of the mainframe I/O adapter card."
+    note: >
+      Reported by the HMC Web Services API adapter object field `type`.
+      Used to distinguish network, storage, cryptographic, and accelerator
+      adapters when aggregating per-type utilization metrics.
     type:
       members:
         - id: crypto

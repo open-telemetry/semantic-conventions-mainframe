@@ -28,6 +28,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -44,6 +45,7 @@ metrics:
     instrument: updowncounter
     unit: "{cpu}"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -79,6 +81,7 @@ metrics:
     instrument: gauge
     unit: "GiBy"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -94,6 +97,7 @@ metrics:
     instrument: gauge
     unit: "GiBy"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -110,6 +114,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -166,6 +171,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -179,6 +185,7 @@ metrics:
     instrument: gauge
     unit: "Cel"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -188,11 +195,11 @@ metrics:
   # Heat load metrics. One possible source is the CPC metric group of the
   # IBM Z HMC Web Services API.
   - name: mainframe.host.heatload
-    brief: "The heat load produced by the mainframe system in BTU per hour."
+    brief: "The heat load produced by the mainframe system, measured in joules per hour."
     note: >
       Reported by the IBM Z HMC Web Services API CPC metric group.
     instrument: gauge
-    unit: "BTU/h"
+    unit: "J/h"
     stability: development
     annotations:
       code_generation:
@@ -249,6 +256,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: int
@@ -260,12 +268,13 @@ metrics:
     note: >
       Reported by the IBM Z HMC Web Services API CPC object field `status`.
       An unacceptable status means the system requires operator attention.
-    instrument: updowncounter
+    instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
-        metric_value_type: bool
+        metric_value_type: int
     entity_associations:
       - mainframe.host
 

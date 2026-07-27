@@ -5,6 +5,7 @@ entities:
       A software service instance running on a z/OS system, such as
       a CICS region, an IMS subsystem, or a batch job.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: zos.sysplex.name
       - ref: zos.smf.id

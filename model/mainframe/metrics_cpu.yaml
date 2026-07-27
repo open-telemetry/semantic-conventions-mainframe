@@ -10,6 +10,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -28,6 +29,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -43,6 +45,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
@@ -58,6 +61,7 @@ metrics:
     instrument: gauge
     unit: "1"
     stability: development
+    requirement_level: recommended
     annotations:
       code_generation:
         metric_value_type: double
