@@ -85,6 +85,10 @@ $(LOCAL_POLICY_STAMP): $(VERSION_PINS_FILE)
 # Clone upstream semantic-conventions at the pinned version and drop the
 # subdirectories that have been migrated into this repo. See the long
 # comment on SC_UPSTREAM_FILTERED above.
+# Derive the upstream schema URL from the version tag: strip the leading 'v'
+# from SEMCONV_VERSION (e.g. v1.42.0 -> 1.42.0) to form the schema URL.
+SEMCONV_SCHEMA_VERSION := $(SEMCONV_VERSION:v%=%)
+
 $(SC_UPSTREAM_STAMP): $(VERSION_PINS_FILE)
 	@mkdir -p .build
 	rm -rf $(SC_UPSTREAM_CHECKOUT) $(SC_UPSTREAM_FILTERED)
@@ -106,6 +110,11 @@ $(SC_UPSTREAM_STAMP): $(VERSION_PINS_FILE)
 			mv "$$target.tmp" "$$target"; \
 		fi; \
 	done
+	@# Patch the upstream dependency schema_url in manifest.yaml to match
+	@# SEMCONV_VERSION so it never needs to be updated by hand.
+	sed -i.bak \
+		's|schema_url: https://opentelemetry.io/schemas/[0-9][0-9.]*|schema_url: https://opentelemetry.io/schemas/$(SEMCONV_SCHEMA_VERSION)|' \
+		model/manifest.yaml && rm -f model/manifest.yaml.bak
 	touch $(SC_UPSTREAM_STAMP)
 
 filter-upstream: $(SC_UPSTREAM_STAMP)
