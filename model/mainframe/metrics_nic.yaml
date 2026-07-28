@@ -5,7 +5,7 @@ metrics:
   # (DPM mode only, HMC >= 2.13.1).
   # Prometheus exporter prefix: zhmc_nic_
 
-  - name: mainframe.nic.bytes.sent
+  - name: mainframe.partition.nic.bytes.sent
     brief: "The total number of bytes in unicast packets sent through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -25,9 +25,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.bytes.received
+  - name: mainframe.partition.nic.bytes.received
     brief: "The total number of bytes in unicast packets received through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -47,9 +47,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.packets.sent
+  - name: mainframe.partition.nic.packets.sent
     brief: "The total number of unicast packets sent through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -69,9 +69,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.packets.received
+  - name: mainframe.partition.nic.packets.received
     brief: "The total number of unicast packets received through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -91,9 +91,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.packets.dropped
+  - name: mainframe.partition.nic.packets.dropped
     brief: "The total number of packets dropped on the virtual network interface card (NIC) attached to the partition due to resource shortage."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -115,12 +115,12 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
     attributes:
       - ref: network.io.direction
         requirement_level: required
 
-  - name: mainframe.nic.packets.discarded
+  - name: mainframe.partition.nic.packets.discarded
     brief: "The total number of malformed packets discarded on the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -142,12 +142,12 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
     attributes:
       - ref: network.io.direction
         requirement_level: required
 
-  - name: mainframe.nic.multicast.packets.sent
+  - name: mainframe.partition.nic.multicast.packets.sent
     brief: "The total number of multicast packets sent through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -167,9 +167,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.multicast.packets.received
+  - name: mainframe.partition.nic.multicast.packets.received
     brief: "The total number of multicast packets received through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -189,9 +189,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.broadcast.packets.sent
+  - name: mainframe.partition.nic.broadcast.packets.sent
     brief: "The total number of broadcast packets sent through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -211,9 +211,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.broadcast.packets.received
+  - name: mainframe.partition.nic.broadcast.packets.received
     brief: "The total number of broadcast packets received through the virtual network interface card (NIC) attached to the partition."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -233,9 +233,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.data.sent
+  - name: mainframe.partition.nic.data.sent
     brief: "The number of bytes sent through the virtual network interface card (NIC) during the last collection interval."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -255,9 +255,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.data.received
+  - name: mainframe.partition.nic.data.received
     brief: "The number of bytes received through the virtual network interface card (NIC) during the last collection interval."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -277,9 +277,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.data.rate.sent
+  - name: mainframe.partition.nic.data.rate.sent
     brief: "The data transmission rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -299,9 +299,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic
 
-  - name: mainframe.nic.data.rate.received
+  - name: mainframe.partition.nic.data.rate.received
     brief: "The data reception rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
     note: >
       Reported by the IBM Z HMC Web Services API partition-attached-network-interface
@@ -321,4 +321,4 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.nic
+      - mainframe.partition.nic

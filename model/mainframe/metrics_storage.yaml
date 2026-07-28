@@ -87,7 +87,7 @@ metrics:
   # (DPM mode only, HMC >= 2.14.1).
   # Prometheus exporter prefix: zhmc_storagevolume_
 
-  - name: mainframe.storage.volume.status.code
+  - name: mainframe.storage.group.volume.status.code
     brief: "The fulfillment state of the DPM storage volume as a numeric code."
     note: >
       Reported by the IBM Z HMC Web Services API storagevolume-resource metric
@@ -109,7 +109,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.volume
+      - mainframe.storage.group.volume
     attributes:
       - ref: mainframe.storage.fulfillment.state
         requirement_level: opt_in
@@ -117,7 +117,7 @@ metrics:
           The string fulfillment state label from the HMC API, carried alongside
           the integer code.
 
-  - name: mainframe.storage.volume.size
+  - name: mainframe.storage.group.volume.size
     brief: "The size of the DPM storage volume in gibibytes."
     note: >
       Reported by the IBM Z HMC Web Services API storagevolume-resource metric
@@ -138,9 +138,9 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.volume
+      - mainframe.storage.group.volume
 
-  - name: mainframe.storage.volume.cylinders
+  - name: mainframe.storage.group.volume.cylinders
     brief: "The size of the DPM ECKD storage volume in cylinders."
     note: >
       Reported by the IBM Z HMC Web Services API storagevolume-resource metric
@@ -162,7 +162,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.volume
+      - mainframe.storage.group.volume
 
   # Adapter resource status metrics.
   # Source: adapter-resource metric group of the HMC Web Services API

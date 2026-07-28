@@ -1,6 +1,6 @@
 file_format: definition/2
 attributes:
-  - key: mainframe.port.id
+  - key: mainframe.adapter.port.id
     type: string
     stability: development
     annotations:
@@ -16,7 +16,7 @@ attributes:
       group field `network-port-id`. In distributed systems terms, this is
       analogous to the port number on a multi-port NIC.
 
-  - key: mainframe.nic.name
+  - key: mainframe.partition.nic.name
     type: string
     stability: development
     annotations:
@@ -248,7 +248,7 @@ attributes:
           brief: "NVMe storage group — NVMe over Fabrics."
           stability: development
 
-  - key: mainframe.storage.volume.name
+  - key: mainframe.storage.group.volume.name
     type: string
     stability: development
     annotations:

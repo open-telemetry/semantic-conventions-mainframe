@@ -1,6 +1,6 @@
 file_format: definition/2
 entities:
-  - type: mainframe.port
+  - type: mainframe.adapter.port
     brief: >
       A physical port on a mainframe network adapter in Dynamic Partition
       Manager (DPM) mode — the mainframe equivalent of a physical port on
@@ -11,7 +11,7 @@ entities:
       - ref: mainframe.adapter.name
         note: >
           The name of the adapter that contains this port, in CSS.CHPID format.
-      - ref: mainframe.port.id
+      - ref: mainframe.adapter.port.id
     description:
       - ref: host.name
         requirement_level: recommended
@@ -19,7 +19,7 @@ entities:
           The name of the Central Processing Complex (CPC) that owns the adapter
           hosting this port.
 
-  - type: mainframe.nic
+  - type: mainframe.partition.nic
     brief: >
       A virtual network interface card (NIC) attached to a logical partition
       (LPAR) in Dynamic Partition Manager (DPM) mode — the mainframe equivalent
@@ -30,7 +30,7 @@ entities:
       - ref: mainframe.partition.name
         note: >
           The name of the DPM partition that owns this NIC.
-      - ref: mainframe.nic.name
+      - ref: mainframe.partition.nic.name
     description:
       - ref: host.name
         requirement_level: recommended
@@ -41,7 +41,7 @@ entities:
         requirement_level: recommended
         note: >
           The name of the physical adapter backing this virtual NIC.
-      - ref: mainframe.port.id
+      - ref: mainframe.adapter.port.id
         requirement_level: recommended
         note: >
           The port ID on the physical adapter backing this virtual NIC.
@@ -65,7 +65,7 @@ entities:
       - ref: mainframe.storage.group.type
         requirement_level: required
 
-  - type: mainframe.storage.volume
+  - type: mainframe.storage.group.volume
     brief: >
       A DPM storage volume — a single unit of block storage (LUN, ECKD DASD
       cylinder set, or NVMe namespace) within a storage group. Analogous to
@@ -76,7 +76,7 @@ entities:
       - ref: mainframe.storage.group.name
         note: >
           The name of the storage group that contains this volume.
-      - ref: mainframe.storage.volume.name
+      - ref: mainframe.storage.group.volume.name
     description:
       - ref: host.name
         requirement_level: recommended
