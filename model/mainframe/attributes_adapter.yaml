@@ -23,6 +23,14 @@ attributes:
           value: "crypto"
           brief: "A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management."
           stability: development
+        - id: flash
+          value: "flash"
+          brief: "A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM)."
+          stability: development
+        - id: roce
+          value: "roce"
+          brief: "A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet."
+          stability: development
         - id: accelerator
           value: "accelerator"
           brief: "An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference."
