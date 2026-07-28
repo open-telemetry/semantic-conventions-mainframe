@@ -3,6 +3,11 @@ attributes:
   - key: mainframe.channel.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: channel-path
+        field: channel-path-id
+        mode: all
     brief: "The name of the I/O channel in the form CSS.Chpid."
     examples: ["0.00", "0.2D", "1.E3"]
     note: >
@@ -12,6 +17,11 @@ attributes:
 
   - key: mainframe.channel.mode
     stability: development
+    annotations:
+      hmc_source:
+        object: channel-path
+        field: chpid-type
+        mode: all
     brief: "The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions."
     type:
       members:
@@ -27,6 +37,11 @@ attributes:
   - key: mainframe.channel.owning.partition
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: channel-path
+        field: owner-objects
+        mode: all
     brief: "The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions."
     examples: ["LPAR01", "shared"]
     note: >

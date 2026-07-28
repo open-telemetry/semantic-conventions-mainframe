@@ -14,6 +14,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: processor-usage
+            mode: all
     entity_associations:
       - mainframe.cpu
 
@@ -33,6 +39,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: smt-mode-usage
+            mode: all
     entity_associations:
       - mainframe.cpu
 
@@ -49,6 +61,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread0-usage
+            mode: all
     entity_associations:
       - mainframe.cpu
 
@@ -65,5 +83,11 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread1-usage
+            mode: all
     entity_associations:
       - mainframe.cpu

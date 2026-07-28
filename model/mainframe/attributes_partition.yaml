@@ -3,6 +3,11 @@ attributes:
   - key: mainframe.partition.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: name
+        mode: all
     brief: "The name of the logical partition (LPAR) running on the mainframe."
     examples: ["LPAR01", "PRODZ", "TEST1"]
     note: >
@@ -13,6 +18,11 @@ attributes:
 
   - key: mainframe.partition.weight.type
     stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: initial-processing-weight
+        mode: all
     brief: "The scheduling weight type that determines how processor time is allocated to the logical partition (LPAR)."
     type:
       members:

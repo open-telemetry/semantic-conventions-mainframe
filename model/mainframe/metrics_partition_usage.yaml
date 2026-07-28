@@ -19,6 +19,56 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-cp
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-ifl
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-icf
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-iip
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-cbp
+            mode: classic
+          - type: metric_group
+            name: logical-partition-usage
+            field: processor-usage-aap
+            mode: classic
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage-cp
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage-ifl
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage-icf
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage-iip
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.partition
     attributes:
@@ -50,6 +100,28 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-usage
+            field: network-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: storage-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: accelerator-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+          - type: metric_group
+            name: partition-usage
+            field: crypto-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.partition
     attributes:
@@ -77,6 +149,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: zvm-paging-rate
+            mode: classic
     entity_associations:
       - mainframe.partition
 
@@ -97,6 +175,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: power
+            mode: classic
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.partition
 
@@ -118,6 +203,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: status
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -141,6 +232,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: has-unacceptable-status
+            mode: all
     entity_associations:
       - mainframe.partition
 
@@ -166,6 +263,28 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-resource
+            field: storage-central-allocation
+            mode: classic
+          - type: metric_group
+            name: logical-partition-resource
+            field: storage-expanded-allocation
+            mode: classic
+          - type: metric_group
+            name: partition-resource
+            field: initial-memory
+            mode: dpm
+          - type: metric_group
+            name: partition-resource
+            field: reserved-memory
+            mode: dpm
+          - type: metric_group
+            name: partition-resource
+            field: maximum-memory
+            mode: dpm
     entity_associations:
       - mainframe.partition
     attributes:
@@ -190,6 +309,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-resource
+            field: defined-capacity
+            mode: classic
     entity_associations:
       - mainframe.partition
 
@@ -209,6 +334,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-resource
+            field: workload-manager-enabled
+            mode: classic
     entity_associations:
       - mainframe.partition
 
@@ -228,6 +359,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-resource
+            field: processor-mode
+            mode: dpm
     entity_associations:
       - mainframe.partition
 
@@ -246,5 +383,11 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-resource
+            field: threads-per-processor
+            mode: dpm
     entity_associations:
       - mainframe.partition

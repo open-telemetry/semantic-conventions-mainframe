@@ -15,6 +15,32 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: processor-count-ifl
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-cp
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-icf
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-iip
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-aap
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-sap
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -35,6 +61,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: initial-processing-weight-capped
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -54,6 +86,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: processor-count-ifl-capped
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-cp-capped
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-icf-capped
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-iip-capped
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -73,6 +123,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: processor-count-ifl-reserved
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-cp-reserved
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-icf-reserved
+            mode: all
+          - type: object_property
+            object: partition
+            field: processor-count-iip-reserved
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -93,6 +161,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: initial-processing-weight
+            mode: all
+          - type: object_property
+            object: partition
+            field: minimum-processing-weight
+            mode: all
+          - type: object_property
+            object: partition
+            field: current-processing-weight
+            mode: all
+          - type: object_property
+            object: partition
+            field: maximum-processing-weight
+            mode: all
     entity_associations:
       - mainframe.partition
     attributes:
@@ -116,5 +202,11 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: initial-processing-weight-capped
+            mode: all
     entity_associations:
       - mainframe.partition

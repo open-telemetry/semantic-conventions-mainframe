@@ -22,6 +22,27 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter
+            field: adapter-usage
+            mode: dpm
+          - type: metric_group
+            name: crypto-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: flash-memory-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: roce-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.1"
     entity_associations:
       - mainframe.adapter
     attributes:

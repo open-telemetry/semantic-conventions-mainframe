@@ -3,6 +3,11 @@ attributes:
   - key: mainframe.host.serial_number
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: serial-number
+        mode: all
     brief: "The serial number of the Central Processing Complex (CPC)."
     examples: ["0000000ABCDE"]
     note: >
@@ -12,6 +17,11 @@ attributes:
   - key: mainframe.host.machine_type
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: machine-type
+        mode: all
     brief: "The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation."
     examples: ["9175", "3931"]
     note: >
@@ -22,6 +32,11 @@ attributes:
   - key: mainframe.host.machine_model
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: machine-model
+        mode: all
     brief: "The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type."
     examples: ["ME1", "ML1", "A01", "LA1"]
     note: >
@@ -31,6 +46,11 @@ attributes:
 
   - key: mainframe.host.temperature.type
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: ambient-temperature
+        mode: all
     brief: "The location of the temperature sensor within the Central Processing Complex (CPC) frame."
     type:
       members:
@@ -45,6 +65,11 @@ attributes:
 
   - key: mainframe.host.heatload.type
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: heat-load
+        mode: all
     brief: "The type of heat load measurement reported for the Central Processing Complex (CPC)."
     type:
       members:
@@ -63,6 +88,11 @@ attributes:
 
   - key: mainframe.host.power.usage.type
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power
+        mode: all
     brief: "The category of power usage measurement reported for the Central Processing Complex (CPC)."
     type:
       members:
@@ -85,6 +115,11 @@ attributes:
 
   - key: mainframe.host.power.cord
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power-cord-usage
+        mode: all
     brief: "The identifier of the power cord supplying the Central Processing Complex (CPC)."
     type:
       members:
@@ -123,6 +158,11 @@ attributes:
 
   - key: mainframe.host.power.phase
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power-cord-usage
+        mode: all
     brief: "The AC power phase supplying the Central Processing Complex (CPC)."
     type:
       members:

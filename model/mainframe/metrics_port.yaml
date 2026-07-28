@@ -20,6 +20,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -37,6 +44,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -52,6 +66,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -67,6 +88,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -86,6 +114,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-dropped
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
     attributes:
@@ -106,6 +141,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-discarded
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
     attributes:
@@ -124,6 +166,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: multicast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -139,6 +188,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: multicast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -154,6 +210,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: broadcast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -169,6 +232,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: broadcast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -186,6 +256,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: interval-bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -201,6 +278,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: interval-bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -216,6 +300,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-per-second-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -231,6 +322,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-per-second-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 
@@ -248,6 +346,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: utilization
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.port
 

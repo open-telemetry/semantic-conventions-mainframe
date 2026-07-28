@@ -3,6 +3,11 @@ attributes:
   - key: mainframe.cpu.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: name
+        mode: all
     brief: "The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number."
     examples: ["IFL01", "CP02", "zIIP03"]
     note: >
@@ -11,6 +16,11 @@ attributes:
 
   - key: mainframe.cpu.type
     stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: type
+        mode: all
     brief: "The type of mainframe processor within the Central Processing Complex (CPC)."
     type:
       members:
@@ -49,6 +59,11 @@ attributes:
 
   - key: mainframe.cpu.sharing.mode
     stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: allocation-type
+        mode: all
     brief: "The sharing mode of the mainframe processor — whether it is dedicated to one partition or shared across multiple partitions."
     type:
       members:

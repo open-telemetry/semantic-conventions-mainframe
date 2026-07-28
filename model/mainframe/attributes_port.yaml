@@ -3,6 +3,12 @@ attributes:
   - key: mainframe.port.id
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: network-physical-adapter-port
+        field: network-port-id
+        mode: dpm
+        min_hmc_version: "2.13.1"
     brief: "The identifier of the physical port on a mainframe network adapter."
     examples: ["0", "1"]
     note: >
@@ -13,6 +19,12 @@ attributes:
   - key: mainframe.nic.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: partition-attached-network-interface
+        field: nic-id
+        mode: dpm
+        min_hmc_version: "2.13.1"
     brief: "The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode."
     examples: ["nic-0", "nic-mgmt", "nic-prod"]
     note: >
@@ -22,6 +34,11 @@ attributes:
 
   - key: mainframe.partition.status
     stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: status
+        mode: all
     brief: "The operational status of the logical partition (LPAR) or DPM partition."
     note: >
       In classic mode (LPAR), reported by the HMC Web Services API partition
@@ -91,6 +108,11 @@ attributes:
 
   - key: mainframe.partition.memory.type
     stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: storage-central-allocation
+        mode: all
     brief: "The type of memory allocation for the logical partition (LPAR) being measured."
     note: >
       Reported by the HMC Web Services API partition object storage allocation
@@ -150,6 +172,12 @@ attributes:
 
   - key: mainframe.adapter.status
     stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: status
+        mode: dpm
+        min_hmc_version: "2.13.1"
     brief: "The operational status of the mainframe I/O adapter."
     note: >
       Reported by the HMC Web Services API adapter object field `status` (DPM mode).
@@ -179,6 +207,12 @@ attributes:
   - key: mainframe.storage.group.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: name
+        mode: dpm
+        min_hmc_version: "2.14.1"
     brief: "The name of the DPM storage group attached to the Central Processing Complex (CPC)."
     examples: ["sg-fcp-prod", "sg-nvme-test"]
     note: >
@@ -189,6 +223,12 @@ attributes:
 
   - key: mainframe.storage.group.type
     stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: type
+        mode: dpm
+        min_hmc_version: "2.14.1"
     brief: "The connectivity type of the DPM storage group."
     note: >
       Reported by the HMC Web Services API storage-group object field `type`
@@ -211,6 +251,12 @@ attributes:
   - key: mainframe.storage.volume.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: storage-volume
+        field: name
+        mode: dpm
+        min_hmc_version: "2.14.1"
     brief: "The name of the DPM storage volume within a storage group."
     examples: ["vol-boot-0", "vol-data-1"]
     note: >
@@ -221,6 +267,12 @@ attributes:
 
   - key: mainframe.storage.fulfillment.state
     stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: fulfillment-state
+        mode: dpm
+        min_hmc_version: "2.14.1"
     brief: "The fulfillment state of the DPM storage group or storage volume."
     note: >
       Reported by the HMC Web Services API storage-group or storage-volume

@@ -15,6 +15,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: channel-usage
+            field: channel-usage
+            mode: classic
     entity_associations:
       - mainframe.channel
     attributes:

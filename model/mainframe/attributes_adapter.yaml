@@ -3,6 +3,11 @@ attributes:
   - key: mainframe.adapter.name
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: adapter-id
+        mode: all
     brief: "The name of the I/O adapter in the form CSS.Chpid."
     examples: ["0.00", "0.2D", "1.E3"]
     note: >
@@ -12,6 +17,11 @@ attributes:
 
   - key: mainframe.adapter.type
     stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: type
+        mode: all
     brief: "The type of the mainframe I/O adapter card."
     note: >
       Reported by the HMC Web Services API adapter object field `type`.
@@ -47,6 +57,11 @@ attributes:
   - key: mainframe.adapter.owning.partition
     type: string
     stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: owner-objects
+        mode: all
     brief: "The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions."
     examples: ["LPAR01", "shared"]
     note: >

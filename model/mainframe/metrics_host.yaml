@@ -13,6 +13,36 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-ifl
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-cp
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-icf
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-iip
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-aap
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-sap
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-cbp
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -33,6 +63,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-defective
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -50,6 +86,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-spare
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -67,6 +109,28 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-total-installed-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-hsa-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-available-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-partitions-central-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-partitions-expanded-memory
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -87,6 +151,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-vfm-increment-size
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -103,6 +173,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-vfm-total-size
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -120,6 +196,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: cpc-usage-overview
+            field: channel-usage
+            mode: classic
     entity_associations:
       - mainframe.host
 
@@ -139,6 +221,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-ifl
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-cp
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-icf
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-iip
+            mode: classic
     entity_associations:
       - mainframe.host
     attributes:
@@ -160,6 +260,16 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: ambient-temperature
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: exhaust-temperature
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -179,6 +289,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: humidity
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -193,6 +309,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: dew-point
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -209,6 +331,20 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load-forced-air
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load-water
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -228,6 +364,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: power
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-partition-power-consumption
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-infrastructure-power-consumption
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-unassigned-power-consumption
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -247,6 +401,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: power-cord-usage
+            mode: all
     entity_associations:
       - mainframe.host
     attributes:
@@ -267,6 +427,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: status
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -282,6 +448,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: has-unacceptable-status
+            mode: all
     entity_associations:
       - mainframe.host
 
@@ -312,6 +484,24 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: network-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: storage-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: accelerator-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: crypto-usage
+            mode: dpm
     entity_associations:
       - mainframe.host
     attributes:

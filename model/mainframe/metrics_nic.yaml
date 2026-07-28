@@ -17,6 +17,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -32,6 +39,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -47,6 +61,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -62,6 +83,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -79,6 +107,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-dropped
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
     attributes:
@@ -99,6 +134,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-discarded
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
     attributes:
@@ -117,6 +159,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: multicast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -132,6 +181,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: multicast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -147,6 +203,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: broadcast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -162,6 +225,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: broadcast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -177,6 +247,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: interval-bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -192,6 +269,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: interval-bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -207,6 +291,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-per-second-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic
 
@@ -222,5 +313,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-per-second-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.nic

@@ -21,6 +21,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagegroup-resource
+            field: fulfillment-state
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.group
     attributes:
@@ -42,6 +49,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagegroup-resource
+            field: shared
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.group
 
@@ -58,6 +72,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagegroup-resource
+            field: max-partitions
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.group
 
@@ -80,6 +101,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagevolume-resource
+            field: fulfillment-state
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.volume
     attributes:
@@ -102,6 +130,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagevolume-resource
+            field: size
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.volume
 
@@ -119,6 +154,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: storagevolume-resource
+            field: cylinders
+            mode: dpm
+            min_hmc_version: "2.14.1"
     entity_associations:
       - mainframe.storage.volume
 
@@ -141,6 +183,13 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter-resource
+            field: status
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.adapter
     attributes:
@@ -166,5 +215,12 @@ metrics:
     annotations:
       code_generation:
         metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter-resource
+            field: physical-channel-status
+            mode: dpm
+            min_hmc_version: "2.13.1"
     entity_associations:
       - mainframe.adapter

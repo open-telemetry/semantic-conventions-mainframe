@@ -2,6 +2,11 @@ file_format: definition/2
 attributes:
   - key: mainframe.memory.type
     stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: storage-total-installed-memory
+        mode: all
     brief: "The category of mainframe memory being measured within the Central Processing Complex (CPC)."
     type:
       members:
