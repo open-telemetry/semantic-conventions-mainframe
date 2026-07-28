@@ -1,0 +1,80 @@
+[
+  {
+    "name": "mainframe.storage.group.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01",
+      "mainframe.storage.fulfillment.state": "complete"
+    }
+  },
+  {
+    "name": "mainframe.storage.group.shared",
+    "value": 0,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.storage.group.max.partitions",
+    "value": 4,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.storage.group.volume.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01",
+      "mainframe.storage.group.volume.name": "vol-boot-0",
+      "mainframe.storage.fulfillment.state": "complete"
+    }
+  },
+  {
+    "name": "mainframe.storage.group.volume.size",
+    "value": 200.0,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01",
+      "mainframe.storage.group.volume.name": "vol-boot-0"
+    }
+  },
+  {
+    "name": "mainframe.storage.group.volume.cylinders",
+    "value": 0,
+    "attributes": {
+      "mainframe.storage.group.name": "sg-fcp-prod",
+      "mainframe.storage.group.type": "fcp",
+      "host.name": "CPC01",
+      "mainframe.storage.group.volume.name": "vol-boot-0"
+    }
+  },
+  {
+    "name": "mainframe.adapter.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.type": "storage",
+      "host.name": "CPC01",
+      "mainframe.adapter.status": "active"
+    }
+  },
+  {
+    "name": "mainframe.adapter.physical_channel.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.type": "storage",
+      "host.name": "CPC01"
+    }
+  }
+]

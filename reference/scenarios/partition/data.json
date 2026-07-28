@@ -1,0 +1,695 @@
+[
+  {
+    "name": "mainframe.partition.cpu.virtual.count",
+    "value": 2,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.virtual.count",
+    "value": 4,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.virtual.count",
+    "value": 2,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.virtual.count",
+    "value": 4,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.capped.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.capped.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.capped.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.capped.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.reserved.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.reserved.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.reserved.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.reserved.count",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 100,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 10,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "minimum"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 95,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "current"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 200,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 100,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 10,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "minimum"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 95,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "current"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.value",
+    "value": 200,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.weight.type": "maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.weight.is_capped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.utilization",
+    "value": 0.42,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.utilization",
+    "value": 0.42,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.utilization",
+    "value": 0.42,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "cp"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.utilization",
+    "value": 0.42,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.cpu.type": "ifl"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "network"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "storage"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "crypto"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "accelerator"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "network"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "storage"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "crypto"
+    }
+  },
+  {
+    "name": "mainframe.partition.adapter.utilization",
+    "value": 0.25,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.adapter.type": "accelerator"
+    }
+  },
+  {
+    "name": "mainframe.partition.zvm.paging.rate",
+    "value": 0.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.zvm.paging.rate",
+    "value": 0.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.power.usage",
+    "value": 2500.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.power.usage",
+    "value": 2500.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.status.code",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.status.unacceptable",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.status.unacceptable",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 65536,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 65536,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-current"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 131072,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-current"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 65536,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 65536,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-current"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 131072,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "central-maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-initial"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-current"
+    }
+  },
+  {
+    "name": "mainframe.partition.memory.size",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01",
+      "mainframe.partition.memory.type": "expanded-maximum"
+    }
+  },
+  {
+    "name": "mainframe.partition.capacity.defined",
+    "value": 500,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.capacity.defined",
+    "value": 500,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.wlm.enabled",
+    "value": 1,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.wlm.enabled",
+    "value": 1,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.mode",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.mode",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.threads_per_processor",
+    "value": 2,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.cpu.threads_per_processor",
+    "value": 2,
+    "attributes": {
+      "mainframe.partition.name": "LPAR02",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.utilization",
+    "value": 0.55,
+    "attributes": {
+      "mainframe.cpu.name": "IFL00",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.utilization",
+    "value": 0.55,
+    "attributes": {
+      "mainframe.cpu.name": "IFL01",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.utilization",
+    "value": 0.3,
+    "attributes": {
+      "mainframe.cpu.name": "CP02",
+      "mainframe.cpu.type": "cp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.smt_mode.utilization",
+    "value": 0.8,
+    "attributes": {
+      "mainframe.cpu.name": "IFL00",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.smt_mode.utilization",
+    "value": 0.8,
+    "attributes": {
+      "mainframe.cpu.name": "IFL01",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.smt_mode.utilization",
+    "value": 0.8,
+    "attributes": {
+      "mainframe.cpu.name": "CP02",
+      "mainframe.cpu.type": "cp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread0.utilization",
+    "value": 0.6,
+    "attributes": {
+      "mainframe.cpu.name": "IFL00",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread0.utilization",
+    "value": 0.6,
+    "attributes": {
+      "mainframe.cpu.name": "IFL01",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread0.utilization",
+    "value": 0.6,
+    "attributes": {
+      "mainframe.cpu.name": "CP02",
+      "mainframe.cpu.type": "cp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread1.utilization",
+    "value": 0.4,
+    "attributes": {
+      "mainframe.cpu.name": "IFL00",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread1.utilization",
+    "value": 0.4,
+    "attributes": {
+      "mainframe.cpu.name": "IFL01",
+      "mainframe.cpu.type": "ifl",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.cpu.thread1.utilization",
+    "value": 0.4,
+    "attributes": {
+      "mainframe.cpu.name": "CP02",
+      "mainframe.cpu.type": "cp",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.channel.utilization",
+    "value": 0.15,
+    "attributes": {
+      "mainframe.channel.name": "0.2D",
+      "mainframe.channel.mode": "shared",
+      "host.name": "CPC01"
+    }
+  }
+]

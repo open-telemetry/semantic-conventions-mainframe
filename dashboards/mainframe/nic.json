@@ -4,9 +4,9 @@
     {"type":"grafana","id":"grafana","name":"Grafana","version":"11.0.0"},
     {"type":"datasource","id":"prometheus","name":"Prometheus","version":"1.0.0"}
   ],
-  "uid": "mainframe-nic",
-  "title": "Mainframe — mainframe NIC",
-  "description": "Auto-generated from mainframe semantic conventions. Entity: mainframe.nic.",
+  "uid": "mainframe-partition-nic",
+  "title": "Mainframe — partition NIC",
+  "description": "Virtual NIC metrics for DPM-mode partitions. Entity: mainframe.partition.nic.",
   "tags": ["mainframe","semconv","mainframe"],
   "schemaVersion": 39,
   "version": 1,
@@ -16,61 +16,61 @@
     {
       "id": 1,
       "title": "Data transmission rate of the virtual NIC in bytes per second",
-      "description": "Metric: mainframe.nic.data.rate.sent. Unit: By/s. DPM mode only.",
+      "description": "Metric: mainframe.partition.nic.data.rate.sent. Unit: By/s. DPM mode only.",
       "type": "timeseries",
       "gridPos": {"x":0,"y":0,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_nic_data_rate_sent{job=~\".+\"}","legendFormat":"{{partition}}/{{nic}} tx"}],
+      "targets": [{"expr":"mainframe_partition_nic_data_rate_sent{job=~\".+\"}","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} tx"}],
       "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
     },
     {
       "id": 2,
       "title": "Data reception rate of the virtual NIC in bytes per second",
-      "description": "Metric: mainframe.nic.data.rate.received. Unit: By/s. DPM mode only.",
+      "description": "Metric: mainframe.partition.nic.data.rate.received. Unit: By/s. DPM mode only.",
       "type": "timeseries",
       "gridPos": {"x":12,"y":0,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_nic_data_rate_received{job=~\".+\"}","legendFormat":"{{partition}}/{{nic}} rx"}],
+      "targets": [{"expr":"mainframe_partition_nic_data_rate_received{job=~\".+\"}","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} rx"}],
       "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
     },
     {
       "id": 3,
       "title": "Total number of bytes in unicast packets sent through the virtual NIC",
-      "description": "Metric: mainframe.nic.bytes.sent. Unit: By. Counter.",
+      "description": "Metric: mainframe.partition.nic.bytes.sent. Unit: By. Counter.",
       "type": "timeseries",
       "gridPos": {"x":0,"y":8,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"rate(mainframe_nic_bytes_sent{job=~\".+\"}[5m])","legendFormat":"{{partition}}/{{nic}} bytes-tx/s"}],
+      "targets": [{"expr":"rate(mainframe_partition_nic_bytes_sent{job=~\".+\"}[5m])","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} bytes-tx/s"}],
       "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
     },
     {
       "id": 4,
       "title": "Total number of bytes in unicast packets received through the virtual NIC",
-      "description": "Metric: mainframe.nic.bytes.received. Unit: By. Counter.",
+      "description": "Metric: mainframe.partition.nic.bytes.received. Unit: By. Counter.",
       "type": "timeseries",
       "gridPos": {"x":12,"y":8,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"rate(mainframe_nic_bytes_received{job=~\".+\"}[5m])","legendFormat":"{{partition}}/{{nic}} bytes-rx/s"}],
+      "targets": [{"expr":"rate(mainframe_partition_nic_bytes_received{job=~\".+\"}[5m])","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} bytes-rx/s"}],
       "fieldConfig": {"defaults":{"unit":"Bps","custom":{}}}
     },
     {
       "id": 5,
       "title": "Total number of packets dropped on the virtual NIC due to resource shortage",
-      "description": "Metric: mainframe.nic.packets.dropped. Unit: {packet}. Counter.",
+      "description": "Metric: mainframe.partition.nic.packets.dropped. Unit: {packet}. Counter.",
       "type": "timeseries",
       "gridPos": {"x":0,"y":16,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"rate(mainframe_nic_packets_dropped{job=~\".+\"}[5m])","legendFormat":"{{partition}}/{{nic}} {{network_io_direction}} dropped/s"}],
+      "targets": [{"expr":"rate(mainframe_partition_nic_packets_dropped{job=~\".+\"}[5m])","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} {{network_io_direction}} dropped/s"}],
       "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
     },
     {
       "id": 6,
       "title": "Total number of malformed packets discarded on the virtual NIC",
-      "description": "Metric: mainframe.nic.packets.discarded. Unit: {packet}. Counter.",
+      "description": "Metric: mainframe.partition.nic.packets.discarded. Unit: {packet}. Counter.",
       "type": "timeseries",
       "gridPos": {"x":12,"y":16,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"rate(mainframe_nic_packets_discarded{job=~\".+\"}[5m])","legendFormat":"{{partition}}/{{nic}} {{network_io_direction}} discarded/s"}],
+      "targets": [{"expr":"rate(mainframe_partition_nic_packets_discarded{job=~\".+\"}[5m])","legendFormat":"{{mainframe_partition_name}}/{{mainframe_partition_nic_name}} {{network_io_direction}} discarded/s"}],
       "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
     }
   ]

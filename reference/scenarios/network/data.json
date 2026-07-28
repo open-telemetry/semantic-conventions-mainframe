@@ -1,0 +1,375 @@
+[
+  {
+    "name": "mainframe.partition.nic.bytes.sent",
+    "value": 1234567890,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.bytes.received",
+    "value": 9876543210,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.sent",
+    "value": 987654,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.received",
+    "value": 1234567,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.dropped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "transmit"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.dropped",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "receive"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.discarded",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "transmit"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.packets.discarded",
+    "value": 0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "receive"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.multicast.packets.sent",
+    "value": 42,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.multicast.packets.received",
+    "value": 37,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.broadcast.packets.sent",
+    "value": 5,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.broadcast.packets.received",
+    "value": 8,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.data.sent",
+    "value": 245760,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.data.received",
+    "value": 983040,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.data.rate.sent",
+    "value": 819200.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.partition.nic.data.rate.received",
+    "value": 3276800.0,
+    "attributes": {
+      "mainframe.partition.name": "LPAR01",
+      "mainframe.partition.nic.name": "nic-0",
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.bytes.sent",
+    "value": 5000000000,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.bytes.received",
+    "value": 12000000000,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.sent",
+    "value": 4000000,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.received",
+    "value": 9600000,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.dropped",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "transmit"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.dropped",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "receive"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.discarded",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "transmit"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.packets.discarded",
+    "value": 0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01",
+      "network.io.direction": "receive"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.multicast.packets.sent",
+    "value": 200,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.multicast.packets.received",
+    "value": 180,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.broadcast.packets.sent",
+    "value": 20,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.broadcast.packets.received",
+    "value": 25,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.data.sent",
+    "value": 1048576,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.data.received",
+    "value": 4194304,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.data.rate.sent",
+    "value": 3500000.0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.data.rate.received",
+    "value": 14000000.0,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.port.bandwidth.utilization",
+    "value": 0.28,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.port.id": "0",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.utilization",
+    "value": 0.35,
+    "attributes": {
+      "mainframe.adapter.name": "0.2D",
+      "mainframe.adapter.type": "network",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.utilization",
+    "value": 0.2,
+    "attributes": {
+      "mainframe.adapter.name": "0.1E",
+      "mainframe.adapter.type": "crypto",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.utilization",
+    "value": 0.05,
+    "attributes": {
+      "mainframe.adapter.name": "0.1F",
+      "mainframe.adapter.type": "flash",
+      "host.name": "CPC01"
+    }
+  },
+  {
+    "name": "mainframe.adapter.utilization",
+    "value": 0.05,
+    "attributes": {
+      "mainframe.adapter.name": "0.20",
+      "mainframe.adapter.type": "roce",
+      "host.name": "CPC01"
+    }
+  }
+]

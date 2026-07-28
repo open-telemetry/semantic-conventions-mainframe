@@ -5,8 +5,8 @@
     {"type":"datasource","id":"prometheus","name":"Prometheus","version":"1.0.0"}
   ],
   "uid": "mainframe-storage",
-  "title": "Mainframe — mainframe storage",
-  "description": "Auto-generated from mainframe semantic conventions. Entities: mainframe.storage.group, mainframe.storage.volume, mainframe.adapter.",
+  "title": "Mainframe — storage",
+  "description": "DPM storage group and volume metrics (HMC >= 2.14.1). Entities: mainframe.storage.group, mainframe.storage.group.volume, mainframe.adapter.",
   "tags": ["mainframe","semconv","mainframe"],
   "schemaVersion": 39,
   "version": 1,
@@ -20,7 +20,7 @@
       "type": "stat",
       "gridPos": {"x":0,"y":0,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_group_status_code{job=~\".+\"}","legendFormat":"{{storagegroup}}"}],
+      "targets": [{"expr":"mainframe_storage_group_status_code{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"complete","color":"green"},"1":{"text":"pending","color":"yellow"},"4":{"text":"incomplete","color":"red"}}}],"custom":{}}}
     },
     {
@@ -30,7 +30,7 @@
       "type": "stat",
       "gridPos": {"x":8,"y":0,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_group_shared{job=~\".+\"}","legendFormat":"{{storagegroup}}"}],
+      "targets": [{"expr":"mainframe_storage_group_shared{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"dedicated"},"1":{"text":"shared"}}}],"custom":{}}}
     },
     {
@@ -40,37 +40,37 @@
       "type": "stat",
       "gridPos": {"x":16,"y":0,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_group_max_partitions{job=~\".+\"}","legendFormat":"{{storagegroup}}"}],
+      "targets": [{"expr":"mainframe_storage_group_max_partitions{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
     },
     {
       "id": 4,
       "title": "Fulfillment state of the DPM storage volume as a numeric code",
-      "description": "Metric: mainframe.storage.volume.status.code. Unit: 1. 0=complete, 5=pending, 3=incomplete, etc.",
+      "description": "Metric: mainframe.storage.group.volume.status.code. Unit: 1. 0=complete, 5=pending, 3=incomplete, etc.",
       "type": "stat",
       "gridPos": {"x":0,"y":8,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_volume_status_code{job=~\".+\"}","legendFormat":"{{storagegroup}}/{{storagevolume}}"}],
+      "targets": [{"expr":"mainframe_storage_group_volume_status_code{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}/{{mainframe_storage_group_volume_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"complete","color":"green"},"5":{"text":"pending","color":"yellow"},"3":{"text":"incomplete","color":"red"}}}],"custom":{}}}
     },
     {
       "id": 5,
       "title": "Size of the DPM storage volume in gibibytes",
-      "description": "Metric: mainframe.storage.volume.size. Unit: GiBy.",
+      "description": "Metric: mainframe.storage.group.volume.size. Unit: GiBy.",
       "type": "stat",
       "gridPos": {"x":8,"y":8,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_volume_size{job=~\".+\"}","legendFormat":"{{storagegroup}}/{{storagevolume}}"}],
+      "targets": [{"expr":"mainframe_storage_group_volume_size{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}/{{mainframe_storage_group_volume_name}}"}],
       "fieldConfig": {"defaults":{"unit":"gibibytes","custom":{}}}
     },
     {
       "id": 6,
       "title": "Size of the DPM ECKD storage volume in cylinders",
-      "description": "Metric: mainframe.storage.volume.cylinders. Unit: {cylinder}. FC-type volumes only.",
+      "description": "Metric: mainframe.storage.group.volume.cylinders. Unit: {cylinder}. FC-type volumes only.",
       "type": "stat",
       "gridPos": {"x":16,"y":8,"w":8,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_storage_volume_cylinders{job=~\".+\"}","legendFormat":"{{storagegroup}}/{{storagevolume}}"}],
+      "targets": [{"expr":"mainframe_storage_group_volume_cylinders{job=~\".+\"}","legendFormat":"{{mainframe_storage_group_name}}/{{mainframe_storage_group_volume_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","custom":{}}}
     },
     {
@@ -80,7 +80,7 @@
       "type": "stat",
       "gridPos": {"x":0,"y":16,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_adapter_status_code{job=~\".+\"}","legendFormat":"{{adapter}}"}],
+      "targets": [{"expr":"mainframe_adapter_status_code{job=~\".+\"}","legendFormat":"{{mainframe_adapter_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"active","color":"green"},"1":{"text":"not-active","color":"yellow"},"3":{"text":"exceptions","color":"red"}}}],"custom":{}}}
     },
     {
@@ -90,7 +90,7 @@
       "type": "stat",
       "gridPos": {"x":12,"y":16,"w":12,"h":8},
       "datasource": {"type":"prometheus","uid":"${DS_PROMETHEUS}"},
-      "targets": [{"expr":"mainframe_adapter_physical_channel_status_code{job=~\".+\"}","legendFormat":"{{adapter}}"}],
+      "targets": [{"expr":"mainframe_adapter_physical_channel_status_code{job=~\".+\"}","legendFormat":"{{mainframe_adapter_name}}"}],
       "fieldConfig": {"defaults":{"unit":"short","mappings":[{"type":"value","options":{"0":{"text":"operating","color":"green"},"9":{"text":"permanent-error","color":"red"}}}],"custom":{}}}
     }
   ]
