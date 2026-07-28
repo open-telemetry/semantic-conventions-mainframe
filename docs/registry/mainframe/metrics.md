@@ -595,7 +595,7 @@
 
 **Requirement Level:** `Recommended`
 
-**[31]:** Reported by the IBM Z HMC Web Services API CPC metric group (zcpc-environmentals-and-power). The HMC API reports heat-load values in BTU/h (British Thermal Units per hour); they are converted to joules per hour (J/h) by multiplying by 1.05506 (1 BTU/h = 1.05506 J/h, exact UCUM equivalent).
+**[31]:** Reported by the IBM Z HMC Web Services API CPC metric group (zcpc-environmentals-and-power). The HMC API reports heat-load values in BTU/h (British Thermal Units per hour); they are converted to joules per hour (J/h) by multiplying by 1055.06 (1 BTU = 1055.06 J, therefore 1 BTU/h = 1055.06 J/h).
 
 **Attributes:**
 
@@ -767,7 +767,7 @@
 
 **Requirement Level:** `Recommended`
 
-**[39]:** Reported by the IBM Z HMC Web Services API CPC object field `status`. An unacceptable status means the system requires operator attention.
+**[39]:** Reported by the IBM Z HMC Web Services API CPC object field `has-unacceptable-status`. An unacceptable status means the system requires operator attention.
 
 
 
