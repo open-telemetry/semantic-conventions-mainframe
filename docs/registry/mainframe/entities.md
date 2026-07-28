@@ -30,7 +30,7 @@ A mainframe I/O adapter card, representing a physical PCIe adapter that connects
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
 | Identity | [`mainframe.adapter.name`](/docs/registry/mainframe/README.md#mainframe-adapter-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O adapter in the form CSS.Chpid. [1] | `0.00`; `0.2D`; `1.E3` |
-| Description | [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [2] | `crypto`; `accelerator`; `network` |
+| Description | [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [2] | `crypto`; `flash`; `roce` |
 | Description | [`mainframe.adapter.owning.partition`](/docs/registry/mainframe/README.md#mainframe-adapter-owning-partition) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions. [3] | `LPAR01`; `shared` |
 
 **[1] `mainframe.adapter.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API adapter object field `adapter-id`.
@@ -47,7 +47,9 @@ A mainframe I/O adapter card, representing a physical PCIe adapter that connects
 | --- | --- | --- |
 | `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
 | `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ## `mainframe.channel`

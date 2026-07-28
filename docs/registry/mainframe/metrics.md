@@ -5,12 +5,9 @@
 
 | Name | Stability | Description |
 | --- | --- | --- |
-| [`mainframe.adapter.crypto.utilization`](#mainframeadaptercryptoutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode cryptographic adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
-| [`mainframe.adapter.flash.utilization`](#mainframeadapterflashutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode Flash Express adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.adapter.physical_channel.status.code`](#mainframeadapterphysical_channelstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The physical channel status of the mainframe I/O adapter as a numeric code. |
-| [`mainframe.adapter.roce.utilization`](#mainframeadapterroceutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode RDMA over Converged Ethernet (RoCE) adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.adapter.status.code`](#mainframeadapterstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The operational status of the mainframe I/O adapter as a numeric code. |
-| [`mainframe.adapter.utilization`](#mainframeadapterutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the adapter was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.adapter.utilization`](#mainframeadapterutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.channel.utilization`](#mainframechannelutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the I/O channel was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.cpu.smt_mode.utilization`](#mainframecpusmt_modeutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. |
 | [`mainframe.cpu.thread0.utilization`](#mainframecputhread0utilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. |
@@ -86,51 +83,15 @@
 | [`mainframe.storage.volume.size`](#mainframestoragevolumesize) | ![Development](https://img.shields.io/badge/-development-blue) | The size of the DPM storage volume in gibibytes. |
 | [`mainframe.storage.volume.status.code`](#mainframestoragevolumestatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The fulfillment state of the DPM storage volume as a numeric code. |
 
-## `mainframe.adapter.crypto.utilization`
-
-| Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
-| -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.crypto.utilization` | Gauge | `1` | The fraction of time the classic-mode cryptographic adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). [1] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
-
-**Requirement Level:** `Recommended`
-
-**[1]:** Reported by the IBM Z HMC Web Services API crypto-usage metric group (classic mode only, HMC ≥ 2.12.0). Each data point is labelled with the adapter's physical channel identifier (PCHID). A cryptographic (CEX) adapter provides hardware-accelerated encryption, decryption, and key management services. In distributed systems terms, this is analogous to the utilization of a Hardware Security Module (HSM) card.
-
-
-
-## `mainframe.adapter.flash.utilization`
-
-| Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
-| -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.flash.utilization` | Gauge | `1` | The fraction of time the classic-mode Flash Express adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). [2] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
-
-**Requirement Level:** `Recommended`
-
-**[2]:** Reported by the IBM Z HMC Web Services API flash-memory-usage metric group (classic mode only, HMC ≥ 2.12.0). A Flash Express adapter provides solid-state storage for IBM Virtual Flash Memory (VFM). In distributed systems terms, this is analogous to the utilization of an NVMe flash card.
-
-
-
 ## `mainframe.adapter.physical_channel.status.code`
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.physical_channel.status.code` | Gauge | `1` | The physical channel status of the mainframe I/O adapter as a numeric code. [3] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
+| `mainframe.adapter.physical_channel.status.code` | Gauge | `1` | The physical channel status of the mainframe I/O adapter as a numeric code. [1] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
 
 **Requirement Level:** `Recommended`
 
-**[3]:** Reported by the IBM Z HMC Web Services API adapter-resource metric group field `physical-channel-status` (DPM mode only, HMC ≥ 2.13.1). Encoded as: 0=operating, 1=no-power, 2=service, 3=stopped, 4=not-defined, 5=definition-error, 6=suspended, 7=check-stopped, 8=wrap-block, 9=permanent-error, 10=loss-of-signal, 11=loss-of-synchronization, 12=not-operational-link, and other error codes up to 24, 99=unknown.
-
-
-
-## `mainframe.adapter.roce.utilization`
-
-| Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
-| -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.roce.utilization` | Gauge | `1` | The fraction of time the classic-mode RDMA over Converged Ethernet (RoCE) adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). [4] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
-
-**Requirement Level:** `Recommended`
-
-**[4]:** Reported by the IBM Z HMC Web Services API roce-usage metric group (classic mode only, HMC ≥ 2.12.1). A RoCE adapter provides low-latency RDMA networking over Ethernet. In distributed systems terms, this is analogous to the utilization of an InfiniBand or RDMA NIC.
+**[1]:** Reported by the IBM Z HMC Web Services API adapter-resource metric group field `physical-channel-status` (DPM mode only, HMC ≥ 2.13.1). Encoded as: 0=operating, 1=no-power, 2=service, 3=stopped, 4=not-defined, 5=definition-error, 6=suspended, 7=check-stopped, 8=wrap-block, 9=permanent-error, 10=loss-of-signal, 11=loss-of-synchronization, 12=not-operational-link, and other error codes up to 24, 99=unknown.
 
 
 
@@ -138,11 +99,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.status.code` | Gauge | `1` | The operational status of the mainframe I/O adapter as a numeric code. [5] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
+| `mainframe.adapter.status.code` | Gauge | `1` | The operational status of the mainframe I/O adapter as a numeric code. [2] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
 
 **Requirement Level:** `Recommended`
 
-**[5]:** Reported by the IBM Z HMC Web Services API adapter-resource metric group field `status` (DPM mode only, HMC ≥ 2.13.1). Encoded as: 0=active, 1=not-active, 2=not-detected, 3=exceptions, 4=service, 99=unknown.
+**[2]:** Reported by the IBM Z HMC Web Services API adapter-resource metric group field `status` (DPM mode only, HMC ≥ 2.13.1). Encoded as: 0=active, 1=not-active, 2=not-detected, 3=exceptions, 4=service, 99=unknown.
 
 **Attributes:**
 
@@ -168,17 +129,17 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.adapter.utilization` | Gauge | `1` | The fraction of time the adapter was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [6] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
+| `mainframe.adapter.utilization` | Gauge | `1` | The fraction of time the adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised). [3] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.adapter` |
 
 **Requirement Level:** `Recommended`
 
-**[6]:** Reported by the IBM Z HMC Web Services API adapter metric group. In distributed systems terms, this is analogous to the utilization of a network interface card (NIC) or storage host bus adapter (HBA).
+**[3]:** Reported by the IBM Z HMC Web Services API. In DPM mode, the source is the adapter metric group. In classic mode, the sources are the crypto-usage (HMC ≥ 2.12.0), flash-memory-usage (HMC ≥ 2.12.0), and roce-usage (HMC ≥ 2.12.1) metric groups. The adapter type is encoded in the mainframe.adapter.type attribute, which distinguishes crypto, flash, RoCE, network, storage, and accelerator adapters. In distributed systems terms, this is analogous to the utilization of a NIC, HBA, HSM card, NVMe flash card, or RDMA NIC.
 
 **Attributes:**
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [2] | `crypto`; `accelerator`; `network` |
+| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [2] | `crypto`; `flash`; `roce` |
 
 **[2] `mainframe.adapter.type`:** Reported by the HMC Web Services API adapter object field `type`. Used to distinguish network, storage, cryptographic, and accelerator adapters when aggregating per-type utilization metrics.
 
@@ -190,18 +151,20 @@
 | --- | --- | --- |
 | `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
 | `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ## `mainframe.channel.utilization`
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.channel.utilization` | Gauge | `1` | The fraction of time the I/O channel was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [7] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.channel` |
+| `mainframe.channel.utilization` | Gauge | `1` | The fraction of time the I/O channel was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [4] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.channel` |
 
 **Requirement Level:** `Recommended`
 
-**[7]:** Reported by the IBM Z HMC Web Services API channel-path metric group. In distributed systems terms, this is analogous to the utilization of a network interface or storage HBA link.
+**[4]:** Reported by the IBM Z HMC Web Services API channel-path metric group. In distributed systems terms, this is analogous to the utilization of a network interface or storage HBA link.
 
 **Attributes:**
 
@@ -222,11 +185,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.cpu.smt_mode.utilization` | Gauge | `1` | The fraction of time the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [8] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
+| `mainframe.cpu.smt_mode.utilization` | Gauge | `1` | The fraction of time the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [5] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
 
 **Requirement Level:** `Recommended`
 
-**[8]:** Reported by the IBM Z HMC Web Services API processor metric group. Simultaneous multithreading (SMT) allows a single physical processor core to execute two hardware threads concurrently. A value of -1 indicates that the mainframe model does not support SMT mode.
+**[5]:** Reported by the IBM Z HMC Web Services API processor metric group. Simultaneous multithreading (SMT) allows a single physical processor core to execute two hardware threads concurrently. A value of -1 indicates that the mainframe model does not support SMT mode.
 
 
 
@@ -234,11 +197,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.cpu.thread0.utilization` | Gauge | `1` | The fraction of time thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [9] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
+| `mainframe.cpu.thread0.utilization` | Gauge | `1` | The fraction of time thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [6] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
 
 **Requirement Level:** `Recommended`
 
-**[9]:** Reported by the IBM Z HMC Web Services API processor metric group. Thread 0 is the primary hardware thread of a processor running in SMT mode. A value of -1 indicates that the mainframe model does not support SMT mode.
+**[6]:** Reported by the IBM Z HMC Web Services API processor metric group. Thread 0 is the primary hardware thread of a processor running in SMT mode. A value of -1 indicates that the mainframe model does not support SMT mode.
 
 
 
@@ -246,11 +209,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.cpu.thread1.utilization` | Gauge | `1` | The fraction of time thread 1 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [10] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
+| `mainframe.cpu.thread1.utilization` | Gauge | `1` | The fraction of time thread 1 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. [7] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
 
 **Requirement Level:** `Recommended`
 
-**[10]:** Reported by the IBM Z HMC Web Services API processor metric group. Thread 1 is the secondary hardware thread of a processor running in SMT mode. A value of -1 indicates that the mainframe model does not support SMT mode.
+**[7]:** Reported by the IBM Z HMC Web Services API processor metric group. Thread 1 is the secondary hardware thread of a processor running in SMT mode. A value of -1 indicates that the mainframe model does not support SMT mode.
 
 
 
@@ -258,11 +221,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.cpu.utilization` | Gauge | `1` | The fraction of time the mainframe processor was busy executing work, as a ratio from 0 (idle) to 1 (fully utilised). [11] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
+| `mainframe.cpu.utilization` | Gauge | `1` | The fraction of time the mainframe processor was busy executing work, as a ratio from 0 (idle) to 1 (fully utilised). [8] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.cpu` |
 
 **Requirement Level:** `Recommended`
 
-**[11]:** Reported by the IBM Z HMC Web Services API processor metric group. In distributed systems terms, this is analogous to system.cpu.utilization.
+**[8]:** Reported by the IBM Z HMC Web Services API processor metric group. In distributed systems terms, this is analogous to system.cpu.utilization.
 
 
 
@@ -270,17 +233,17 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.adapter.utilization` | Gauge | `1` | The fraction of time adapters of the specified type on the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [12] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.adapter.utilization` | Gauge | `1` | The fraction of time adapters of the specified type on the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [9] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[12]:** Reported by the IBM Z Hardware Management Console (HMC) Web Services API under the dpm-system-usage-overview metric group (SC27-2646-00 Chapter 9). The fields network-usage, storage-usage, accelerator-usage, and crypto-usage each map to one value of `mainframe.adapter.type`. The metric is only available in Dynamic Partition Manager (DPM) mode. A value of -1 indicates that no adapters of the specified type are present on the system. Collected by the HMC at 15-second intervals. In distributed systems terms, this is analogous to the aggregate utilization of all NICs, HBAs, or accelerator cards of a given type in a server.
+**[9]:** Reported by the IBM Z Hardware Management Console (HMC) Web Services API under the dpm-system-usage-overview metric group (SC27-2646-00 Chapter 9). The fields network-usage, storage-usage, accelerator-usage, and crypto-usage each map to one value of `mainframe.adapter.type`. The metric is only available in Dynamic Partition Manager (DPM) mode. A value of -1 indicates that no adapters of the specified type are present on the system. Collected by the HMC at 15-second intervals. In distributed systems terms, this is analogous to the aggregate utilization of all NICs, HBAs, or accelerator cards of a given type in a server.
 
 **Attributes:**
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [3] | `crypto`; `accelerator`; `network` |
+| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [3] | `crypto`; `flash`; `roce` |
 
 **[3] `mainframe.adapter.type`:** Identifies the adapter type being reported. One of: network (maps to HMC field network-usage), storage (storage-usage), accelerator (accelerator-usage), or crypto (crypto-usage).
 
@@ -292,18 +255,20 @@
 | --- | --- | --- |
 | `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
 | `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ## `mainframe.host.channel.utilization`
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.channel.utilization` | Gauge | `1` | The average fraction of time all channels in the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [13] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.channel.utilization` | Gauge | `1` | The average fraction of time all channels in the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [10] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[13]:** Reported by the IBM Z HMC Web Services API CPC metric group. This is a system-wide average across all channel paths.
+**[10]:** Reported by the IBM Z HMC Web Services API CPC metric group. This is a system-wide average across all channel paths.
 
 
 
@@ -311,11 +276,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.cpu.active.count` | UpDownCounter | `{cpu}` | The number of active processors of the specified type installed in the mainframe system. [14] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.cpu.active.count` | UpDownCounter | `{cpu}` | The number of active processors of the specified type installed in the mainframe system. [11] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[14]:** Reported by the IBM Z HMC Web Services API CPC object. In distributed systems terms, this is analogous to the physical CPU count of a server.
+**[11]:** Reported by the IBM Z HMC Web Services API CPC object. In distributed systems terms, this is analogous to the physical CPU count of a server.
 
 **Attributes:**
 
@@ -342,11 +307,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.cpu.defective.count` | UpDownCounter | `{cpu}` | The number of defective processors in the mainframe system. [15] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.cpu.defective.count` | UpDownCounter | `{cpu}` | The number of defective processors in the mainframe system. [12] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[15]:** Reported by the IBM Z HMC Web Services API CPC object. Defective processors are hardware-detected faulty units that are taken offline by the machine firmware.
+**[12]:** Reported by the IBM Z HMC Web Services API CPC object. Defective processors are hardware-detected faulty units that are taken offline by the machine firmware.
 
 
 
@@ -354,11 +319,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.cpu.spare.count` | UpDownCounter | `{cpu}` | The number of spare processors available in the mainframe system. [16] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.cpu.spare.count` | UpDownCounter | `{cpu}` | The number of spare processors available in the mainframe system. [13] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[16]:** Reported by the IBM Z HMC Web Services API CPC object. Spare processors are installed but unallocated units held in reserve for capacity-on-demand or defect replacement.
+**[13]:** Reported by the IBM Z HMC Web Services API CPC object. Spare processors are installed but unallocated units held in reserve for capacity-on-demand or defect replacement.
 
 
 
@@ -366,11 +331,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.cpu.utilization` | Gauge | `1` | The fraction of time processors of the specified type in the mainframe system were busy executing work. Set to -1 when no processors of this type are present. [17] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.cpu.utilization` | Gauge | `1` | The fraction of time processors of the specified type in the mainframe system were busy executing work. Set to -1 when no processors of this type are present. [14] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[17]:** Reported by the IBM Z HMC Web Services API CPC metric group. In distributed systems terms, this is analogous to system.cpu.utilization aggregated across all cores of a given type. A value of -1 indicates no processors of the specified type are installed.
+**[14]:** Reported by the IBM Z HMC Web Services API CPC metric group. In distributed systems terms, this is analogous to system.cpu.utilization aggregated across all cores of a given type. A value of -1 indicates no processors of the specified type are installed.
 
 **Attributes:**
 
@@ -408,11 +373,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.dewpoint` | Gauge | `Cel` | The dew point temperature of the environment surrounding the mainframe system in degrees Celsius. [18] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.dewpoint` | Gauge | `Cel` | The dew point temperature of the environment surrounding the mainframe system in degrees Celsius. [15] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[18]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[15]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 
 
@@ -420,11 +385,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.heatload` | Gauge | `J/h` | The heat load produced by the mainframe system, measured in joules per hour. [19] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.heatload` | Gauge | `J/h` | The heat load produced by the mainframe system, measured in joules per hour. [16] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[19]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[16]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 **Attributes:**
 
@@ -446,11 +411,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.humidity` | Gauge | `1` | The relative humidity of the environment surrounding the mainframe system, expressed as a ratio from 0 to 1. [20] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.humidity` | Gauge | `1` | The relative humidity of the environment surrounding the mainframe system, expressed as a ratio from 0 to 1. [17] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[20]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[17]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 
 
@@ -458,11 +423,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.memory.size` | Gauge | `MiBy` | The size of memory of the specified category in the mainframe system. [21] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.memory.size` | Gauge | `MiBy` | The size of memory of the specified category in the mainframe system. [18] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[21]:** Reported by the IBM Z HMC Web Services API CPC object memory metrics. In distributed systems terms, this is analogous to the total or available RAM reported by a server.
+**[18]:** Reported by the IBM Z HMC Web Services API CPC object memory metrics. In distributed systems terms, this is analogous to the total or available RAM reported by a server.
 
 **Attributes:**
 
@@ -487,11 +452,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.memory.vfm.increment.size` | Gauge | `GiBy` | The size of one IBM Virtual Flash Memory (VFM) increment in the mainframe system. [22] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.memory.vfm.increment.size` | Gauge | `GiBy` | The size of one IBM Virtual Flash Memory (VFM) increment in the mainframe system. [19] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[22]:** Virtual Flash Memory (VFM) is IBM's solid-state storage that extends the memory address space beyond physical DRAM. Reported by the IBM Z HMC Web Services API CPC object.
+**[19]:** Virtual Flash Memory (VFM) is IBM's solid-state storage that extends the memory address space beyond physical DRAM. Reported by the IBM Z HMC Web Services API CPC object.
 
 
 
@@ -499,11 +464,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.memory.vfm.size` | Gauge | `GiBy` | The total size of installed IBM Virtual Flash Memory (VFM) in the mainframe system. [23] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.memory.vfm.size` | Gauge | `GiBy` | The total size of installed IBM Virtual Flash Memory (VFM) in the mainframe system. [20] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[23]:** Virtual Flash Memory (VFM) is IBM's solid-state storage that extends the memory address space beyond physical DRAM. Reported by the IBM Z HMC Web Services API CPC object.
+**[20]:** Virtual Flash Memory (VFM) is IBM's solid-state storage that extends the memory address space beyond physical DRAM. Reported by the IBM Z HMC Web Services API CPC object.
 
 
 
@@ -511,11 +476,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.power.cord.usage` | Gauge | `W` | The power consumption on the specified power cord of the mainframe system in Watts. [24] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.power.cord.usage` | Gauge | `W` | The power consumption on the specified power cord of the mainframe system in Watts. [21] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[24]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[21]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 **Attributes:**
 
@@ -553,11 +518,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.power.usage` | Gauge | `W` | The power consumption of the mainframe system in Watts. [25] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.power.usage` | Gauge | `W` | The power consumption of the mainframe system in Watts. [22] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[25]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[22]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 **Attributes:**
 
@@ -580,11 +545,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.status.code` | Gauge | `1` | The operational status of the mainframe system as a numeric code. [26] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.status.code` | Gauge | `1` | The operational status of the mainframe system as a numeric code. [23] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[26]:** Reported by the IBM Z HMC Web Services API CPC object field `status`.
+**[23]:** Reported by the IBM Z HMC Web Services API CPC object field `status`.
 
 
 
@@ -592,11 +557,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.status.unacceptable` | Gauge | `1` | Indicates whether the Central Processing Complex (CPC) is in an unacceptable status (1=true, 0=false). [27] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.status.unacceptable` | Gauge | `1` | Indicates whether the Central Processing Complex (CPC) is in an unacceptable status (1=true, 0=false). [24] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[27]:** Reported by the IBM Z HMC Web Services API CPC object field `status`. An unacceptable status means the system requires operator attention.
+**[24]:** Reported by the IBM Z HMC Web Services API CPC object field `status`. An unacceptable status means the system requires operator attention.
 
 
 
@@ -604,11 +569,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.host.temperature` | Gauge | `Cel` | The temperature at the specified sensor location of the mainframe system in degrees Celsius. [28] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
+| `mainframe.host.temperature` | Gauge | `Cel` | The temperature at the specified sensor location of the mainframe system in degrees Celsius. [25] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.host` |
 
 **Requirement Level:** `Recommended`
 
-**[28]:** Reported by the IBM Z HMC Web Services API CPC metric group.
+**[25]:** Reported by the IBM Z HMC Web Services API CPC metric group.
 
 **Attributes:**
 
@@ -629,11 +594,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.broadcast.packets.received` | Counter | `{packet}` | The total number of broadcast packets received through the virtual network interface card (NIC) attached to the partition. [29] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.broadcast.packets.received` | Counter | `{packet}` | The total number of broadcast packets received through the virtual network interface card (NIC) attached to the partition. [26] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[29]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
+**[26]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
 
 
 
@@ -641,11 +606,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.broadcast.packets.sent` | Counter | `{packet}` | The total number of broadcast packets sent through the virtual network interface card (NIC) attached to the partition. [30] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.broadcast.packets.sent` | Counter | `{packet}` | The total number of broadcast packets sent through the virtual network interface card (NIC) attached to the partition. [27] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[30]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
+**[27]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
 
 
 
@@ -653,11 +618,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.bytes.received` | Counter | `By` | The total number of bytes in unicast packets received through the virtual network interface card (NIC) attached to the partition. [31] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.bytes.received` | Counter | `By` | The total number of bytes in unicast packets received through the virtual network interface card (NIC) attached to the partition. [28] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[31]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`.
+**[28]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`.
 
 
 
@@ -665,11 +630,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.bytes.sent` | Counter | `By` | The total number of bytes in unicast packets sent through the virtual network interface card (NIC) attached to the partition. [32] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.bytes.sent` | Counter | `By` | The total number of bytes in unicast packets sent through the virtual network interface card (NIC) attached to the partition. [29] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[32]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`.
+**[29]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`.
 
 
 
@@ -677,11 +642,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.data.rate.received` | Gauge | `By/s` | The data reception rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval. [33] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.data.rate.received` | Gauge | `By/s` | The data reception rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval. [30] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[33]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
+**[30]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
 
 
 
@@ -689,11 +654,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.data.rate.sent` | Gauge | `By/s` | The data transmission rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval. [34] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.data.rate.sent` | Gauge | `By/s` | The data transmission rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval. [31] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[34]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
+**[31]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
 
 
 
@@ -701,11 +666,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.data.received` | Gauge | `By` | The number of bytes received through the virtual network interface card (NIC) during the last collection interval. [35] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.data.received` | Gauge | `By` | The number of bytes received through the virtual network interface card (NIC) during the last collection interval. [32] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[35]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
+**[32]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
 
 
 
@@ -713,11 +678,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.data.sent` | Gauge | `By` | The number of bytes sent through the virtual network interface card (NIC) during the last collection interval. [36] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.data.sent` | Gauge | `By` | The number of bytes sent through the virtual network interface card (NIC) during the last collection interval. [33] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[36]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`.
+**[33]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`.
 
 
 
@@ -725,11 +690,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.multicast.packets.received` | Counter | `{packet}` | The total number of multicast packets received through the virtual network interface card (NIC) attached to the partition. [37] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.multicast.packets.received` | Counter | `{packet}` | The total number of multicast packets received through the virtual network interface card (NIC) attached to the partition. [34] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[37]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
+**[34]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
 
 
 
@@ -737,11 +702,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.multicast.packets.sent` | Counter | `{packet}` | The total number of multicast packets sent through the virtual network interface card (NIC) attached to the partition. [38] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.multicast.packets.sent` | Counter | `{packet}` | The total number of multicast packets sent through the virtual network interface card (NIC) attached to the partition. [35] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[38]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
+**[35]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
 
 
 
@@ -749,11 +714,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.packets.discarded` | Counter | `{packet}` | The total number of malformed packets discarded on the virtual network interface card (NIC) attached to the partition. [39] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.packets.discarded` | Counter | `{packet}` | The total number of malformed packets discarded on the virtual network interface card (NIC) attached to the partition. [36] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[39]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded` and `packets-received-discarded`. Use the `network.io.direction` attribute to distinguish sent vs. received discards.
+**[36]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded` and `packets-received-discarded`. Use the `network.io.direction` attribute to distinguish sent vs. received discards.
 
 **Attributes:**
 
@@ -776,11 +741,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.packets.dropped` | Counter | `{packet}` | The total number of packets dropped on the virtual network interface card (NIC) attached to the partition due to resource shortage. [40] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.packets.dropped` | Counter | `{packet}` | The total number of packets dropped on the virtual network interface card (NIC) attached to the partition due to resource shortage. [37] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[40]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped` and `packets-received-dropped`. Use the `network.io.direction` attribute to distinguish sent vs. received drops.
+**[37]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped` and `packets-received-dropped`. Use the `network.io.direction` attribute to distinguish sent vs. received drops.
 
 **Attributes:**
 
@@ -803,11 +768,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.packets.received` | Counter | `{packet}` | The total number of unicast packets received through the virtual network interface card (NIC) attached to the partition. [41] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.packets.received` | Counter | `{packet}` | The total number of unicast packets received through the virtual network interface card (NIC) attached to the partition. [38] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[41]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
+**[38]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
 
 
 
@@ -815,11 +780,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.nic.packets.sent` | Counter | `{packet}` | The total number of unicast packets sent through the virtual network interface card (NIC) attached to the partition. [42] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
+| `mainframe.nic.packets.sent` | Counter | `{packet}` | The total number of unicast packets sent through the virtual network interface card (NIC) attached to the partition. [39] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.nic` |
 
 **Requirement Level:** `Recommended`
 
-**[42]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
+**[39]:** Reported by the IBM Z HMC Web Services API partition-attached-network-interface metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
 
 
 
@@ -827,17 +792,17 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.adapter.utilization` | Gauge | `1` | The fraction of time adapters of the specified type attached to the logical partition (LPAR) were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [43] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.adapter.utilization` | Gauge | `1` | The fraction of time adapters of the specified type attached to the logical partition (LPAR) were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). [40] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[43]:** Reported by the IBM Z HMC Web Services API partition-usage metric group (DPM mode only, HMC ≥ 2.13.1). The fields network-usage, storage-usage, accelerator-usage, and crypto-usage each map to one value of `mainframe.adapter.type`. A value of -1 indicates that no adapters of the specified type are attached to the partition. In distributed systems terms, this is analogous to the NIC or HBA utilization attributed to a specific virtual machine.
+**[40]:** Reported by the IBM Z HMC Web Services API partition-usage metric group (DPM mode only, HMC ≥ 2.13.1). The fields network-usage, storage-usage, accelerator-usage, and crypto-usage each map to one value of `mainframe.adapter.type`. A value of -1 indicates that no adapters of the specified type are attached to the partition. In distributed systems terms, this is analogous to the NIC or HBA utilization attributed to a specific virtual machine.
 
 **Attributes:**
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [6] | `crypto`; `accelerator`; `network` |
+| [`mainframe.adapter.type`](/docs/registry/mainframe/README.md#mainframe-adapter-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of the mainframe I/O adapter card. [6] | `crypto`; `flash`; `roce` |
 
 **[6] `mainframe.adapter.type`:** Identifies the adapter type being reported: network, storage, accelerator, or crypto.
 
@@ -849,18 +814,20 @@
 | --- | --- | --- |
 | `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
 | `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ## `mainframe.partition.capacity.defined`
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.capacity.defined` | Gauge | `{MSU}/h` | The defined capacity of the classic-mode logical partition (LPAR) expressed in Millions of Service Units (MSU) per hour. [44] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.capacity.defined` | Gauge | `{MSU}/h` | The defined capacity of the classic-mode logical partition (LPAR) expressed in Millions of Service Units (MSU) per hour. [41] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[44]:** Reported by the IBM Z HMC Web Services API logical-partition-resource metric group field `defined-capacity` (classic mode only). The defined capacity is used by z/OS Workload Manager (WLM) to manage workload goals. A value of 0 means no defined capacity is set. In distributed systems terms, this is analogous to a CPU quota specified in capacity units rather than processor cores.
+**[41]:** Reported by the IBM Z HMC Web Services API logical-partition-resource metric group field `defined-capacity` (classic mode only). The defined capacity is used by z/OS Workload Manager (WLM) to manage workload goals. A value of 0 means no defined capacity is set. In distributed systems terms, this is analogous to a CPU quota specified in capacity units rather than processor cores.
 
 
 
@@ -868,11 +835,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.capped.count` | UpDownCounter | `{cpu}` | The maximum number of processors of the specified type the logical partition (LPAR) may use when absolute capping is enabled, otherwise 0. [45] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.capped.count` | UpDownCounter | `{cpu}` | The maximum number of processors of the specified type the logical partition (LPAR) may use when absolute capping is enabled, otherwise 0. [42] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[45]:** Reported by the IBM Z HMC Web Services API partition object. A value of 0 indicates that absolute capping is not enabled for this processor type.
+**[42]:** Reported by the IBM Z HMC Web Services API partition object. A value of 0 indicates that absolute capping is not enabled for this processor type.
 
 **Attributes:**
 
@@ -899,11 +866,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.is_capped` | Gauge | `1` | Indicates whether absolute capping is enabled for processors of the specified type allocated to the logical partition (LPAR) (0=false, 1=true). [46] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.is_capped` | Gauge | `1` | Indicates whether absolute capping is enabled for processors of the specified type allocated to the logical partition (LPAR) (0=false, 1=true). [43] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[46]:** When absolute capping is enabled the partition cannot exceed the capped processor count regardless of spare capacity on the system. Reported by the IBM Z HMC Web Services API partition object.
+**[43]:** When absolute capping is enabled the partition cannot exceed the capped processor count regardless of spare capacity on the system. Reported by the IBM Z HMC Web Services API partition object.
 
 **Attributes:**
 
@@ -930,11 +897,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.mode` | Gauge | `1` | The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated). [47] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.mode` | Gauge | `1` | The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated). [44] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[47]:** Reported by the IBM Z HMC Web Services API partition-resource metric group field `processor-mode` (DPM mode only). In shared mode, processor cycles are shared across partitions; in dedicated mode, processors are exclusively assigned to the partition.
+**[44]:** Reported by the IBM Z HMC Web Services API partition-resource metric group field `processor-mode` (DPM mode only). In shared mode, processor cycles are shared across partitions; in dedicated mode, processors are exclusively assigned to the partition.
 
 
 
@@ -942,11 +909,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.reserved.count` | UpDownCounter | `{cpu}` | The number of processors of the specified type reserved for the active logical partition (LPAR). [48] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.reserved.count` | UpDownCounter | `{cpu}` | The number of processors of the specified type reserved for the active logical partition (LPAR). [45] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[48]:** Reserved processors are allocated to the partition but not yet in active use. Reported by the IBM Z HMC Web Services API partition object.
+**[45]:** Reserved processors are allocated to the partition but not yet in active use. Reported by the IBM Z HMC Web Services API partition object.
 
 **Attributes:**
 
@@ -973,11 +940,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.threads_per_processor` | Gauge | `{thread}` | The number of simultaneous multithreading (SMT) threads per processor that the operating system in the DPM partition is configured to use. [49] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.threads_per_processor` | Gauge | `{thread}` | The number of simultaneous multithreading (SMT) threads per processor that the operating system in the DPM partition is configured to use. [46] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[49]:** Reported by the IBM Z HMC Web Services API partition-resource metric group field `threads-per-processor` (DPM mode only). Typical values are 1 (SMT disabled) or 2 (SMT enabled with two hardware threads per physical processor).
+**[46]:** Reported by the IBM Z HMC Web Services API partition-resource metric group field `threads-per-processor` (DPM mode only). Typical values are 1 (SMT disabled) or 2 (SMT enabled with two hardware threads per physical processor).
 
 
 
@@ -985,11 +952,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.utilization` | Gauge | `1` | The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy executing work, as a ratio from 0 (idle) to 1 (fully utilised). [50] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.utilization` | Gauge | `1` | The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy executing work, as a ratio from 0 (idle) to 1 (fully utilised). [47] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[50]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode) or partition-usage metric group (DPM mode). Available per-type breakdowns: cp, ifl, icf, iip, cbp, aap. In distributed systems terms, this is analogous to the CPU utilization of a virtual machine (VM) or container, per vCPU type.
+**[47]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode) or partition-usage metric group (DPM mode). Available per-type breakdowns: cp, ifl, icf, iip, cbp, aap. In distributed systems terms, this is analogous to the CPU utilization of a virtual machine (VM) or container, per vCPU type.
 
 **Attributes:**
 
@@ -1018,11 +985,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.virtual.count` | UpDownCounter | `{cpu}` | The number of virtual processors of the specified type allocated to an active logical partition (LPAR). [51] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.virtual.count` | UpDownCounter | `{cpu}` | The number of virtual processors of the specified type allocated to an active logical partition (LPAR). [48] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[51]:** Reported by the IBM Z HMC Web Services API partition object. In distributed systems terms, this is analogous to the vCPU count of a virtual machine.
+**[48]:** Reported by the IBM Z HMC Web Services API partition object. In distributed systems terms, this is analogous to the vCPU count of a virtual machine.
 
 **Attributes:**
 
@@ -1049,11 +1016,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.weight.is_capped` | Gauge | `1` | Indicates whether the initial central processor (CP) processing weight of the logical partition (LPAR) is capped (0=false, 1=true). [52] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.weight.is_capped` | Gauge | `1` | Indicates whether the initial central processor (CP) processing weight of the logical partition (LPAR) is capped (0=false, 1=true). [49] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[52]:** When capped, the partition cannot exceed its initial weight even when spare capacity is available. Reported by the IBM Z HMC Web Services API partition object.
+**[49]:** When capped, the partition cannot exceed its initial weight even when spare capacity is available. Reported by the IBM Z HMC Web Services API partition object.
 
 
 
@@ -1061,11 +1028,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.cpu.weight.value` | Gauge | `1` | The processor scheduling weight of the active logical partition (LPAR). [53] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.cpu.weight.value` | Gauge | `1` | The processor scheduling weight of the active logical partition (LPAR). [50] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[53]:** The weight determines the proportion of available processor cycles allocated to this partition relative to other partitions. Reported by the IBM Z HMC Web Services API partition object.
+**[50]:** The weight determines the proportion of available processor cycles allocated to this partition relative to other partitions. Reported by the IBM Z HMC Web Services API partition object.
 
 **Attributes:**
 
@@ -1090,11 +1057,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.memory.size` | Gauge | `MiBy` | The size of the specified memory allocation for the logical partition (LPAR), in mebibytes. [54] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.memory.size` | Gauge | `MiBy` | The size of the specified memory allocation for the logical partition (LPAR), in mebibytes. [51] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[54]:** In classic mode, reported by the IBM Z HMC Web Services API logical-partition-resource metric group fields storage-central-allocation and storage-expanded-allocation (initial/current/maximum). In DPM mode, reported via partition-resource fields initial-memory, reserved-memory, maximum-memory. For IBM Virtual Flash Memory (VFM) allocations, the unit is gibibytes; use the `vfm-initial`, `vfm-current`, and `vfm-maximum` members of `mainframe.partition.memory.type` accordingly.
+**[51]:** In classic mode, reported by the IBM Z HMC Web Services API logical-partition-resource metric group fields storage-central-allocation and storage-expanded-allocation (initial/current/maximum). In DPM mode, reported via partition-resource fields initial-memory, reserved-memory, maximum-memory. For IBM Virtual Flash Memory (VFM) allocations, the unit is gibibytes; use the `vfm-initial`, `vfm-current`, and `vfm-maximum` members of `mainframe.partition.memory.type` accordingly.
 
 **Attributes:**
 
@@ -1127,11 +1094,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.power.usage` | Gauge | `W` | The power consumption of the logical partition (LPAR) in Watts. [55] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.power.usage` | Gauge | `W` | The power consumption of the logical partition (LPAR) in Watts. [52] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[55]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode only, requires the `environmental-metrics` Support Element feature, HMC ≥ 2.13.1). Covers CPU, memory, and I/O adapter power attributed to the partition.
+**[52]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode only, requires the `environmental-metrics` Support Element feature, HMC ≥ 2.13.1). Covers CPU, memory, and I/O adapter power attributed to the partition.
 
 
 
@@ -1139,11 +1106,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.status.code` | Gauge | `1` | The operational status of the logical partition (LPAR) as a numeric code. [56] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.status.code` | Gauge | `1` | The operational status of the logical partition (LPAR) as a numeric code. [53] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[56]:** Classic mode values (logical-partition-resource): 0=operating, 1=not-operating, 2=not-activated, 10=exceptions, 99=unknown. DPM mode values (partition-resource): 0=active, 1=degraded, 10=paused, 11=stopped, 12=starting, 13=stopping, 20=reservation-error, 21=terminated, 22=communications-not-active, 23=status-check, 99=unknown. Reported by the IBM Z HMC Web Services API partition object field `status`.
+**[53]:** Classic mode values (logical-partition-resource): 0=operating, 1=not-operating, 2=not-activated, 10=exceptions, 99=unknown. DPM mode values (partition-resource): 0=active, 1=degraded, 10=paused, 11=stopped, 12=starting, 13=stopping, 20=reservation-error, 21=terminated, 22=communications-not-active, 23=status-check, 99=unknown. Reported by the IBM Z HMC Web Services API partition object field `status`.
 
 **Attributes:**
 
@@ -1178,11 +1145,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.status.unacceptable` | Gauge | `1` | Indicates whether the logical partition (LPAR) is in an unacceptable status (1=true, 0=false). [57] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.status.unacceptable` | Gauge | `1` | Indicates whether the logical partition (LPAR) is in an unacceptable status (1=true, 0=false). [54] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[57]:** Reported by the IBM Z HMC Web Services API partition object field `has-unacceptable-status`. An unacceptable status means the partition requires operator attention.
+**[54]:** Reported by the IBM Z HMC Web Services API partition object field `has-unacceptable-status`. An unacceptable status means the partition requires operator attention.
 
 
 
@@ -1190,11 +1157,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.wlm.enabled` | Gauge | `1` | Indicates whether the z/OS Workload Manager (WLM) is permitted to adjust the processor weight properties of the classic-mode logical partition (LPAR) (1=true, 0=false). [58] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.wlm.enabled` | Gauge | `1` | Indicates whether the z/OS Workload Manager (WLM) is permitted to adjust the processor weight properties of the classic-mode logical partition (LPAR) (1=true, 0=false). [55] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[58]:** Reported by the IBM Z HMC Web Services API logical-partition-resource metric group field `workload-manager-enabled` (classic mode only). When enabled, z/OS WLM can dynamically adjust the partition's processing weights to meet workload goals.
+**[55]:** Reported by the IBM Z HMC Web Services API logical-partition-resource metric group field `workload-manager-enabled` (classic mode only). When enabled, z/OS WLM can dynamically adjust the partition's processing weights to meet workload goals.
 
 
 
@@ -1202,11 +1169,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.partition.zvm.paging.rate` | Gauge | `{page}/s` | The z/VM paging rate for the logical partition (LPAR), in pages per second. [59] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
+| `mainframe.partition.zvm.paging.rate` | Gauge | `{page}/s` | The z/VM paging rate for the logical partition (LPAR), in pages per second. [56] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.partition` |
 
 **Requirement Level:** `Recommended`
 
-**[59]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode only) for partitions running z/VM. A non-zero value indicates active paging activity. In distributed systems terms, this is analogous to the page fault rate or swap rate of a virtual machine. Only relevant for z/VM partitions; 0 for all others.
+**[56]:** Reported by the IBM Z HMC Web Services API logical-partition-usage metric group (classic mode only) for partitions running z/VM. A non-zero value indicates active paging activity. In distributed systems terms, this is analogous to the page fault rate or swap rate of a virtual machine. Only relevant for z/VM partitions; 0 for all others.
 
 
 
@@ -1214,11 +1181,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.bandwidth.utilization` | Gauge | `1` | The fraction of the available bandwidth currently in use on the physical network adapter port, as a ratio from 0 (idle) to 1 (fully utilised). [60] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.bandwidth.utilization` | Gauge | `1` | The fraction of the available bandwidth currently in use on the physical network adapter port, as a ratio from 0 (idle) to 1 (fully utilised). [57] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[60]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `utilization`. In distributed systems terms, this is analogous to the bandwidth utilization percentage of a NIC port.
+**[57]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `utilization`. In distributed systems terms, this is analogous to the bandwidth utilization percentage of a NIC port.
 
 
 
@@ -1226,11 +1193,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.broadcast.packets.received` | Counter | `{packet}` | The total number of broadcast packets received through the physical network adapter port. [61] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.broadcast.packets.received` | Counter | `{packet}` | The total number of broadcast packets received through the physical network adapter port. [58] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[61]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
+**[58]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
 
 
 
@@ -1238,11 +1205,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.broadcast.packets.sent` | Counter | `{packet}` | The total number of broadcast packets sent through the physical network adapter port. [62] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.broadcast.packets.sent` | Counter | `{packet}` | The total number of broadcast packets sent through the physical network adapter port. [59] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[62]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
+**[59]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
 
 
 
@@ -1250,11 +1217,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.bytes.received` | Counter | `By` | The total number of bytes in unicast packets received through the physical network adapter port. [63] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.bytes.received` | Counter | `By` | The total number of bytes in unicast packets received through the physical network adapter port. [60] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[63]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`. This is a monotonically increasing counter. In distributed systems terms, this is analogous to `network.receive_bytes_total`.
+**[60]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`. This is a monotonically increasing counter. In distributed systems terms, this is analogous to `network.receive_bytes_total`.
 
 
 
@@ -1262,11 +1229,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.bytes.sent` | Counter | `By` | The total number of bytes in unicast packets sent through the physical network adapter port. [64] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.bytes.sent` | Counter | `By` | The total number of bytes in unicast packets sent through the physical network adapter port. [61] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[64]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`. This is a monotonically increasing counter; rate-of-change gives throughput. In distributed systems terms, this is analogous to the `network.transmit_bytes_total` counter on a physical NIC port.
+**[61]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`. This is a monotonically increasing counter; rate-of-change gives throughput. In distributed systems terms, this is analogous to the `network.transmit_bytes_total` counter on a physical NIC port.
 
 
 
@@ -1274,11 +1241,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.data.rate.received` | Gauge | `By/s` | The data reception rate of the physical network adapter port in bytes per second, averaged over the last collection interval. [65] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.data.rate.received` | Gauge | `By/s` | The data reception rate of the physical network adapter port in bytes per second, averaged over the last collection interval. [62] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[65]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
+**[62]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
 
 
 
@@ -1286,11 +1253,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.data.rate.sent` | Gauge | `By/s` | The data transmission rate of the physical network adapter port in bytes per second, averaged over the last collection interval. [66] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.data.rate.sent` | Gauge | `By/s` | The data transmission rate of the physical network adapter port in bytes per second, averaged over the last collection interval. [63] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[66]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
+**[63]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
 
 
 
@@ -1298,11 +1265,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.data.received` | Gauge | `By` | The number of bytes received through the physical network adapter port during the last collection interval. [67] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.data.received` | Gauge | `By` | The number of bytes received through the physical network adapter port during the last collection interval. [64] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[67]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
+**[64]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
 
 
 
@@ -1310,11 +1277,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.data.sent` | Gauge | `By` | The number of bytes sent through the physical network adapter port during the last collection interval. [68] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.data.sent` | Gauge | `By` | The number of bytes sent through the physical network adapter port during the last collection interval. [65] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[68]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`. This gauge reflects the bytes transmitted during the most recent measurement interval, not a cumulative counter.
+**[65]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`. This gauge reflects the bytes transmitted during the most recent measurement interval, not a cumulative counter.
 
 
 
@@ -1322,11 +1289,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.multicast.packets.received` | Counter | `{packet}` | The total number of multicast packets received through the physical network adapter port. [69] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.multicast.packets.received` | Counter | `{packet}` | The total number of multicast packets received through the physical network adapter port. [66] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[69]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
+**[66]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
 
 
 
@@ -1334,11 +1301,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.multicast.packets.sent` | Counter | `{packet}` | The total number of multicast packets sent through the physical network adapter port. [70] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.multicast.packets.sent` | Counter | `{packet}` | The total number of multicast packets sent through the physical network adapter port. [67] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[70]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
+**[67]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
 
 
 
@@ -1346,11 +1313,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.packets.discarded` | Counter | `{packet}` | The total number of malformed packets discarded on the physical network adapter port. [71] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.packets.discarded` | Counter | `{packet}` | The total number of malformed packets discarded on the physical network adapter port. [68] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[71]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded` and `packets-received-discarded`. Use the `network.io.direction` attribute to distinguish sent vs. received discards.
+**[68]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded` and `packets-received-discarded`. Use the `network.io.direction` attribute to distinguish sent vs. received discards.
 
 **Attributes:**
 
@@ -1371,11 +1338,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.packets.dropped` | Counter | `{packet}` | The total number of packets dropped on the physical network adapter port due to resource shortage. [72] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.packets.dropped` | Counter | `{packet}` | The total number of packets dropped on the physical network adapter port due to resource shortage. [69] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[72]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped` and `packets-received-dropped`. Use the `network.io.direction` attribute to distinguish sent vs. received drops. In distributed systems terms, this is analogous to `network.transmit_drop_total` / `network.receive_drop_total` on a NIC.
+**[69]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped` and `packets-received-dropped`. Use the `network.io.direction` attribute to distinguish sent vs. received drops. In distributed systems terms, this is analogous to `network.transmit_drop_total` / `network.receive_drop_total` on a NIC.
 
 **Attributes:**
 
@@ -1396,11 +1363,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.packets.received` | Counter | `{packet}` | The total number of unicast packets received through the physical network adapter port. [73] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.packets.received` | Counter | `{packet}` | The total number of unicast packets received through the physical network adapter port. [70] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[73]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
+**[70]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
 
 
 
@@ -1408,11 +1375,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.port.packets.sent` | Counter | `{packet}` | The total number of unicast packets sent through the physical network adapter port. [74] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
+| `mainframe.port.packets.sent` | Counter | `{packet}` | The total number of unicast packets sent through the physical network adapter port. [71] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.port` |
 
 **Requirement Level:** `Recommended`
 
-**[74]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
+**[71]:** Reported by the IBM Z HMC Web Services API network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
 
 
 
@@ -1420,11 +1387,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.group.max.partitions` | Gauge | `{partition}` | The maximum number of DPM partitions to which the FCP-type storage group can be simultaneously attached. [75] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
+| `mainframe.storage.group.max.partitions` | Gauge | `{partition}` | The maximum number of DPM partitions to which the FCP-type storage group can be simultaneously attached. [72] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
 
 **Requirement Level:** `Recommended`
 
-**[75]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `max-partitions` (DPM mode only, FCP-type storage groups only, HMC ≥ 2.14.1). Not applicable to FC or NVMe storage groups.
+**[72]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `max-partitions` (DPM mode only, FCP-type storage groups only, HMC ≥ 2.14.1). Not applicable to FC or NVMe storage groups.
 
 
 
@@ -1432,11 +1399,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.group.shared` | Gauge | `1` | Indicates whether the DPM storage group is shared across multiple partitions (1=shared, 0=not shared). [76] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
+| `mainframe.storage.group.shared` | Gauge | `1` | Indicates whether the DPM storage group is shared across multiple partitions (1=shared, 0=not shared). [73] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
 
 **Requirement Level:** `Recommended`
 
-**[76]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `shared` (DPM mode only, HMC ≥ 2.14.1).
+**[73]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `shared` (DPM mode only, HMC ≥ 2.14.1).
 
 
 
@@ -1444,11 +1411,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.group.status.code` | Gauge | `1` | The fulfillment state of the DPM storage group as a numeric code. [77] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
+| `mainframe.storage.group.status.code` | Gauge | `1` | The fulfillment state of the DPM storage group as a numeric code. [74] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.group` |
 
 **Requirement Level:** `Recommended`
 
-**[77]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1). Encoded as: 0=complete, 1=pending, 2=pending-with-mismatches, 3=checking-migration, 4=incomplete, 99=unknown. In distributed systems terms, this is analogous to the binding phase of a Kubernetes Persistent Volume Claim.
+**[74]:** Reported by the IBM Z HMC Web Services API storagegroup-resource metric group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1). Encoded as: 0=complete, 1=pending, 2=pending-with-mismatches, 3=checking-migration, 4=incomplete, 99=unknown. In distributed systems terms, this is analogous to the binding phase of a Kubernetes Persistent Volume Claim.
 
 **Attributes:**
 
@@ -1477,11 +1444,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.volume.cylinders` | Gauge | `{cylinder}` | The size of the DPM ECKD storage volume in cylinders. [78] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
+| `mainframe.storage.volume.cylinders` | Gauge | `{cylinder}` | The size of the DPM ECKD storage volume in cylinders. [75] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
 
 **Requirement Level:** `Recommended`
 
-**[78]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `cylinders` (DPM mode only, FC-type storage groups only, HMC ≥ 2.14.1). A cylinder is the basic unit of IBM ECKD Direct Access Storage Device (DASD) capacity. Not applicable to FCP or NVMe volumes.
+**[75]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `cylinders` (DPM mode only, FC-type storage groups only, HMC ≥ 2.14.1). A cylinder is the basic unit of IBM ECKD Direct Access Storage Device (DASD) capacity. Not applicable to FCP or NVMe volumes.
 
 
 
@@ -1489,11 +1456,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.volume.size` | Gauge | `GiBy` | The size of the DPM storage volume in gibibytes. [79] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
+| `mainframe.storage.volume.size` | Gauge | `GiBy` | The size of the DPM storage volume in gibibytes. [76] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
 
 **Requirement Level:** `Recommended`
 
-**[79]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `size` (DPM mode only, HMC ≥ 2.14.1). For ECKD alias volumes this value is 0.
+**[76]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `size` (DPM mode only, HMC ≥ 2.14.1). For ECKD alias volumes this value is 0.
 
 
 
@@ -1501,11 +1468,11 @@
 
 | Name | Instrument Type | Unit (UCUM) | Description | Stability | Entity Associations |
 | -------- | --------------- | ----------- | -------------- | --------- | ------ |
-| `mainframe.storage.volume.status.code` | Gauge | `1` | The fulfillment state of the DPM storage volume as a numeric code. [80] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
+| `mainframe.storage.volume.status.code` | Gauge | `1` | The fulfillment state of the DPM storage volume as a numeric code. [77] | ![Development](https://img.shields.io/badge/-development-blue) | `mainframe.storage.volume` |
 
 **Requirement Level:** `Recommended`
 
-**[80]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1). Encoded as: 0=complete, 1=configuration-error, 2=deleting, 3=incomplete, 4=overprovisioned, 5=pending, 6=pending-with-mismatches, 99=unknown.
+**[77]:** Reported by the IBM Z HMC Web Services API storagevolume-resource metric group field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1). Encoded as: 0=complete, 1=configuration-error, 2=deleting, 3=incomplete, 4=overprovisioned, 5=pending, 6=pending-with-mismatches, 99=unknown.
 
 **Attributes:**
 

@@ -25,12 +25,9 @@
 
 | Name | Stability | Description |
 | --- | --- | --- |
-| [`mainframe.adapter.crypto.utilization`](/docs/registry/mainframe/metrics.md#mainframeadaptercryptoutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode cryptographic adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
-| [`mainframe.adapter.flash.utilization`](/docs/registry/mainframe/metrics.md#mainframeadapterflashutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode Flash Express adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.adapter.physical_channel.status.code`](/docs/registry/mainframe/metrics.md#mainframeadapterphysical_channelstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The physical channel status of the mainframe I/O adapter as a numeric code. |
-| [`mainframe.adapter.roce.utilization`](/docs/registry/mainframe/metrics.md#mainframeadapterroceutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the classic-mode RDMA over Converged Ethernet (RoCE) adapter was busy processing requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.adapter.status.code`](/docs/registry/mainframe/metrics.md#mainframeadapterstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The operational status of the mainframe I/O adapter as a numeric code. |
-| [`mainframe.adapter.utilization`](/docs/registry/mainframe/metrics.md#mainframeadapterutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the adapter was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.adapter.utilization`](/docs/registry/mainframe/metrics.md#mainframeadapterutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.channel.utilization`](/docs/registry/mainframe/metrics.md#mainframechannelutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the I/O channel was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
 | [`mainframe.cpu.smt_mode.utilization`](/docs/registry/mainframe/metrics.md#mainframecpusmt_modeutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. |
 | [`mainframe.cpu.thread0.utilization`](/docs/registry/mainframe/metrics.md#mainframecputhread0utilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported. |
@@ -115,7 +112,7 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | <a id="mainframe-adapter-name">`mainframe.adapter.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O adapter in the form CSS.Chpid. [1] | `0.00`; `0.2D`; `1.E3` |
 | <a id="mainframe-adapter-owning-partition">`mainframe.adapter.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions. [2] | `LPAR01`; `shared` |
 | <a id="mainframe-adapter-status">`mainframe.adapter.status`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational status of the mainframe I/O adapter. [3] | `active`; `not-active`; `not-detected` |
-| <a id="mainframe-adapter-type">`mainframe.adapter.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of the mainframe I/O adapter card. [4] | `crypto`; `accelerator`; `network` |
+| <a id="mainframe-adapter-type">`mainframe.adapter.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of the mainframe I/O adapter card. [4] | `crypto`; `flash`; `roce` |
 | <a id="mainframe-channel-mode">`mainframe.channel.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions. | `dedicated`; `shared` |
 | <a id="mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. [5] | `0.00`; `0.2D`; `1.E3` |
 | <a id="mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [6] | `LPAR01`; `shared` |
@@ -200,7 +197,9 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | --- | --- | --- |
 | `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
 | `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
