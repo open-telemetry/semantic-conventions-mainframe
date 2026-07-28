@@ -323,7 +323,11 @@ metrics:
   - name: mainframe.host.heatload
     brief: "The heat load produced by the mainframe system, measured in joules per hour."
     note: >
-      Reported by the IBM Z HMC Web Services API CPC metric group.
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports heat-load values in
+      BTU/h (British Thermal Units per hour); they are converted to joules per
+      hour (J/h) by multiplying by 1.05506
+      (1 BTU/h = 1.05506 J/h, exact UCUM equivalent).
     instrument: gauge
     unit: "J/h"
     stability: development
@@ -337,14 +341,29 @@ metrics:
             name: zcpc-environmentals-and-power
             field: heat-load
             mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1.05506"
+              multiplier: 1.05506
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: heat-load-forced-air
             mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1.05506"
+              multiplier: 1.05506
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: heat-load-water
             mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1.05506"
+              multiplier: 1.05506
     entity_associations:
       - mainframe.host
     attributes:
@@ -356,7 +375,10 @@ metrics:
   - name: mainframe.host.power.usage
     brief: "The power consumption of the mainframe system in Watts."
     note: >
-      Reported by the IBM Z HMC Web Services API CPC metric group.
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports power values in
+      kilowatts (kW); they are converted to watts (W) by multiplying by 1000
+      (1 kW = 1000 W).
     instrument: gauge
     unit: "W"
     stability: development
@@ -370,18 +392,38 @@ metrics:
             name: zcpc-environmentals-and-power
             field: power
             mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: total-partition-power-consumption
             mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: total-infrastructure-power-consumption
             mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: total-unassigned-power-consumption
             mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
     entity_associations:
       - mainframe.host
     attributes:
@@ -393,7 +435,10 @@ metrics:
   - name: mainframe.host.power.cord.usage
     brief: "The power consumption on the specified power cord of the mainframe system in Watts."
     note: >
-      Reported by the IBM Z HMC Web Services API CPC metric group.
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports power-cord values in
+      kilowatts (kW); they are converted to watts (W) by multiplying by 1000
+      (1 kW = 1000 W).
     instrument: gauge
     unit: "W"
     stability: development
@@ -407,6 +452,11 @@ metrics:
             name: zcpc-environmentals-and-power
             field: power-cord-usage
             mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
     entity_associations:
       - mainframe.host
     attributes:

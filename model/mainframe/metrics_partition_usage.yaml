@@ -167,7 +167,9 @@ metrics:
       Reported by the IBM Z HMC Web Services API logical-partition-usage metric
       group (classic mode only, requires the `environmental-metrics` Support
       Element feature, HMC ≥ 2.13.1). Covers CPU, memory, and I/O adapter
-      power attributed to the partition.
+      power attributed to the partition. The HMC API reports the power value in
+      kilowatts (kW); it is converted to watts (W) by multiplying by 1000
+      (1 kW = 1000 W).
     instrument: gauge
     unit: "W"
     stability: development
@@ -182,6 +184,11 @@ metrics:
             field: power
             mode: classic
             min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
     entity_associations:
       - mainframe.partition
 
