@@ -1,0 +1,15 @@
+# Grafana dashboard provisioning — automatically loads all mainframe dashboards
+# from the bind-mounted directory.
+
+apiVersion: 1
+
+providers:
+  - name: mainframe
+    orgId: 1
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards/mainframe
+      foldersFromFilesStructure: false

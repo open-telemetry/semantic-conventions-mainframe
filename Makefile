@@ -1,7 +1,7 @@
 # Mainframe Semantic Conventions - Makefile
-# Requires: docker (or podman aliased as docker)
-# The weaver version is pinned in versions.env (WEAVER_VERSION) and run via
-# the otel/weaver container image -- contributors do not need to install weaver locally.
+# Requires: podman (https://podman.io) and podman-compose (https://github.com/containers/podman-compose).
+# The Weaver version is pinned in versions.env (WEAVER_VERSION) and run via
+# the otel/weaver container image — contributors do not need to install weaver locally.
 
 # Shared external version pins. Override on the command line when needed, e.g.
 # `make check-policies SEMCONV_VERSION=v1.40.0`.
@@ -13,12 +13,21 @@ include $(VERSION_PINS_FILE)
 # targets below pass to weaver (./model, .build/..., docs/, docs/registry)
 # resolves the same way it would for a host-installed weaver.
 WEAVER_IMAGE := otel/weaver:$(WEAVER_VERSION)
-WEAVER := docker run --rm \
+WEAVER := podman run --rm \
 	-u $(shell id -u):$(shell id -g) \
 	-v "$(CURDIR):/workspace" \
 	-w /workspace \
 	-e HOME=/tmp \
 	$(WEAVER_IMAGE)
+
+# podman-compose binary. Override if installed elsewhere:
+#   make stack-up COMPOSE=/usr/local/bin/podman-compose
+COMPOSE ?= podman-compose
+
+# Compose project file for the reference observability stack.
+# Use absolute path so podman-compose resolves bind-mount paths relative to
+# the reference/ directory regardless of where make is invoked from.
+COMPOSE_FILE := $(CURDIR)/reference/docker-compose.yaml
 
 # Shared docs template from opentelemetry-weaver-packages, pinned to the same
 # commit as the policy repo so a single renovate PR bumps both in lock-step.
@@ -61,8 +70,8 @@ SC_UPSTREAM_MIGRATED_DIRS := mainframe zos ibm tps
 # same group id.
 SC_UPSTREAM_MIGRATED_GROUPS := # aws/registry.yaml:registry.aws.bedrock
 
-.PHONY: check-policies generate-registry generate-docs generate-json-schemas generate-all clean filter-upstream package-dev \
-	generate-reference-reports
+.PHONY: check-policies generate-registry generate-docs generate-json-schemas generate-all \
+        clean filter-upstream package-dev emit stack-emit stack-up stack-down demo
 
 # Release version = last path segment of the top-level schema_url in
 # model/manifest.yaml. E.g. `mainframe-dev/1.42.0-dev` -> `1.42.0-dev`.
@@ -158,13 +167,37 @@ generate-docs: $(SC_UPSTREAM_STAMP)
 generate-json-schemas:
 # TODO:	cd docs/gen-ai/non-normative && uv run models.py $(CURDIR)/model/gen-ai
 
-# Update reference reports (README.md and reports/) from data.json files.
-generate-reference-reports:
-# TODO:	cd reference && uv run --frozen update-reports
-
-# Run every regeneration the repo owns (weaver-driven + pydantic-driven + reports).
+# Run every regeneration the repo owns (weaver-driven + pydantic-driven).
 # CI checks that all committed outputs match what this target generates.
-generate-all: generate-registry generate-docs generate-json-schemas generate-reference-reports
+generate-all: generate-registry generate-docs generate-json-schemas
+
+# Resolve the registry and emit one synthetic data point per metric, span, and
+# log to stdout or a live OTLP collector.
+#
+#   make emit                                      # emit to stdout (default)
+#   make emit OTLP_ENDPOINT=http://localhost:4317  # emit to the local stack
+#
+# NOTE: Weaver runs inside a Podman container, so 'localhost' inside that
+# container refers to the container itself, not the host.  When targeting the
+# reference stack use OTLP_ENDPOINT=http://host.containers.internal:4317
+# (Podman's host gateway alias), which make stack-emit sets automatically.
+OTLP_ENDPOINT ?=
+emit: $(SC_UPSTREAM_STAMP)
+	$(WEAVER) registry emit \
+		-r ./model \
+		--v2 \
+		--skip-policies \
+		$(if $(OTLP_ENDPOINT),--endpoint $(OTLP_ENDPOINT),--stdout)
+
+# Emit synthetic telemetry into the running reference stack.
+# Uses host.containers.internal so the Weaver container can reach the
+# OTel Collector running on the host network.
+stack-emit: $(SC_UPSTREAM_STAMP)
+	$(WEAVER) registry emit \
+		-r ./model \
+		--v2 \
+		--skip-policies \
+		--endpoint http://host.containers.internal:4317
 
 # Package the registry into a publication artifact. The version comes from
 # model/manifest.yaml's schema_url; bump it there to cut a new release.
@@ -178,17 +211,47 @@ package-dev: $(SC_UPSTREAM_STAMP)
 		-o ./$(PACKAGE_OUTPUT)
 	@echo "Packaged version $(VERSION) -> $(PACKAGE_OUTPUT)"
 
+# --- Reference observability stack -----------------------------------------
+
+# Export all versions.env variables so podman-compose can expand them inside
+# docker-compose.yaml (${OTELCOL_VERSION}, ${PROMETHEUS_VERSION}, etc.).
+export OTELCOL_VERSION
+export PROMETHEUS_VERSION
+export GRAFANA_VERSION
+
+# Start the OTel Collector + Prometheus + Grafana stack in the background.
+# Grafana will be available at http://localhost:3000 (admin/admin).
+stack-up:
+	$(COMPOSE) -f $(COMPOSE_FILE) up -d
+	@echo ""
+	@echo "Stack is up. Grafana: http://localhost:3000  (admin / admin)"
+	@echo "Run 'make stack-emit' to send synthetic telemetry into the stack."
+
+# Stop and remove the stack containers (volumes are preserved).
+stack-down:
+	$(COMPOSE) -f $(COMPOSE_FILE) down
+
+# One-shot demo: start the stack, wait for the collector to be ready,
+# emit synthetic telemetry, then print the Grafana URL.
+demo: stack-up
+	@echo "Waiting for OTel Collector gRPC port to be ready..."
+	@for i in $$(seq 1 30); do \
+	    nc -z localhost 4317 2>/dev/null && break; \
+	    sleep 1; \
+	done
+	$(MAKE) stack-emit
+	@echo ""
+	@echo "Telemetry emitted. Open Grafana: http://localhost:3000"
+	@echo "  Login: admin / admin"
+	@echo "  Dashboards → Mainframe → pick any dashboard"
+
+# ---------------------------------------------------------------------------
+
 # Remove generated docs, the local .build/ tree (Weaver-fetched templates/policies
-# plus any hand-created weaver-min-repro* dirs), reference-project caches, and
-# Python bytecode trees under the entire repo.
-#
-# `clean` does NOT touch `reference/.venv`; rebuilding it requires a fresh
-# `uv sync` which re-downloads every tooling dependency. Remove it manually
-# (`rm -rf reference/.venv`) for a full reset.
+# plus any hand-created weaver-min-repro* dirs), and Python bytecode trees.
 clean:
 	rm -rf docs/registry
 	rm -rf .build
-	rm -rf reference/.cache
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +
 	find . -type d -name '*.egg-info' -prune -exec rm -rf {} +
 	find . -type d -name .ruff_cache -prune -exec rm -rf {} +

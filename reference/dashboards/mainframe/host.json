@@ -1,257 +1,475 @@
 {
-  "__inputs": [
+  "__requires": [
     {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.0.0"
+    },
+    {
       "type": "datasource",
-      "pluginId": "prometheus"
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
     }
   ],
-  "__requires": [
-    { "type": "grafana",    "id": "grafana",    "name": "Grafana",    "version": "11.0.0" },
-    { "type": "datasource", "id": "prometheus", "name": "Prometheus", "version": "1.0.0" }
-  ],
   "uid": "mainframe-host",
-  "title": "Mainframe — mainframe host",
+  "title": "Mainframe \u2014 mainframe host",
   "description": "Auto-generated from mainframe semantic conventions. Entity: mainframe.host.",
-  "tags": ["mainframe", "semconv", "mainframe"],
+  "tags": [
+    "mainframe",
+    "semconv",
+    "mainframe"
+  ],
   "schemaVersion": 39,
   "version": 1,
   "refresh": "30s",
-  "time": { "from": "now-1h", "to": "now" },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
   "panels": [
     {
       "id": 1,
       "title": "Number of active processors of the specified type installed in the mainframe system",
       "description": "Metric: mainframe.host.cpu.active.count. Unit: {cpu}.",
       "type": "stat",
-      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_cpu_active_count{job=~\".+\"}",
           "legendFormat": "{{mainframe_cpu_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "short", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 2,
       "title": "Number of defective processors in the mainframe system",
       "description": "Metric: mainframe.host.cpu.defective.count. Unit: {cpu}.",
       "type": "stat",
-      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_cpu_defective_count{job=~\".+\"}",
           "legendFormat": "defective"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "short", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 3,
       "title": "Number of spare processors available in the mainframe system",
       "description": "Metric: mainframe.host.cpu.spare.count. Unit: {cpu}.",
       "type": "stat",
-      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_cpu_spare_count{job=~\".+\"}",
           "legendFormat": "spare"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "short", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 4,
       "title": "Size of memory of the specified category in the mainframe system",
       "description": "Metric: mainframe.host.memory.size. Unit: MiBy.",
       "type": "stat",
-      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_memory_size{job=~\".+\"}",
           "legendFormat": "{{mainframe_memory_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "mebibytes", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "mebibytes",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 5,
       "title": "Size of one IBM Virtual Flash Memory (VFM) increment in the mainframe system",
       "description": "Metric: mainframe.host.memory.vfm.increment.size. Unit: GiBy.",
       "type": "stat",
-      "gridPos": { "x": 0, "y": 16, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_memory_vfm_increment_size{job=~\".+\"}",
           "legendFormat": "VFM increment size"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "gibibytes", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "gibibytes",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 6,
       "title": "Total size of installed IBM Virtual Flash Memory (VFM) in the mainframe system",
       "description": "Metric: mainframe.host.memory.vfm.size. Unit: GiBy.",
       "type": "stat",
-      "gridPos": { "x": 12, "y": 16, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_memory_vfm_size{job=~\".+\"}",
           "legendFormat": "VFM total size"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "gibibytes", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "gibibytes",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 7,
       "title": "Average fraction of time all channels in the mainframe system were busy processing I/O",
       "description": "Metric: mainframe.host.channel.utilization. Unit: 1 (ratio 0-1).",
       "type": "gauge",
-      "gridPos": { "x": 0, "y": 24, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_channel_utilization{job=~\".+\"}",
           "legendFormat": "channel utilization"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1, "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {}
+        }
+      }
     },
     {
       "id": 8,
       "title": "Fraction of time processors of the specified type in the mainframe system were busy executing work",
       "description": "Metric: mainframe.host.cpu.utilization. Unit: 1 (ratio 0-1). -1 = no processors of this type present.",
       "type": "gauge",
-      "gridPos": { "x": 12, "y": 24, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_cpu_utilization{job=~\".+\"}",
           "legendFormat": "{{mainframe_cpu_type}} / {{mainframe_cpu_sharing_mode}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "percentunit", "min": -1, "max": 1, "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": -1,
+          "max": 1,
+          "custom": {}
+        }
+      }
     },
     {
       "id": 9,
       "title": "Temperature at the specified sensor location of the mainframe system in degrees Celsius",
       "description": "Metric: mainframe.host.temperature. Unit: Cel.",
       "type": "gauge",
-      "gridPos": { "x": 0, "y": 32, "w": 8, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_temperature{job=~\".+\"}",
           "legendFormat": "{{mainframe_host_temperature_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "celsius", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 10,
       "title": "Relative humidity of the environment surrounding the mainframe system",
       "description": "Metric: mainframe.host.humidity. Unit: 1 (ratio 0-1).",
       "type": "gauge",
-      "gridPos": { "x": 8, "y": 32, "w": 8, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 8,
+        "y": 32,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_humidity{job=~\".+\"}",
           "legendFormat": "humidity"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1, "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {}
+        }
+      }
     },
     {
       "id": 11,
       "title": "Dew point temperature of the environment surrounding the mainframe system in degrees Celsius",
       "description": "Metric: mainframe.host.dewpoint. Unit: Cel.",
       "type": "gauge",
-      "gridPos": { "x": 16, "y": 32, "w": 8, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 16,
+        "y": 32,
+        "w": 8,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_dewpoint{job=~\".+\"}",
           "legendFormat": "dew point"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "celsius", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 12,
       "title": "Heat load produced by the mainframe system, measured in joules per hour",
       "description": "Metric: mainframe.host.heatload. Unit: J/h.",
       "type": "gauge",
-      "gridPos": { "x": 0, "y": 40, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_heatload{job=~\".+\"}",
           "legendFormat": "{{mainframe_host_heatload_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "joule", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "joule",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 13,
       "title": "Power consumption of the mainframe system in Watts",
       "description": "Metric: mainframe.host.power.usage. Unit: W.",
       "type": "gauge",
-      "gridPos": { "x": 12, "y": 40, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 40,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_power_usage{job=~\".+\"}",
           "legendFormat": "{{mainframe_host_power_usage_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "watt", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 14,
       "title": "Power consumption on the specified power cord of the mainframe system in Watts",
       "description": "Metric: mainframe.host.power.cord.usage. Unit: W.",
       "type": "gauge",
-      "gridPos": { "x": 0, "y": 48, "w": 12, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 48,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_power_cord_usage{job=~\".+\"}",
           "legendFormat": "cord={{mainframe_host_power_cord}} phase={{mainframe_host_power_phase}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "watt", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "watt",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 15,
       "title": "Operational status of the mainframe system as a numeric code",
       "description": "Metric: mainframe.host.status.code. Unit: 1.",
       "type": "stat",
-      "gridPos": { "x": 12, "y": 48, "w": 6, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 12,
+        "y": 48,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_status_code{job=~\".+\"}",
           "legendFormat": "status code"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "short", "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {}
+        }
+      }
     },
     {
       "id": 16,
       "title": "Indicates whether the Central Processing Complex (CPC) is in an unacceptable status (1=true, 0=false)",
       "description": "Metric: mainframe.host.status.unacceptable. Unit: 1.",
       "type": "stat",
-      "gridPos": { "x": 18, "y": 48, "w": 6, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 18,
+        "y": 48,
+        "w": 6,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_status_unacceptable{job=~\".+\"}",
@@ -265,8 +483,14 @@
             {
               "type": "value",
               "options": {
-                "0": { "text": "OK",           "color": "green" },
-                "1": { "text": "UNACCEPTABLE", "color": "red"   }
+                "0": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "UNACCEPTABLE",
+                  "color": "red"
+                }
               }
             }
           ],
@@ -279,15 +503,30 @@
       "title": "Fraction of time adapters of the specified type on the mainframe system were busy processing I/O",
       "description": "Metric: mainframe.host.adapter.utilization. Unit: 1 (ratio 0-1). DPM mode only. -1 = no adapters of this type present.",
       "type": "gauge",
-      "gridPos": { "x": 0, "y": 56, "w": 24, "h": 8 },
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "gridPos": {
+        "x": 0,
+        "y": 56,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "DS_PROMETHEUS"
+      },
       "targets": [
         {
           "expr": "mainframe_host_adapter_utilization{job=~\".+\"}",
           "legendFormat": "{{mainframe_adapter_type}}"
         }
       ],
-      "fieldConfig": { "defaults": { "unit": "percentunit", "min": -1, "max": 1, "custom": {} } }
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": -1,
+          "max": 1,
+          "custom": {}
+        }
+      }
     }
   ]
 }

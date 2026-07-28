@@ -1,0 +1,53 @@
+# OpenTelemetry Collector configuration for the Mainframe semconv demo stack.
+#
+# Receives synthetic telemetry from `weaver registry emit` (OTLP gRPC :4317)
+# and exposes it as a Prometheus metrics endpoint that Prometheus scrapes.
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"
+      http:
+        endpoint: "0.0.0.0:4318"
+
+processors:
+  # Drop empty metric data points that some instruments produce with no value
+  filter/drop_empty:
+    error_mode: ignore
+    metrics:
+      datapoint: []
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 256
+  batch:
+    timeout: 5s
+
+exporters:
+  # Exposes metrics in Prometheus format; Prometheus scrapes this endpoint.
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+    namespace: ""
+    send_timestamps: true
+    metric_expiration: 1h
+    resource_to_telemetry_conversion:
+      enabled: true
+
+  # Debug exporter — prints received telemetry to collector stdout (verbosity: basic)
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus, debug]
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]
