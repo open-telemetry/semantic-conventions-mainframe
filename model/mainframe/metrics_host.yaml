@@ -326,8 +326,8 @@ metrics:
       Reported by the IBM Z HMC Web Services API CPC metric group
       (zcpc-environmentals-and-power). The HMC API reports heat-load values in
       BTU/h (British Thermal Units per hour); they are converted to joules per
-      hour (J/h) by multiplying by 1.05506
-      (1 BTU/h = 1.05506 J/h, exact UCUM equivalent).
+      hour (J/h) by multiplying by 1055.06
+      (1 BTU = 1055.06 J, therefore 1 BTU/h = 1055.06 J/h).
     instrument: gauge
     unit: "J/h"
     stability: development
@@ -344,8 +344,8 @@ metrics:
             unit_transformation:
               hmc_unit: BTU/h
               otel_unit: J/h
-              formula: "value * 1.05506"
-              multiplier: 1.05506
+              formula: "value * 1055.06"
+              multiplier: 1055.06
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: heat-load-forced-air
@@ -353,8 +353,8 @@ metrics:
             unit_transformation:
               hmc_unit: BTU/h
               otel_unit: J/h
-              formula: "value * 1.05506"
-              multiplier: 1.05506
+              formula: "value * 1055.06"
+              multiplier: 1055.06
           - type: metric_group
             name: zcpc-environmentals-and-power
             field: heat-load-water
@@ -362,8 +362,8 @@ metrics:
             unit_transformation:
               hmc_unit: BTU/h
               otel_unit: J/h
-              formula: "value * 1.05506"
-              multiplier: 1.05506
+              formula: "value * 1055.06"
+              multiplier: 1055.06
     entity_associations:
       - mainframe.host
     attributes:
@@ -489,8 +489,9 @@ metrics:
   - name: mainframe.host.status.unacceptable
     brief: "Indicates whether the Central Processing Complex (CPC) is in an unacceptable status (1=true, 0=false)."
     note: >
-      Reported by the IBM Z HMC Web Services API CPC object field `status`.
-      An unacceptable status means the system requires operator attention.
+      Reported by the IBM Z HMC Web Services API CPC object field
+      `has-unacceptable-status`. An unacceptable status means the system
+      requires operator attention.
     instrument: gauge
     unit: "1"
     stability: development

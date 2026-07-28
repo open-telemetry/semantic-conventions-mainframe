@@ -6,14 +6,14 @@
 | Type | Stability | Description |
 | --- | --- | --- |
 | [`mainframe.adapter`](#mainframeadapter) | ![Development](https://img.shields.io/badge/-development-blue) | A mainframe I/O adapter card, representing a physical PCIe adapter that connects the Central Processing Complex (CPC) to networks, storage, or provides cryptographic and acceleration services. |
+| [`mainframe.adapter.port`](#mainframeadapterport) | ![Development](https://img.shields.io/badge/-development-blue) | A physical port on a mainframe network adapter in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a physical port on a multi-port NIC or switch. |
 | [`mainframe.channel`](#mainframechannel) | ![Development](https://img.shields.io/badge/-development-blue) | A mainframe I/O channel, representing a physical channel path that connects the Central Processing Complex (CPC) to peripheral devices — the mainframe equivalent of a network or storage interface card port. |
 | [`mainframe.cpu`](#mainframecpu) | ![Development](https://img.shields.io/badge/-development-blue) | A physical mainframe processor within the Central Processing Complex (CPC) — the mainframe equivalent of a CPU core in a distributed server. |
 | [`mainframe.host`](#mainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | A mainframe host, representing the physical machine known as the Central Processing Complex (CPC) — the mainframe equivalent of a bare-metal server. |
-| [`mainframe.nic`](#mainframenic) | ![Development](https://img.shields.io/badge/-development-blue) | A virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a vNIC attached to a virtual machine. |
 | [`mainframe.partition`](#mainframepartition) | ![Development](https://img.shields.io/badge/-development-blue) | A logical partition (LPAR) running on the mainframe — the mainframe equivalent of a virtual machine (VM). Each LPAR can run an independent operating system such as z/OS, Linux, or z/VM. |
-| [`mainframe.port`](#mainframeport) | ![Development](https://img.shields.io/badge/-development-blue) | A physical port on a mainframe network adapter in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a physical port on a multi-port NIC or switch. |
+| [`mainframe.partition.nic`](#mainframepartitionnic) | ![Development](https://img.shields.io/badge/-development-blue) | A virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a vNIC attached to a virtual machine. |
 | [`mainframe.storage.group`](#mainframestoragegroup) | ![Development](https://img.shields.io/badge/-development-blue) | A DPM storage group — a named collection of block storage volumes of a single connectivity type (FCP, FC, or NVMe) that can be attached to one or more DPM partitions. Analogous to a Kubernetes StorageClass or a cloud storage pool. |
-| [`mainframe.storage.volume`](#mainframestoragevolume) | ![Development](https://img.shields.io/badge/-development-blue) | A DPM storage volume — a single unit of block storage (LUN, ECKD DASD cylinder set, or NVMe namespace) within a storage group. Analogous to a Kubernetes Persistent Volume or a cloud block storage volume. |
+| [`mainframe.storage.group.volume`](#mainframestoragegroupvolume) | ![Development](https://img.shields.io/badge/-development-blue) | A DPM storage volume — a single unit of block storage (LUN, ECKD DASD cylinder set, or NVMe namespace) within a storage group. Analogous to a Kubernetes Persistent Volume or a cloud block storage volume. |
 
 ## `mainframe.adapter`
 
@@ -52,6 +52,30 @@ A mainframe I/O adapter card, representing a physical PCIe adapter that connects
 | `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
 
+## `mainframe.adapter.port`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+A physical port on a mainframe network adapter in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a physical port on a multi-port NIC or switch.
+
+**Type:** `mainframe.adapter.port`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`mainframe.adapter.name`](/docs/registry/mainframe/README.md#mainframe-adapter-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O adapter in the form CSS.Chpid. [4] | `0.00`; `0.2D`; `1.E3` |
+| Identity | [`mainframe.adapter.port.id`](/docs/registry/mainframe/README.md#mainframe-adapter-port-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The identifier of the physical port on a mainframe network adapter. [5] | `0`; `1` |
+| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [6] | `opentelemetry-test` |
+
+**[4] `mainframe.adapter.name`:** The name of the adapter that contains this port, in CSS.CHPID format.
+
+**[5] `mainframe.adapter.port.id`:** Reported by the HMC Web Services API network-physical-adapter-port metric group field `network-port-id`. In distributed systems terms, this is analogous to the port number on a multi-port NIC.
+
+**[6] `host.name`:** The name of the Central Processing Complex (CPC) that owns the adapter hosting this port.
+
 ## `mainframe.channel`
 
 **Status:** ![Development](https://img.shields.io/badge/-development-blue)
@@ -66,13 +90,13 @@ A mainframe I/O channel, representing a physical channel path that connects the 
 
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
-| Identity | [`mainframe.channel.name`](/docs/registry/mainframe/README.md#mainframe-channel-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O channel in the form CSS.Chpid. [4] | `0.00`; `0.2D`; `1.E3` |
+| Identity | [`mainframe.channel.name`](/docs/registry/mainframe/README.md#mainframe-channel-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O channel in the form CSS.Chpid. [7] | `0.00`; `0.2D`; `1.E3` |
 | Description | [`mainframe.channel.mode`](/docs/registry/mainframe/README.md#mainframe-channel-mode) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions. | `dedicated`; `shared` |
-| Description | [`mainframe.channel.owning.partition`](/docs/registry/mainframe/README.md#mainframe-channel-owning-partition) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [5] | `LPAR01`; `shared` |
+| Description | [`mainframe.channel.owning.partition`](/docs/registry/mainframe/README.md#mainframe-channel-owning-partition) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [8] | `LPAR01`; `shared` |
 
-**[4] `mainframe.channel.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API channel-path object.
+**[7] `mainframe.channel.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API channel-path object.
 
-**[5] `mainframe.channel.owning.partition`:** Reported by the HMC Web Services API channel-path object. Set to 'shared' when the channel is not dedicated to a single partition.
+**[8] `mainframe.channel.owning.partition`:** Reported by the HMC Web Services API channel-path object. Set to 'shared' when the channel is not dedicated to a single partition.
 
 ---
 
@@ -97,10 +121,10 @@ A physical mainframe processor within the Central Processing Complex (CPC) — t
 
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
-| Identity | [`mainframe.cpu.name`](/docs/registry/mainframe/README.md#mainframe-cpu-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number. [6] | `IFL01`; `CP02`; `zIIP03` |
+| Identity | [`mainframe.cpu.name`](/docs/registry/mainframe/README.md#mainframe-cpu-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number. [9] | `IFL01`; `CP02`; `zIIP03` |
 | Description | [`mainframe.cpu.type`](/docs/registry/mainframe/README.md#mainframe-cpu-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The type of mainframe processor within the Central Processing Complex (CPC). | `all`; `cp`; `icf` |
 
-**[6] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
+**[9] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
 
 ---
 
@@ -131,27 +155,27 @@ A mainframe host, representing the physical machine known as the Central Process
 
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
-| Identity | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [7] | `opentelemetry-test` |
-| Description | `host.arch` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The CPU architecture the host system is running on. [8] | `amd64`; `arm32`; `arm64` |
-| Description | `host.id` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized systems, this should be the `machine-id`. See the table below for the sources to use to determine the `machine-id` based on operating system. [9] | `fdbf79e8af94cb7f9e8df36789187052` |
-| Description | `host.type` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Type of host. For Cloud, this must be the machine type. [10] | `n1-standard-1` |
-| Description | [`mainframe.host.machine_model`](/docs/registry/mainframe/README.md#mainframe-host-machine-model) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [11] | `ME1`; `ML1`; `A01`; `LA1` |
-| Description | [`mainframe.host.machine_type`](/docs/registry/mainframe/README.md#mainframe-host-machine-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [12] | `9175`; `3931` |
-| Description | [`mainframe.host.serial_number`](/docs/registry/mainframe/README.md#mainframe-host-serial-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The serial number of the Central Processing Complex (CPC). [13] | `0000000ABCDE` |
+| Identity | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [10] | `opentelemetry-test` |
+| Description | `host.arch` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The CPU architecture the host system is running on. [11] | `amd64`; `arm32`; `arm64` |
+| Description | `host.id` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized systems, this should be the `machine-id`. See the table below for the sources to use to determine the `machine-id` based on operating system. [12] | `fdbf79e8af94cb7f9e8df36789187052` |
+| Description | `host.type` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Type of host. For Cloud, this must be the machine type. [13] | `n1-standard-1` |
+| Description | [`mainframe.host.machine_model`](/docs/registry/mainframe/README.md#mainframe-host-machine-model) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [14] | `ME1`; `ML1`; `A01`; `LA1` |
+| Description | [`mainframe.host.machine_type`](/docs/registry/mainframe/README.md#mainframe-host-machine-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [15] | `9175`; `3931` |
+| Description | [`mainframe.host.serial_number`](/docs/registry/mainframe/README.md#mainframe-host-serial-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The serial number of the Central Processing Complex (CPC). [16] | `0000000ABCDE` |
 
-**[7] `host.name`:** The name of the Central Processing Complex (CPC) as configured on the HMC. Reported by the HMC Web Services API CPC object field `name`.
+**[10] `host.name`:** The name of the Central Processing Complex (CPC) as configured on the HMC. Reported by the HMC Web Services API CPC object field `name`.
 
-**[8] `host.arch`:** SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+**[11] `host.arch`:** SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
 
-**[9] `host.id`:** The host.id SHOULD be the object-id UUID of the Central Processing Complex (CPC) as defined by the HMC Web Services API CPC object.
+**[12] `host.id`:** The host.id SHOULD be the object-id UUID of the Central Processing Complex (CPC) as defined by the HMC Web Services API CPC object.
 
-**[10] `host.type`:** SHOULD be the concatenation of the IBM machine type and model of the Central Processing Complex (CPC), e.g., "9175-ME1".
+**[13] `host.type`:** SHOULD be the concatenation of the IBM machine type and model of the Central Processing Complex (CPC), e.g., "9175-ME1".
 
-**[11] `mainframe.host.machine_model`:** Reported by the HMC Web Services API CPC object field `machine-model`. Combined with `mainframe.host.machine_type`, forms the full IBM machine type-model identifier (e.g., "9175-ME1").
+**[14] `mainframe.host.machine_model`:** Reported by the HMC Web Services API CPC object field `machine-model`. Combined with `mainframe.host.machine_type`, forms the full IBM machine type-model identifier (e.g., "9175-ME1").
 
-**[12] `mainframe.host.machine_type`:** Reported by the HMC Web Services API CPC object field `machine-type`. In distributed systems terms, this is analogous to the CPU family or server product line identifier.
+**[15] `mainframe.host.machine_type`:** Reported by the HMC Web Services API CPC object field `machine-type`. In distributed systems terms, this is analogous to the CPU family or server product line identifier.
 
-**[13] `mainframe.host.serial_number`:** Reported by the HMC Web Services API CPC object field `serial-number`. The serial number uniquely identifies a physical mainframe machine.
+**[16] `mainframe.host.serial_number`:** Reported by the HMC Web Services API CPC object field `serial-number`. The serial number uniquely identifies a physical mainframe machine.
 
 ---
 
@@ -168,36 +192,6 @@ A mainframe host, representing the physical machine known as the Central Process
 | `s390x` | IBM z/Architecture | ![Development](https://img.shields.io/badge/-development-blue) |
 | `x86` | 32-bit x86 | ![Development](https://img.shields.io/badge/-development-blue) |
 
-## `mainframe.nic`
-
-**Status:** ![Development](https://img.shields.io/badge/-development-blue)
-
-A virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a vNIC attached to a virtual machine.
-
-**Type:** `mainframe.nic`
-
-**Requirement Level:** `Recommended`
-
-**Attributes:**
-
-| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
-| --- | --- | --- | --- | --- | --- | --- |
-| Identity | [`mainframe.nic.name`](/docs/registry/mainframe/README.md#mainframe-nic-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [14] | `nic-0`; `nic-mgmt`; `nic-prod` |
-| Identity | [`mainframe.partition.name`](/docs/registry/mainframe/README.md#mainframe-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) running on the mainframe. [15] | `LPAR01`; `PRODZ`; `TEST1` |
-| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [16] | `opentelemetry-test` |
-| Description | [`mainframe.adapter.name`](/docs/registry/mainframe/README.md#mainframe-adapter-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O adapter in the form CSS.Chpid. [17] | `0.00`; `0.2D`; `1.E3` |
-| Description | [`mainframe.port.id`](/docs/registry/mainframe/README.md#mainframe-port-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The identifier of the physical port on a mainframe network adapter. [18] | `0`; `1` |
-
-**[14] `mainframe.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
-
-**[15] `mainframe.partition.name`:** The name of the DPM partition that owns this NIC.
-
-**[16] `host.name`:** The name of the Central Processing Complex (CPC) that hosts the partition owning this NIC.
-
-**[17] `mainframe.adapter.name`:** The name of the physical adapter backing this virtual NIC.
-
-**[18] `mainframe.port.id`:** The port ID on the physical adapter backing this virtual NIC.
-
 ## `mainframe.partition`
 
 **Status:** ![Development](https://img.shields.io/badge/-development-blue)
@@ -212,20 +206,20 @@ A logical partition (LPAR) running on the mainframe — the mainframe equivalent
 
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
-| Identity | [`mainframe.partition.name`](/docs/registry/mainframe/README.md#mainframe-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) running on the mainframe. [19] | `LPAR01`; `PRODZ`; `TEST1` |
-| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [20] | `opentelemetry-test` |
+| Identity | [`mainframe.partition.name`](/docs/registry/mainframe/README.md#mainframe-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) running on the mainframe. [17] | `LPAR01`; `PRODZ`; `TEST1` |
+| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [18] | `opentelemetry-test` |
 
-**[19] `mainframe.partition.name`:** A logical partition (LPAR) is the mainframe equivalent of a virtual machine (VM) in distributed cloud environments. Each LPAR can run an independent operating system such as z/OS, Linux, or z/VM. Reported by the HMC Web Services API partition object field `name`.
+**[17] `mainframe.partition.name`:** A logical partition (LPAR) is the mainframe equivalent of a virtual machine (VM) in distributed cloud environments. Each LPAR can run an independent operating system such as z/OS, Linux, or z/VM. Reported by the HMC Web Services API partition object field `name`.
 
-**[20] `host.name`:** The name of the Central Processing Complex (CPC) that hosts this logical partition (LPAR). Reported by the HMC Web Services API partition object field `parent-object-uri`.
+**[18] `host.name`:** The name of the Central Processing Complex (CPC) that hosts this logical partition (LPAR). Reported by the HMC Web Services API partition object field `parent-object-uri`.
 
-## `mainframe.port`
+## `mainframe.partition.nic`
 
 **Status:** ![Development](https://img.shields.io/badge/-development-blue)
 
-A physical port on a mainframe network adapter in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a physical port on a multi-port NIC or switch.
+A virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode — the mainframe equivalent of a vNIC attached to a virtual machine.
 
-**Type:** `mainframe.port`
+**Type:** `mainframe.partition.nic`
 
 **Requirement Level:** `Recommended`
 
@@ -233,15 +227,21 @@ A physical port on a mainframe network adapter in Dynamic Partition Manager (DPM
 
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
-| Identity | [`mainframe.adapter.name`](/docs/registry/mainframe/README.md#mainframe-adapter-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O adapter in the form CSS.Chpid. [21] | `0.00`; `0.2D`; `1.E3` |
-| Identity | [`mainframe.port.id`](/docs/registry/mainframe/README.md#mainframe-port-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The identifier of the physical port on a mainframe network adapter. [22] | `0`; `1` |
-| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [23] | `opentelemetry-test` |
+| Identity | [`mainframe.partition.name`](/docs/registry/mainframe/README.md#mainframe-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) running on the mainframe. [19] | `LPAR01`; `PRODZ`; `TEST1` |
+| Identity | [`mainframe.partition.nic.name`](/docs/registry/mainframe/README.md#mainframe-partition-nic-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [20] | `nic-0`; `nic-mgmt`; `nic-prod` |
+| Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [21] | `opentelemetry-test` |
+| Description | [`mainframe.adapter.name`](/docs/registry/mainframe/README.md#mainframe-adapter-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the I/O adapter in the form CSS.Chpid. [22] | `0.00`; `0.2D`; `1.E3` |
+| Description | [`mainframe.adapter.port.id`](/docs/registry/mainframe/README.md#mainframe-adapter-port-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The identifier of the physical port on a mainframe network adapter. [23] | `0`; `1` |
 
-**[21] `mainframe.adapter.name`:** The name of the adapter that contains this port, in CSS.CHPID format.
+**[19] `mainframe.partition.name`:** The name of the DPM partition that owns this NIC.
 
-**[22] `mainframe.port.id`:** Reported by the HMC Web Services API network-physical-adapter-port metric group field `network-port-id`. In distributed systems terms, this is analogous to the port number on a multi-port NIC.
+**[20] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
 
-**[23] `host.name`:** The name of the Central Processing Complex (CPC) that owns the adapter hosting this port.
+**[21] `host.name`:** The name of the Central Processing Complex (CPC) that hosts the partition owning this NIC.
+
+**[22] `mainframe.adapter.name`:** The name of the physical adapter backing this virtual NIC.
+
+**[23] `mainframe.adapter.port.id`:** The port ID on the physical adapter backing this virtual NIC.
 
 ## `mainframe.storage.group`
 
@@ -277,13 +277,13 @@ A DPM storage group — a named collection of block storage volumes of a single 
 | `fcp` | FCP (Fibre Channel Protocol) storage group — SCSI over Fibre Channel. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `nvme` | NVMe storage group — NVMe over Fabrics. | ![Development](https://img.shields.io/badge/-development-blue) |
 
-## `mainframe.storage.volume`
+## `mainframe.storage.group.volume`
 
 **Status:** ![Development](https://img.shields.io/badge/-development-blue)
 
 A DPM storage volume — a single unit of block storage (LUN, ECKD DASD cylinder set, or NVMe namespace) within a storage group. Analogous to a Kubernetes Persistent Volume or a cloud block storage volume.
 
-**Type:** `mainframe.storage.volume`
+**Type:** `mainframe.storage.group.volume`
 
 **Requirement Level:** `Recommended`
 
@@ -292,11 +292,11 @@ A DPM storage volume — a single unit of block storage (LUN, ECKD DASD cylinder
 | Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- | --- |
 | Identity | [`mainframe.storage.group.name`](/docs/registry/mainframe/README.md#mainframe-storage-group-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the DPM storage group attached to the Central Processing Complex (CPC). [27] | `sg-fcp-prod`; `sg-nvme-test` |
-| Identity | [`mainframe.storage.volume.name`](/docs/registry/mainframe/README.md#mainframe-storage-volume-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the DPM storage volume within a storage group. [28] | `vol-boot-0`; `vol-data-1` |
+| Identity | [`mainframe.storage.group.volume.name`](/docs/registry/mainframe/README.md#mainframe-storage-group-volume-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the DPM storage volume within a storage group. [28] | `vol-boot-0`; `vol-data-1` |
 | Description | `host.name` | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On Unix systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [29] | `opentelemetry-test` |
 
 **[27] `mainframe.storage.group.name`:** The name of the storage group that contains this volume.
 
-**[28] `mainframe.storage.volume.name`:** Reported by the HMC Web Services API storage-volume resource object field `name` (DPM mode only, HMC ≥ 2.14.1). A storage volume is a single logical unit of block storage (LUN / ECKD DASD cylinder set / NVMe namespace) within a storage group.
+**[28] `mainframe.storage.group.volume.name`:** Reported by the HMC Web Services API storage-volume resource object field `name` (DPM mode only, HMC ≥ 2.14.1). A storage volume is a single logical unit of block storage (LUN / ECKD DASD cylinder set / NVMe namespace) within a storage group.
 
 **[29] `host.name`:** The name of the Central Processing Complex (CPC) that owns the storage group containing this volume.
