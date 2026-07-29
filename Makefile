@@ -129,16 +129,18 @@ $(SC_UPSTREAM_STAMP): $(VERSION_PINS_FILE)
 filter-upstream: $(SC_UPSTREAM_STAMP)
 
 # Validate the model and run shared policies
+# NOTE: --baseline-registry flag is intentionally disabled until deprecated entries
+# are removed from the model. To re-enable: add the flag to the command below and
+# remove the final `\` from the --policy line.
 check-policies: $(LOCAL_POLICY_STAMP) $(SC_UPSTREAM_STAMP)
 	$(WEAVER) registry check \
 		-r ./model \
 		--v2 \
-		--debug --debug
-		--diagnostic-format gh_workflow_command
-		--diagnostic-stdout true
+		--debug --debug \
+		--diagnostic-format gh_workflow_command \
+		--diagnostic-stdout true \
 		--policy $(LOCAL_POLICIES)/policies/check \
 		--policy policies/check/json-schema-annotations
-		--baseline-registry '$(BASELINE_REGISTRY)' \ uncomment after removing deprecated entries
 
 # Generate the attribute registry pages under docs/registry/ from the shared
 # upstream weaver-packages markdown template.
@@ -231,8 +233,13 @@ stack-up:
 stack-down:
 	$(COMPOSE) -f $(COMPOSE_FILE) down
 
-# One-shot demo: start the stack, wait for the collector to be ready,
-# emit synthetic telemetry, then print the Grafana URL.
+# One-shot demo: start the stack, wait for the collector to be ready, emit a
+# single round of synthetic telemetry, then print the Grafana URL.
+#
+# For a continuous emit loop that keeps all dashboards live (including rate()
+# panels on counter metrics), use the demo script instead:
+#   ./reference/scripts/demo.sh start
+#   ./reference/scripts/demo.sh stop
 demo: stack-up
 	@echo "Waiting for OTel Collector gRPC port to be ready..."
 	@for i in $$(seq 1 30); do \
@@ -244,6 +251,7 @@ demo: stack-up
 	@echo "Telemetry emitted. Open Grafana: http://localhost:3000"
 	@echo "  Login: admin / admin"
 	@echo "  Dashboards → Mainframe → pick any dashboard"
+	@echo "  Tip: run './reference/scripts/demo.sh start' for a continuous emit loop."
 
 # ---------------------------------------------------------------------------
 
