@@ -71,7 +71,7 @@ value for 5 minutes, so Grafana panels show data immediately after the first emi
 
 ## Grafana dashboards
 
-All six dashboards in [`../dashboards/mainframe/`](../dashboards/mainframe/) are
+All six dashboards in [`dashboards/mainframe/`](dashboards/mainframe/) are
 provisioned automatically at startup:
 
 | Dashboard | Entities | Grafana UID |
@@ -105,8 +105,7 @@ Every signal defined under `model/mainframe/`:
 | `metrics_host.yaml` | 17 |
 | `metrics_nic.yaml` | 14 |
 | `metrics_port.yaml` | 15 |
-| `metrics_partition.yaml` | 6 |
-| `metrics_partition_usage.yaml` | 11 |
+| `metrics_partition.yaml` | 17 |
 | `metrics_cpu.yaml` | 4 |
 | `metrics_channel.yaml` | 1 |
 | `metrics_adapter.yaml` | 1 |

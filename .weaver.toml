@@ -14,5 +14,8 @@ zos = "z/OS"
 # Where upstream (OTel base registry) attribute documentation lives, keyed by
 # the schema_url declared in model/manifest.yaml's dependencies block.
 # Attributes from that dependency link to these pages.
+# NOTE: This key must match the schema_url in model/manifest.yaml's dependencies
+# block, which is auto-patched by the filter-upstream Make target to match
+# SEMCONV_VERSION. Update this entry when SEMCONV_VERSION is bumped in versions.env.
 [template.text_maps.upstream_docs]
 "https://opentelemetry.io/schemas/1.42.0" = "https://github.com/open-telemetry/semantic-conventions/blob/v1.42.0/docs/registry/attributes/{namespace}.md"

@@ -9,11 +9,13 @@ If you are changing the semantic conventions themselves under `model/` or
 
 ## Adding or updating a dashboard
 
-1. Edit or create a dashboard JSON under [`../dashboards/mainframe/`](../dashboards/mainframe/).
+1. Edit or create a dashboard JSON under [`dashboards/mainframe/`](dashboards/mainframe/).
 2. Dashboards are provisioned from that directory at stack startup. Run
    `make stack-down && make stack-up` to reload, or use Grafana's reload API.
-3. Ensure the datasource variable in the JSON is `${DS_PROMETHEUS}` — that is
-   the uid auto-provisioned by `grafana/provisioning/datasources/prometheus.yaml`.
+3. Ensure every panel's `datasource` field uses the literal uid `"DS_PROMETHEUS"` —
+   **not** the template variable `"${DS_PROMETHEUS}"`. File-provisioned dashboards
+   are loaded directly from disk and do not go through the import flow that
+   resolves `__inputs`; using the template variable leaves all panels empty.
 
 ## Changing stack image versions
 

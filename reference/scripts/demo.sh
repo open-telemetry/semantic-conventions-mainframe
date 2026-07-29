@@ -11,8 +11,8 @@
 # Grafana URL.
 #
 # Usage:
-#   ./scripts/demo.sh              # run from the repository root
-#   ./scripts/demo.sh --down       # tear down the stack and exit
+#   ./reference/scripts/demo.sh              # run from the repository root
+#   ./reference/scripts/demo.sh --down       # tear down the stack and exit
 #
 # Prerequisites:
 #   - podman >= 5.0  (https://podman.io)
@@ -24,7 +24,7 @@
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
 # Prepend the uv tool bin directory so tools installed with
 # `uv tool install` (e.g. podman-compose) are found even when
