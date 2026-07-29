@@ -171,7 +171,13 @@ generate-json-schemas:
 
 # Run every regeneration the repo owns (weaver-driven + pydantic-driven).
 # CI checks that all committed outputs match what this target generates.
-generate-all: generate-registry generate-docs generate-json-schemas
+# NOTE: generate-docs (weaver update-markdown) is intentionally excluded here.
+# That command is for hand-written signal docs under docs/ with <!-- weaver -->
+# snippet markers. Currently docs/ contains only the auto-generated docs/registry/
+# tree, so running update-markdown on docs/ would re-process those generated
+# files and produce a non-idempotent result. Re-add generate-docs to this
+# target once hand-written docs with snippet markers exist outside docs/registry/.
+generate-all: generate-registry generate-json-schemas
 
 # Resolve the registry and emit one synthetic data point per metric, span, and
 # log to stdout or a live OTLP collector.
