@@ -1,5 +1,5 @@
 # Mainframe Semantic Conventions - Makefile
-# Requires: podman (https://podman.io) and podman-compose (https://github.com/containers/podman-compose).
+# Requires: podman or docker, and podman-compose or docker-compose.
 # The Weaver version is pinned in versions.env (WEAVER_VERSION) and run via
 # the otel/weaver container image — contributors do not need to install weaver locally.
 
@@ -12,17 +12,20 @@ include $(VERSION_PINS_FILE)
 # /workspace and that is the working directory, so every relative path the
 # targets below pass to weaver (./model, .build/..., docs/, docs/registry)
 # resolves the same way it would for a host-installed weaver.
+# Use podman if available, fall back to docker.
+CONTAINER_RUNTIME := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 WEAVER_IMAGE := otel/weaver:$(WEAVER_VERSION)
-WEAVER := podman run --rm \
+WEAVER := $(CONTAINER_RUNTIME) run --rm \
 	-u $(shell id -u):$(shell id -g) \
 	-v "$(CURDIR):/workspace" \
 	-w /workspace \
 	-e HOME=/tmp \
 	$(WEAVER_IMAGE)
 
-# podman-compose binary. Override if installed elsewhere:
-#   make stack-up COMPOSE=/usr/local/bin/podman-compose
-COMPOSE ?= podman-compose
+# Compose binary: prefer podman-compose, fall back to docker compose / docker-compose.
+COMPOSE ?= $(shell command -v podman-compose 2>/dev/null || \
+             (command -v docker 2>/dev/null && echo "docker compose") || \
+             command -v docker-compose 2>/dev/null)
 
 # Compose project file for the reference observability stack.
 # Use absolute path so podman-compose resolves bind-mount paths relative to
