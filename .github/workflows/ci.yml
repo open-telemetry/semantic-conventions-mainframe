@@ -86,6 +86,7 @@ jobs:
 
       - name: Regenerate and check committed outputs are in sync
         run: |
+          rm -rf docs/registry
           make generate-all
           if ! git diff --exit-code -- ./docs/registry 'model/gen-ai/gen-ai-*.json'; then
             echo "FAIL: committed generated outputs are out of sync!"
