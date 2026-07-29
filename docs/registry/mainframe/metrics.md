@@ -1232,9 +1232,7 @@
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`network.io.direction`](/docs/registry/network/README.md#network-io-direction) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The network IO operation direction. [8] | `receive`; `transmit` |
-
-**[8] `network.io.direction`:** Set to 'transmit' for packets sent (HMC field `packets-sent`), or 'receive' for packets received (HMC field `packets-received`).
+| [`network.io.direction`](/docs/registry/network/README.md#network-io-direction) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The network IO operation direction. | `transmit` |
 
 ---
 
@@ -1259,9 +1257,7 @@
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`network.io.direction`](/docs/registry/network/README.md#network-io-direction) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The network IO operation direction. [9] | `receive`; `transmit` |
-
-**[9] `network.io.direction`:** Set to 'transmit' for packets sent (HMC field `packets-sent`), or 'receive' for packets received (HMC field `packets-received`).
+| [`network.io.direction`](/docs/registry/network/README.md#network-io-direction) | ![Development](https://img.shields.io/badge/-development-blue) | `Required` | string | The network IO operation direction. | `transmit` |
 
 ---
 
@@ -1322,9 +1318,9 @@
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.partition.status`](/docs/registry/mainframe/README.md#mainframe-partition-status) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The operational status of the logical partition (LPAR) or DPM partition. [10] | `operating`; `active`; `degraded` |
+| [`mainframe.partition.status`](/docs/registry/mainframe/README.md#mainframe-partition-status) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The operational status of the logical partition (LPAR) or DPM partition. [8] | `operating`; `active`; `degraded` |
 
-**[10] `mainframe.partition.status`:** The string status value reported by the HMC API, carried as a label alongside the integer code. Use to decorate time series with the human-readable status string.
+**[8] `mainframe.partition.status`:** The string status value reported by the HMC API, carried as a label alongside the integer code. Use to decorate time series with the human-readable status string.
 
 ---
 
@@ -1421,9 +1417,9 @@
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.storage.fulfillment.state`](/docs/registry/mainframe/README.md#mainframe-storage-fulfillment-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The fulfillment state of the DPM storage group or storage volume. [11] | `complete`; `pending`; `pending-with-mismatches` |
+| [`mainframe.storage.fulfillment.state`](/docs/registry/mainframe/README.md#mainframe-storage-fulfillment-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The fulfillment state of the DPM storage group or storage volume. [9] | `complete`; `pending`; `pending-with-mismatches` |
 
-**[11] `mainframe.storage.fulfillment.state`:** The string fulfillment state label from the HMC API, carried alongside the integer code.
+**[9] `mainframe.storage.fulfillment.state`:** The string fulfillment state label from the HMC API, carried alongside the integer code.
 
 ---
 
@@ -1478,9 +1474,9 @@
 
 | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- | --- |
-| [`mainframe.storage.fulfillment.state`](/docs/registry/mainframe/README.md#mainframe-storage-fulfillment-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The fulfillment state of the DPM storage group or storage volume. [12] | `complete`; `pending`; `pending-with-mismatches` |
+| [`mainframe.storage.fulfillment.state`](/docs/registry/mainframe/README.md#mainframe-storage-fulfillment-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The fulfillment state of the DPM storage group or storage volume. [10] | `complete`; `pending`; `pending-with-mismatches` |
 
-**[12] `mainframe.storage.fulfillment.state`:** The string fulfillment state label from the HMC API, carried alongside the integer code.
+**[10] `mainframe.storage.fulfillment.state`:** The string fulfillment state label from the HMC API, carried alongside the integer code.
 
 ---
 
