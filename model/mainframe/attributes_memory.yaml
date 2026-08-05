@@ -1,0 +1,36 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.memory.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: storage-total-installed-memory
+        mode: all
+    brief: "The category of mainframe memory being measured within the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: total
+          value: "total"
+          brief: "Total amount of installed physical memory in the CPC."
+          stability: development
+        - id: hsa
+          value: "HSA"
+          brief: "Memory reserved for the Hardware System Area (HSA), used for system management and I/O processing by the machine firmware."
+          stability: development
+        - id: partitions
+          value: "partitions"
+          brief: "Memory available for use by logical partitions (LPARs) running on the CPC."
+          stability: development
+        - id: central
+          value: "central"
+          brief: "Memory allocated as central storage across all active logical partitions (LPARs) in the CPC."
+          stability: development
+        - id: expanded
+          value: "expanded"
+          brief: "Memory allocated as expanded storage across all active logical partitions (LPARs) in the CPC."
+          stability: development
+        - id: available
+          value: "available"
+          brief: "Memory not yet allocated to any active logical partition (LPAR) and available for assignment."
+          stability: development

@@ -1,0 +1,50 @@
+file_format: definition/2
+metrics:
+  # Adapter utilization metrics. Possible sources are:
+  #   - DPM mode:     Adapter metric group of the IBM Z HMC Web Services API.
+  #   - Classic mode: crypto-usage, flash-memory-usage, and roce-usage metric
+  #                   groups of the IBM Z HMC Web Services API (HMC >= 2.12.0).
+  - name: mainframe.adapter.utilization
+    brief: "The fraction of time the adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API. In DPM mode, the source is the
+      adapter metric group. In classic mode, the sources are the crypto-usage
+      (HMC ≥ 2.12.0), flash-memory-usage (HMC ≥ 2.12.0), and roce-usage
+      (HMC ≥ 2.12.1) metric groups. The adapter type is encoded in the
+      mainframe.adapter.type attribute, which distinguishes crypto, flash, RoCE,
+      network, storage, and accelerator adapters. In distributed systems terms,
+      this is analogous to the utilization of a NIC, HBA, HSM card, NVMe flash
+      card, or RDMA NIC.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter
+            field: adapter-usage
+            mode: dpm
+          - type: metric_group
+            name: crypto-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: flash-memory-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: roce-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.type
+        requirement_level: required

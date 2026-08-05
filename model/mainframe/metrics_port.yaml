@@ -1,0 +1,412 @@
+file_format: definition/2
+metrics:
+  # Network physical adapter port metrics.
+  # Source: network-physical-adapter-port metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.13.1).
+  # Prometheus exporter prefix: zhmc_port_
+
+  - name: mainframe.adapter.port.bytes.sent
+    brief: "The total number of bytes in unicast packets sent through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`.
+      This is a monotonically increasing counter; rate-of-change gives throughput.
+      In distributed systems terms, this is analogous to the `network.transmit_bytes_total`
+      counter on a physical NIC port.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.bytes.received
+    brief: "The total number of bytes in unicast packets received through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`.
+      This is a monotonically increasing counter.
+      In distributed systems terms, this is analogous to `network.receive_bytes_total`.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.packets.sent
+    brief: "The total number of unicast packets sent through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.packets.received
+    brief: "The total number of unicast packets received through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.packets.dropped
+    brief: "The total number of packets dropped on the physical network adapter port due to resource shortage."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped`
+      and `packets-received-dropped`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received drops.
+      In distributed systems terms, this is analogous to `network.transmit_drop_total`
+      / `network.receive_drop_total` on a NIC.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-dropped
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.adapter.port.packets.discarded
+    brief: "The total number of malformed packets discarded on the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded`
+      and `packets-received-discarded`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received discards.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-discarded
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.adapter.port.multicast.packets.sent
+    brief: "The total number of multicast packets sent through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: multicast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.multicast.packets.received
+    brief: "The total number of multicast packets received through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: multicast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.broadcast.packets.sent
+    brief: "The total number of broadcast packets sent through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: broadcast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.broadcast.packets.received
+    brief: "The total number of broadcast packets received through the physical network adapter port."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: broadcast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.data.sent
+    brief: "The number of bytes sent through the physical network adapter port during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`.
+      This gauge reflects the bytes transmitted during the most recent
+      measurement interval, not a cumulative counter.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: interval-bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.data.received
+    brief: "The number of bytes received through the physical network adapter port during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: interval-bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.data.rate.sent
+    brief: "The data transmission rate of the physical network adapter port in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-per-second-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.data.rate.received
+    brief: "The data reception rate of the physical network adapter port in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-per-second-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+  - name: mainframe.adapter.port.bandwidth.utilization
+    brief: "The fraction of the available bandwidth currently in use on the physical network adapter port, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API network-physical-adapter-port
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `utilization`.
+      In distributed systems terms, this is analogous to the bandwidth utilization
+      percentage of a NIC port.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: utilization
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter.port
+
+metric_refinements:
+  # mainframe.adapter.port.bytes.sent / received refine hw.network.io
+  - id: refinement.mainframe.adapter.port.hw.network.io
+    ref: hw.network.io
+    brief: "Received and transmitted network traffic in bytes through the mainframe physical network adapter port."
+    note: >
+      Mainframe refinement of hw.network.io for the mainframe.adapter.port entity.
+      Use network.io.direction to distinguish direction: 'transmit' maps to
+      HMC field `bytes-sent`, 'receive' maps to `bytes-received`. Reported
+      by the IBM Z HMC Web Services API network-physical-adapter-port metric
+      group (DPM mode only, HMC ≥ 2.13.1).
+    stability: development
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+        note: >
+          Set to 'transmit' for bytes sent (HMC field `bytes-sent`),
+          or 'receive' for bytes received (HMC field `bytes-received`).
+
+  # mainframe.adapter.port.packets.sent / received refine hw.network.packets
+  - id: refinement.mainframe.adapter.port.hw.network.packets
+    ref: hw.network.packets
+    brief: "Received and transmitted unicast network traffic in packets through the mainframe physical network adapter port."
+    note: >
+      Mainframe refinement of hw.network.packets for the mainframe.adapter.port entity.
+      Use network.io.direction to distinguish direction: 'transmit' maps to
+      HMC field `packets-sent`, 'receive' maps to `packets-received`. Reported
+      by the IBM Z HMC Web Services API network-physical-adapter-port metric
+      group (DPM mode only, HMC ≥ 2.13.1).
+    stability: development
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+        note: >
+          Set to 'transmit' for packets sent (HMC field `packets-sent`),
+          or 'receive' for packets received (HMC field `packets-received`).
+
+  # mainframe.adapter.port.bandwidth.utilization refines hw.network.bandwidth.utilization
+  - id: refinement.mainframe.adapter.port.hw.network.bandwidth.utilization
+    ref: hw.network.bandwidth.utilization
+    brief: "Utilization of the network bandwidth as a fraction for the mainframe physical network adapter port."
+    note: >
+      Mainframe refinement of hw.network.bandwidth.utilization for the
+      mainframe.adapter.port entity. Reported by the IBM Z HMC Web Services API
+      network-physical-adapter-port metric group (DPM mode only, HMC ≥ 2.13.1)
+      field `utilization`. Value ranges from 0 (idle) to 1 (fully utilised).
+    stability: development
+    entity_associations:
+      - mainframe.adapter.port
+    attributes: []

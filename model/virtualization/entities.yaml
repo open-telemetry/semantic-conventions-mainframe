@@ -1,0 +1,55 @@
+groups:
+  - id: entity.virtualization.platform
+    type: entity
+    stability: development
+    brief: >
+      A physical computing platform capable of hosting partitions,
+      hypervisors, or virtual machines.
+    identifying_attributes:
+      - ref: virtualization.platform.id
+    attributes:
+      - ref: virtualization.system.name
+      - ref: virtualization.platform.name
+      - ref: virtualization.platform.model
+      - ref: virtualization.platform.serial_number
+      - ref: virtualization.platform.firmware.version
+  - id: entity.virtualization.partition
+    type: entity
+    stability: development
+    brief: >
+      A hardware or firmware enforced partition of a virtualization platform.
+    identifying_attributes:
+      - ref: virtualization.partition.id
+      - ref: virtualization.platform.id
+    attributes:
+      - ref: virtualization.partition.name
+      - ref: virtualization.partition.number
+      - ref: virtualization.partition.type
+      - ref: virtualization.partition.state
+  - id: entity.virtualization.hypervisor
+    type: entity
+    stability: development
+    brief: >
+      A virtualization layer that manages one or more virtual machines.
+    identifying_attributes:
+      - ref: virtualization.hypervisor.id
+    attributes:
+      - ref: virtualization.system.name
+      - ref: virtualization.hypervisor.version
+      - ref: virtualization.hypervisor.type
+      - ref: virtualization.hypervisor.state
+  - id: entity.virtualization.vm
+    type: entity
+    stability: development
+    brief: >
+      A virtual machine managed by a hypervisor.
+    identifying_attributes:
+      - ref: virtualization.vm.id
+    attributes:
+      - ref: virtualization.vm.name
+      - ref: virtualization.vm.instance_id
+      - ref: virtualization.vm.state
+      - ref: virtualization.vm.cpu.count
+      - ref: virtualization.vm.memory.size
+      - ref: virtualization.vm.machine_type
+      - ref: virtualization.vm.nested_virtualization.enabled
