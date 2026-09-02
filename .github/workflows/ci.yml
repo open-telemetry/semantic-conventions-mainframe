@@ -86,7 +86,8 @@ jobs:
 
       - name: Regenerate and check committed outputs are in sync
         run: |
-          make generate-all
+          rm -rf ./docs/registry
+          make generate-all WEAVER=weaver
           if ! git diff --exit-code -- ./docs/registry 'model/gen-ai/gen-ai-*.json'; then
             echo "FAIL: committed generated outputs are out of sync!"
             echo "Run 'make generate-all' and commit the changes."

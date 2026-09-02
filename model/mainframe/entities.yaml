@@ -1,0 +1,94 @@
+file_format: definition/2
+entities:
+  - type: mainframe.host
+    brief: >
+      A mainframe host, representing the physical machine known as the
+      Central Processing Complex (CPC) — the mainframe equivalent of a
+      bare-metal server.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: host.name
+        note: >
+          The name of the Central Processing Complex (CPC) as configured on
+          the HMC. Reported by the HMC Web Services API CPC object field `name`.
+    description:
+      - ref: host.id
+        requirement_level: recommended
+        note: >
+          The host.id SHOULD be the object-id UUID of the Central Processing
+          Complex (CPC) as defined by the HMC Web Services API CPC object.
+      - ref: host.type
+        requirement_level: recommended
+        note: >
+          SHOULD be the concatenation of the IBM machine type and model of the
+          Central Processing Complex (CPC), e.g., "9175-ME1".
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.channel.name
+    description:
+      - ref: mainframe.channel.mode
+        requirement_level: required
+      - ref: mainframe.channel.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.adapter.name
+    description:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+      - ref: mainframe.adapter.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.cpu
+    brief: >
+      A physical mainframe processor within the Central Processing Complex (CPC)
+      — the mainframe equivalent of a CPU core in a distributed server.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.cpu.name
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - type: mainframe.partition
+    brief: >
+      A logical partition (LPAR) running on the mainframe — the mainframe
+      equivalent of a virtual machine (VM). Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.partition.name
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that hosts this
+          logical partition (LPAR). Reported by the HMC Web Services API
+          partition object field `parent-object-uri`.

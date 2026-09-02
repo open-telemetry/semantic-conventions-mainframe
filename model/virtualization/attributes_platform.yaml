@@ -1,0 +1,70 @@
+attributes:
+  - key: virtualization.system.name
+    stability: development
+    brief: "Virtualization implementation."
+    type:
+      members:
+        - id: ibm.prsm
+          value: "ibm.prsm"
+          brief: "IBM PowerVM PR/SM (Processor Resource/System Manager) hypervisor."
+          stability: development
+        - id: ibm.zvm
+          value: "ibm.zvm"
+          brief: "IBM z/VM hypervisor."
+          stability: development
+        - id: ibm.powervm
+          value: "ibm.powervm"
+          brief: "IBM PowerVM hypervisor."
+          stability: development
+        - id: vmware.esxi
+          value: "vmware.esxi"
+          brief: "VMware ESXi hypervisor."
+          stability: development
+        - id: vmware.workstation
+          value: "vmware.workstation"
+          brief: "VMware Workstation hypervisor."
+          stability: development
+        - id: kvm
+          value: "kvm"
+          brief: "Kernel-based Virtual Machine hypervisor."
+          stability: development
+        - id: hyperv
+          value: "hyperv"
+          brief: "Microsoft Hyper-V hypervisor."
+          stability: development
+        - id: virtualbox
+          value: "virtualbox"
+          brief: "Oracle VirtualBox hypervisor."
+          stability: development
+        - id: kubevirt
+          value: "kubevirt"
+          brief: "KubeVirt hypervisor."
+          stability: development
+        - id: openshift_virtualization
+          value: "openshift_virtualization"
+          brief: "OpenShift Virtualization hypervisor."
+          stability: development
+        - id: xen
+          value: "xen"
+          brief: "Xen hypervisor."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Unknown hypervisor."
+          stability: development
+  - key: virtualization.platform.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization platform."
+  - key: virtualization.platform.name
+    type: string
+    stability: development
+    brief: "The name of the virtualization platform."
+  - key: virtualization.platform.serial_number
+    type: string
+    stability: development
+    brief: "The serial number of the virtualization platform."
+  - key: virtualization.platform.firmwareversion
+    type: string
+    stability: development
+    brief: "The firmwareversion of the virtualization platform."

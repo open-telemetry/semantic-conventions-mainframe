@@ -1,0 +1,93 @@
+file_format: definition/2
+metrics:
+  # CPU utilization metrics. One possible source is the CPU metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.cpu.utilization
+    brief: "The fraction of time the mainframe processor was busy executing work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API processor metric group.
+      In distributed systems terms, this is analogous to system.cpu.utilization.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: processor-usage
+            mode: all
+    entity_associations:
+      - mainframe.cpu
+
+  # SMT mode metrics. One possible source is the CPU metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.cpu.smt_mode.utilization
+    brief: "The fraction of time the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported."
+    note: >
+      Reported by the IBM Z HMC Web Services API processor metric group.
+      Simultaneous multithreading (SMT) allows a single physical processor core
+      to execute two hardware threads concurrently. A value of -1 indicates
+      that the mainframe model does not support SMT mode.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: smt-mode-usage
+            mode: all
+    entity_associations:
+      - mainframe.cpu
+
+  - name: mainframe.cpu.thread0.utilization
+    brief: "The fraction of time thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported."
+    note: >
+      Reported by the IBM Z HMC Web Services API processor metric group.
+      Thread 0 is the primary hardware thread of a processor running in SMT mode.
+      A value of -1 indicates that the mainframe model does not support SMT mode.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread0-usage
+            mode: all
+    entity_associations:
+      - mainframe.cpu
+
+  - name: mainframe.cpu.thread1.utilization
+    brief: "The fraction of time thread 1 was busy when the processor was running in simultaneous multithreading (SMT) mode. Set to -1 when SMT mode is not supported."
+    note: >
+      Reported by the IBM Z HMC Web Services API processor metric group.
+      Thread 1 is the secondary hardware thread of a processor running in SMT mode.
+      A value of -1 indicates that the mainframe model does not support SMT mode.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread1-usage
+            mode: all
+    entity_associations:
+      - mainframe.cpu
