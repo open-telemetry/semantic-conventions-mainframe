@@ -2,21 +2,6 @@
 # and the split of responsibilities between Dependabot and Renovate.
 version: 2
 updates:
-  - package-ecosystem: "uv"
-    directories:
-      - "/reference"
-      - "/reference/scenarios/*"
-    schedule:
-      interval: "weekly"
-    cooldown: 
-      default-days: 7
-    open-pull-requests-limit: 0
-    groups:
-      python-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-
   - package-ecosystem: "github-actions"
     directories:
       - "/"

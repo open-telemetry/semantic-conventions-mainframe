@@ -1,0 +1,98 @@
+file_format: definition/2
+attribute_groups:
+  - id: attr_group.service.zos.software
+    visibility: public
+    brief: "Attributes for a software service running on a z/OS system."
+    stability: development
+    attributes:
+      - ref: service.name
+        requirement_level: required
+        note: >
+          For z/OS system software, SHOULD be set to an abbreviated name of the
+          z/OS system software, e.g., 'CICS TS', 'Datacom', 'ADABAS'.
+      - ref: service.version
+        requirement_level: required
+        note: >
+          For z/OS system software, SHOULD be set to the version of the z/OS
+          system software, e.g., '5.6'.
+      - ref: service.instance.id
+        requirement_level: required
+        note: >
+          For z/OS system software, SHOULD be set to the identifier representing
+          the current instance of the z/OS system software, e.g., the CICS
+          region APPLID or IMS region IMSID.
+      - ref: service.namespace
+        requirement_level: required
+        note: >
+          For z/OS system software, SHOULD be set to the identifier representing
+          a grouping of z/OS system software instances, e.g., the name of the
+          CICSPLEX.
+
+  - id: attr_group.process.zos
+    visibility: public
+    brief: "Attributes for a process running on a z/OS system."
+    stability: development
+    attributes:
+      - ref: process.command
+        requirement_level: required
+        note: >
+          On z/OS, SHOULD be set to the name of the job used to start the z/OS
+          system software, e.g., 'CICSSTRT'.
+      - ref: process.pid
+        requirement_level: required
+        note: >
+          On z/OS, SHOULD be set to the Address Space Identifier (ASID), e.g.,
+          '008A'.
+      - ref: process.owner
+        requirement_level: opt_in
+        note: >
+          On z/OS, SHOULD be set to the user under which the z/OS system
+          software is executed.
+      - ref: process.runtime.description
+        requirement_level: opt_in
+      - ref: process.runtime.name
+        requirement_level: opt_in
+      - ref: process.runtime.version
+        requirement_level: opt_in
+
+  - id: attr_group.os.zos
+    visibility: public
+    brief: "Attributes for the operating system on a z/OS system."
+    stability: development
+    attributes:
+      - ref: os.type
+        requirement_level: required
+        note: >
+          SHOULD be set to 'zos'.
+      - ref: os.description
+        requirement_level: opt_in
+        note: >
+          Human readable OS version information, e.g., as reported by
+          command 'd iplinfo'. Example: 'IBM z/OS 3.1'.
+      - ref: os.name
+        requirement_level: opt_in
+      - ref: os.version
+        requirement_level: opt_in
+        note: >
+          The version string of the operating system. On z/OS, SHOULD be the
+          release returned by the command 'd iplinfo', e.g., '3.1.0'.
+
+  - id: attr_group.host.zos
+    visibility: public
+    brief: "Attributes for the host of a z/OS system."
+    stability: development
+    attributes:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          On z/OS, SHOULD be the fully qualified hostname used to register
+          the z/OS system in DNS.
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          SHOULD be set to 's390x' for z/OS systems.
+      - ref: host.id
+        requirement_level: opt_in
+        note: >
+          On z/OS, SHOULD be the concatenation of sysplex name and SMF system
+          identifier (SMFID), separated by a dash, e.g., 'SYSPLEX1-SYS1'.

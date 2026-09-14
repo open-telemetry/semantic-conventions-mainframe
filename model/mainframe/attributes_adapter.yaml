@@ -1,0 +1,69 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.adapter.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: adapter-id
+        mode: all
+    brief: "The name of the I/O adapter in the form CSS.Chpid."
+    examples: ["0.00", "0.2D", "1.E3"]
+    note: >
+      The channel subsystem (CSS) index and channel path identifier (CHPID) are
+      concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D.
+      Reported by the HMC Web Services API adapter object field `adapter-id`.
+
+  - key: mainframe.adapter.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: type
+        mode: all
+    brief: "The type of the mainframe I/O adapter card."
+    note: >
+      Reported by the HMC Web Services API adapter object field `type`.
+      Used to distinguish network, storage, cryptographic, and accelerator
+      adapters when aggregating per-type utilization metrics.
+    type:
+      members:
+        - id: crypto
+          value: "crypto"
+          brief: "A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management."
+          stability: development
+        - id: flash
+          value: "flash"
+          brief: "A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM)."
+          stability: development
+        - id: roce
+          value: "roce"
+          brief: "A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet."
+          stability: development
+        - id: accelerator
+          value: "accelerator"
+          brief: "An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference."
+          stability: development
+        - id: network
+          value: "network"
+          brief: "A network adapter providing connectivity to external networks."
+          stability: development
+        - id: storage
+          value: "storage"
+          brief: "A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF."
+          stability: development
+
+  - key: mainframe.adapter.owning.partition
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: owner-objects
+        mode: all
+    brief: "The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions."
+    examples: ["LPAR01", "shared"]
+    note: >
+      Reported by the HMC Web Services API adapter object. Set to 'shared' when
+      the adapter is not dedicated to a single partition.

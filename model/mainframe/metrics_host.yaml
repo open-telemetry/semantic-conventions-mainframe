@@ -1,0 +1,604 @@
+file_format: definition/2
+metrics:
+  # Active processors
+  - name: mainframe.host.cpu.active.count
+    brief: "The number of active processors of the specified type installed in the mainframe system."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object. In distributed
+      systems terms, this is analogous to the physical CPU count of a server.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-ifl
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-cp
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-icf
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-iip
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-aap
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-sap
+            mode: all
+          - type: object_property
+            object: CPC
+            field: processor-count-cbp
+            mode: all
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  # Defective processors
+  - name: mainframe.host.cpu.defective.count
+    brief: "The number of defective processors in the mainframe system."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object.
+      Defective processors are hardware-detected faulty units that are
+      taken offline by the machine firmware.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-defective
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  # Spare processors
+  - name: mainframe.host.cpu.spare.count
+    brief: "The number of spare processors available in the mainframe system."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object.
+      Spare processors are installed but unallocated units held in reserve
+      for capacity-on-demand or defect replacement.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: processor-count-spare
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  # Memory size metrics
+  - name: mainframe.host.memory.size
+    brief: "The size of memory of the specified category in the mainframe system."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object memory metrics.
+      In distributed systems terms, this is analogous to the total or available
+      RAM reported by a server.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-total-installed-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-hsa-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-available-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-partitions-central-memory
+            mode: all
+          - type: object_property
+            object: CPC
+            field: storage-partitions-expanded-memory
+            mode: all
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.memory.type
+        requirement_level: required
+
+  # VFM memory size metrics
+  - name: mainframe.host.memory.vfm.increment.size
+    brief: "The size of one IBM Virtual Flash Memory (VFM) increment in the mainframe system."
+    note: >
+      Virtual Flash Memory (VFM) is IBM's solid-state storage that extends
+      the memory address space beyond physical DRAM. Reported by the IBM Z
+      HMC Web Services API CPC object.
+    instrument: gauge
+    unit: "GiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-vfm-increment-size
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  - name: mainframe.host.memory.vfm.size
+    brief: "The total size of installed IBM Virtual Flash Memory (VFM) in the mainframe system."
+    note: >
+      Virtual Flash Memory (VFM) is IBM's solid-state storage that extends
+      the memory address space beyond physical DRAM. Reported by the IBM Z
+      HMC Web Services API CPC object.
+    instrument: gauge
+    unit: "GiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: storage-vfm-total-size
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  # Average channel utilization metric. One possible source is the CPC metric
+  # group of the IBM Z HMC Web Services API.
+  - name: mainframe.host.channel.utilization
+    brief: "The average fraction of time all channels in the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group.
+      This is a system-wide average across all channel paths.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: cpc-usage-overview
+            field: channel-usage
+            mode: classic
+    entity_associations:
+      - mainframe.host
+
+  # CPU utilization metrics. One possible source is the CPC metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.host.cpu.utilization
+    brief: "The fraction of time processors of the specified type in the mainframe system were busy executing work. Set to -1 when no processors of this type are present."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group.
+      In distributed systems terms, this is analogous to system.cpu.utilization
+      aggregated across all cores of a given type.
+      A value of -1 indicates no processors of the specified type are installed.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-ifl
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-cp
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-icf
+            mode: classic
+          - type: metric_group
+            name: cpc-usage-overview
+            field: processor-usage-iip
+            mode: classic
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+      - ref: mainframe.cpu.sharing.mode
+        requirement_level: required
+
+  # Temperature metrics. One possible source is the CPC metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.host.temperature
+    brief: "The temperature at the specified sensor location of the mainframe system in degrees Celsius."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group.
+    instrument: gauge
+    unit: "Cel"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: ambient-temperature
+            mode: all
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: exhaust-temperature
+            mode: all
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.host.temperature.type
+        requirement_level: required
+
+  # Environmental metrics. One possible source is the CPC metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.host.humidity
+    brief: "The relative humidity of the environment surrounding the mainframe system, expressed as a ratio from 0 to 1."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: humidity
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  - name: mainframe.host.dewpoint
+    brief: "The dew point temperature of the environment surrounding the mainframe system in degrees Celsius."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group.
+    instrument: gauge
+    unit: "Cel"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: dew-point
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  # Heat load metrics. One possible source is the CPC metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.host.heatload
+    brief: "The heat load produced by the mainframe system, measured in joules per hour."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports heat-load values in
+      BTU/h (British Thermal Units per hour); they are converted to joules per
+      hour (J/h) by multiplying by 1055.06
+      (1 BTU = 1055.06 J, therefore 1 BTU/h = 1055.06 J/h).
+    instrument: gauge
+    unit: "J/h"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load
+            mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1055.06"
+              multiplier: 1055.06
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load-forced-air
+            mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1055.06"
+              multiplier: 1055.06
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: heat-load-water
+            mode: all
+            unit_transformation:
+              hmc_unit: BTU/h
+              otel_unit: J/h
+              formula: "value * 1055.06"
+              multiplier: 1055.06
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.host.heatload.type
+        requirement_level: required
+
+  # Power usage metrics. One possible source is the CPC metric group of the
+  # IBM Z HMC Web Services API.
+  - name: mainframe.host.power.usage
+    brief: "The power consumption of the mainframe system in Watts."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports power values in
+      kilowatts (kW); they are converted to watts (W) by multiplying by 1000
+      (1 kW = 1000 W).
+    instrument: gauge
+    unit: "W"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: power
+            mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-partition-power-consumption
+            mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-infrastructure-power-consumption
+            mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: total-unassigned-power-consumption
+            mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.host.power.usage.type
+        requirement_level: required
+
+  # Power cord usage metrics. One possible source is the CPC metric group of
+  # the IBM Z HMC Web Services API.
+  - name: mainframe.host.power.cord.usage
+    brief: "The power consumption on the specified power cord of the mainframe system in Watts."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      (zcpc-environmentals-and-power). The HMC API reports power-cord values in
+      kilowatts (kW); they are converted to watts (W) by multiplying by 1000
+      (1 kW = 1000 W).
+    instrument: gauge
+    unit: "W"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-environmentals-and-power
+            field: power-cord-usage
+            mode: all
+            unit_transformation:
+              hmc_unit: kW
+              otel_unit: W
+              formula: "value * 1000"
+              multiplier: 1000
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.host.power.cord
+        requirement_level: required
+      - ref: mainframe.host.power.phase
+        requirement_level: required
+
+  # Status
+  - name: mainframe.host.status.code
+    brief: "The operational status of the mainframe system as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object field `status`.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: status
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  - name: mainframe.host.status.unacceptable
+    brief: "Indicates whether the Central Processing Complex (CPC) is in an unacceptable status (1=true, 0=false)."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC object field
+      `has-unacceptable-status`. An unacceptable status means the system
+      requires operator attention.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: CPC
+            field: has-unacceptable-status
+            mode: all
+    entity_associations:
+      - mainframe.host
+
+  # DPM system overview adapter utilization metrics. Source: dpm-system-usage-overview
+  # metric group of the IBM Z HMC Web Services API (SC27-2646-00 Chapter 9).
+  # Fields: network-usage, storage-usage, accelerator-usage, crypto-usage.
+  # Collected every 15 seconds by the HMC.
+  # Prometheus exporter equivalents: zhmc_cpc_accelerator_adapter_usage_ratio,
+  # zhmc_cpc_crypto_adapter_usage_ratio, zhmc_cpc_network_adapter_usage_ratio,
+  # zhmc_cpc_storage_adapter_usage_ratio. Available in DPM mode only.
+  - name: mainframe.host.adapter.utilization
+    brief: "The fraction of time adapters of the specified type on the mainframe system were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z Hardware Management Console (HMC) Web Services API
+      under the dpm-system-usage-overview metric group (SC27-2646-00 Chapter 9).
+      The fields network-usage, storage-usage, accelerator-usage, and
+      crypto-usage each map to one value of `mainframe.adapter.type`. The metric
+      is only available in Dynamic Partition Manager (DPM) mode. A value of -1
+      indicates that no adapters of the specified type are present on the system.
+      Collected by the HMC at 15-second intervals.
+      In distributed systems terms, this is analogous to the aggregate
+      utilization of all NICs, HBAs, or accelerator cards of a given type
+      in a server.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: network-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: storage-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: accelerator-usage
+            mode: dpm
+          - type: metric_group
+            name: dpm-system-usage-overview
+            field: crypto-usage
+            mode: dpm
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+        note: >
+          Identifies the adapter type being reported. One of: network (maps to
+          HMC field network-usage), storage (storage-usage), accelerator
+          (accelerator-usage), or crypto (crypto-usage).
+
+metric_refinements:
+  # mainframe.host.cpu.active.count extends system.cpu.physical.count
+  - id: refinement.mainframe.host.cpu.active.count
+    ref: system.cpu.physical.count
+    brief: "The number of active processors of the specified type installed in the mainframe system."
+    note: >
+      Mainframe refinement of system.cpu.physical.count. Reported by the IBM Z
+      HMC Web Services API CPC object. Set mainframe.cpu.type to select the
+      processor type being counted.
+    stability: development
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+        note: >
+          Identifies the processor type being counted, e.g., cp, ifl, iip.
+
+  # mainframe.host.cpu.utilization extends system.cpu.utilization
+  - id: refinement.mainframe.host.cpu.utilization
+    ref: system.cpu.utilization
+    brief: "The fraction of time processors of the specified type in the mainframe system were busy. Set to -1 when no processors of this type are present."
+    note: >
+      Mainframe refinement of system.cpu.utilization. Reported by the IBM Z
+      HMC Web Services API CPC metric group. A value of -1 indicates no
+      processors of the specified type are installed.
+    stability: development
+    entity_associations:
+      - mainframe.host
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+        note: >
+          Identifies the processor type, e.g., cp, ifl, iip.
+      - ref: mainframe.cpu.sharing.mode
+        requirement_level: required
+        note: >
+          Identifies whether the utilization is for dedicated or shared
+          processors.

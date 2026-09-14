@@ -1,0 +1,28 @@
+file_format: definition/2
+metrics:
+  # Channel utilization metrics. One possible source is the Channels metric group
+  # of the IBM Z HMC Web Services API.
+  - name: mainframe.channel.utilization
+    brief: "The fraction of time the I/O channel was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API channel-path metric group.
+      In distributed systems terms, this is analogous to the utilization of a
+      network interface or storage HBA link.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: channel-usage
+            field: channel-usage
+            mode: classic
+    entity_associations:
+      - mainframe.channel
+    attributes:
+      - ref: mainframe.channel.mode
+        requirement_level: required
