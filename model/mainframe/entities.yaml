@@ -1,0 +1,166 @@
+file_format: definition/2
+entities:
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.channel.name
+    description:
+      - ref: mainframe.channel.mode
+        requirement_level: required
+      - ref: mainframe.channel.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.adapter.name
+    description:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+      - ref: mainframe.adapter.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.cpu
+    brief: >
+      A physical mainframe processor within the Central Processing Complex (CPC)
+      — the mainframe equivalent of a CPU core in a distributed server.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.cpu.name
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - type: mainframe.partition
+    brief: >
+      A logical partition (LPAR) running on the mainframe — the mainframe
+      equivalent of a virtual machine (VM). Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.partition.name
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that hosts this
+          logical partition (LPAR). Reported by the HMC Web Services API
+          partition object field `parent-object-uri`.
+
+
+entity_refinements:
+  # mainframe.host refines the generic 'host' entity — a mainframe CPC is
+  # physically a bare-metal host server. Using host as the base ensures that
+  # cross-platform consumers that understand the OTel host entity can also
+  # navigate mainframe CPC data. The mainframe.host entity already uses
+  # host.name as its identity and host.id / host.type / host.arch in its
+  # description, making it fully aligned with the host entity contract.
+  - id: refinement.mainframe.host
+    ref: host
+    brief: >
+      Mainframe refinement of the generic host entity for the IBM Z Central
+      Processing Complex (CPC). A CPC is a physical bare-metal server — the
+      mainframe equivalent of any host. The IBM Z-specific attributes
+      (serial number, machine type, machine model) extend the generic host
+      description while preserving full compatibility with consumers that
+      understand the base host entity.
+    stability: development
+    identity:
+      - ref: host.name
+        note: >
+          The name of the Central Processing Complex (CPC) as configured on
+          the HMC. Reported by the HMC Web Services API CPC object field `name`.
+    description:
+      - ref: host.id
+        requirement_level: recommended
+        note: >
+          The host.id SHOULD be the object-id UUID of the Central Processing
+          Complex (CPC) as defined by the HMC Web Services API CPC object.
+      - ref: host.type
+        requirement_level: recommended
+        note: >
+          SHOULD be the concatenation of the IBM machine type and model of the
+          Central Processing Complex (CPC), e.g., "9175-ME1".
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+        note: >
+          Mainframe-specific serial number of the CPC. Consumers that
+          understand only the base host entity should use host.id instead.
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+        note: >
+          IBM four-digit machine type (e.g. "9175"). Consumers that understand
+          only the base host entity should use host.type instead.
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+        note: >
+          IBM machine model tier (e.g. "ME1"). Combined with
+          mainframe.host.machine_type this forms the full type-model string
+          that populates host.type.
+
+  # mainframe.host also refines virtualization.platform — a mainframe CPC is a
+  # physical computing platform capable of hosting firmware partitions (LPARs)
+  # and is the IBM Z equivalent of virtualization.platform.
+  - id: refinement.mainframe.host.virtualization.platform
+    ref: virtualization.platform
+    brief: >
+      Mainframe refinement of virtualization.platform for the IBM Z Central
+      Processing Complex (CPC). A CPC is a physical computing platform that
+      hosts firmware-enforced logical partitions (LPARs) via PR/SM, directly
+      analogous to virtualization.platform in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+        note: >
+          Mainframe-specific serial number of the CPC. Use alongside
+          virtualization.platform.serial_number for cross-platform consumers.
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+        note: >
+          IBM four-digit machine type (e.g. "9175"). Use alongside
+          virtualization.platform.model for cross-platform consumers.
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+        note: >
+          IBM machine model tier (e.g. "ME1"). Combined with
+          mainframe.host.machine_type, this forms the full type-model string.
+
+  # mainframe.partition refines virtualization.partition — an LPAR is a
+  # hardware/firmware-enforced partition, analogous to virtualization.partition.
+  - id: refinement.mainframe.partition.virtualization.partition
+    ref: virtualization.partition
+    brief: >
+      Mainframe refinement of virtualization.partition for an IBM Z logical
+      partition (LPAR).  An LPAR is a firmware-enforced partition managed by
+      PR/SM, directly analogous to virtualization.partition in the generic
+      virtualization schema.
+    stability: development
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the CPC that hosts this LPAR. Corresponds to the
+          virtualization.platform identity for cross-platform portability.

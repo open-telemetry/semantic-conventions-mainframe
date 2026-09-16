@@ -1,0 +1,180 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.host.serial_number
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: serial-number
+        mode: all
+    brief: "The serial number of the Central Processing Complex (CPC)."
+    examples: ["0000000ABCDE"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `serial-number`.
+      The serial number uniquely identifies a physical mainframe machine.
+
+  - key: mainframe.host.machine_type
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: machine-type
+        mode: all
+    brief: "The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation."
+    examples: ["9175", "3931"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `machine-type`.
+      In distributed systems terms, this is analogous to the CPU family or
+      server product line identifier.
+
+  - key: mainframe.host.machine_model
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: machine-model
+        mode: all
+    brief: "The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type."
+    examples: ["ME1", "ML1", "A01", "LA1"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `machine-model`.
+      Combined with `mainframe.host.machine_type`, forms the full IBM machine
+      type-model identifier (e.g., "9175-ME1").
+
+  - key: mainframe.host.temperature.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: ambient-temperature
+        mode: all
+    brief: "The location of the temperature sensor within the Central Processing Complex (CPC) frame."
+    type:
+      members:
+        - id: ambient
+          value: "ambient"
+          brief: "Ambient (inlet) temperature at the front of the CPC frame."
+          stability: development
+        - id: exhaust
+          value: "exhaust"
+          brief: "Exhaust (outlet) temperature at the rear of the CPC frame."
+          stability: development
+
+  - key: mainframe.host.heatload.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: heat-load
+        mode: all
+    brief: "The type of heat load measurement reported for the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: total
+          value: "total"
+          brief: "Total heat load produced by the entire CPC frame."
+          stability: development
+        - id: forced_air
+          value: "forced-air"
+          brief: "Heat load dissipated via forced-air cooling."
+          stability: development
+        - id: water
+          value: "water"
+          brief: "Heat load dissipated via water cooling."
+          stability: development
+
+  - key: mainframe.host.power.usage.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power
+        mode: all
+    brief: "The category of power usage measurement reported for the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: total
+          value: "total"
+          brief: "Total power consumed by the entire CPC."
+          stability: development
+        - id: partitions
+          value: "partitions"
+          brief: "Aggregate power consumed by all active logical partitions (LPARs)."
+          stability: development
+        - id: infrastructure
+          value: "infrastructure"
+          brief: "Power consumed by CPC infrastructure components such as cooling and I/O."
+          stability: development
+        - id: unassigned
+          value: "unassigned"
+          brief: "Power consumed by components not attributed to any active partition."
+          stability: development
+
+  - key: mainframe.host.power.cord
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power-cord-usage
+        mode: all
+    brief: "The identifier of the power cord supplying the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: cord1
+          value: "1"
+          brief: "Power cord 1."
+          stability: development
+        - id: cord2
+          value: "2"
+          brief: "Power cord 2."
+          stability: development
+        - id: cord3
+          value: "3"
+          brief: "Power cord 3."
+          stability: development
+        - id: cord4
+          value: "4"
+          brief: "Power cord 4."
+          stability: development
+        - id: cord5
+          value: "5"
+          brief: "Power cord 5."
+          stability: development
+        - id: cord6
+          value: "6"
+          brief: "Power cord 6."
+          stability: development
+        - id: cord7
+          value: "7"
+          brief: "Power cord 7."
+          stability: development
+        - id: cord8
+          value: "8"
+          brief: "Power cord 8."
+          stability: development
+
+  - key: mainframe.host.power.phase
+    stability: development
+    annotations:
+      hmc_source:
+        object: CPC
+        field: power-cord-usage
+        mode: all
+    brief: "The AC power phase supplying the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: a
+          value: "A"
+          brief: "Power phase A."
+          stability: development
+        - id: b
+          value: "B"
+          brief: "Power phase B."
+          stability: development
+        - id: c
+          value: "C"
+          brief: "Power phase C."
+          stability: development

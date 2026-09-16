@@ -1,0 +1,604 @@
+file_format: definition/2
+metrics:
+  # Partition-attached NIC metrics.
+  # Source: partition-attached-network-interface metric group of the HMC Web Services API
+  # (DPM mode only, HMC >= 2.13.1).
+  # Prometheus exporter prefix: zhmc_nic_
+
+  - name: mainframe.partition.nic.bytes.sent
+    brief: "The total number of bytes in unicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-sent`.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.bytes.received
+    brief: "The total number of bytes in unicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-received`.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.packets.sent
+    brief: "The total number of unicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.packets.received
+    brief: "The total number of unicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.packets.dropped
+    brief: "The total number of packets dropped on the virtual network interface card (NIC) attached to the partition due to resource shortage."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-dropped`
+      and `packets-received-dropped`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received drops.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-dropped
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.partition.nic.packets.discarded
+    brief: "The total number of malformed packets discarded on the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) fields `packets-sent-discarded`
+      and `packets-received-discarded`. Use the `network.io.direction` attribute
+      to distinguish sent vs. received discards.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-discarded
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+      - ref: network.io.direction
+        requirement_level: required
+
+  - name: mainframe.partition.nic.multicast.packets.sent
+    brief: "The total number of multicast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: multicast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.multicast.packets.received
+    brief: "The total number of multicast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `multicast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: multicast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.broadcast.packets.sent
+    brief: "The total number of broadcast packets sent through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-sent`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: broadcast-packets-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.broadcast.packets.received
+    brief: "The total number of broadcast packets received through the virtual network interface card (NIC) attached to the partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `broadcast-packets-received`.
+    instrument: counter
+    unit: "{packet}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: broadcast-packets-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.data.sent
+    brief: "The number of bytes sent through the virtual network interface card (NIC) during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-sent`.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: interval-bytes-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.data.received
+    brief: "The number of bytes received through the virtual network interface card (NIC) during the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `interval-bytes-received`.
+    instrument: gauge
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: interval-bytes-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.data.rate.sent
+    brief: "The data transmission rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-sent`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-per-second-sent
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+  - name: mainframe.partition.nic.data.rate.received
+    brief: "The data reception rate of the virtual network interface card (NIC) in bytes per second, averaged over the last collection interval."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-attached-network-interface
+      metric group (DPM mode only, HMC ≥ 2.13.1) field `bytes-per-second-received`.
+    instrument: gauge
+    unit: "By/s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-per-second-received
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+
+metric_refinements:
+  # mainframe.partition.nic.bytes.sent / received refine hw.network.io
+  - id: refinement.mainframe.partition.nic.hw.network.io
+    ref: hw.network.io
+    brief: "Received and transmitted network traffic in bytes through the mainframe virtual NIC."
+    note: >
+      Mainframe refinement of hw.network.io for the mainframe.partition.nic
+      entity (DPM mode only, HMC ≥ 2.13.1). Use network.io.direction to
+      distinguish direction: 'transmit' maps to HMC field `bytes-sent`,
+      'receive' maps to HMC field `bytes-received`. The mainframe-specific
+      metrics mainframe.partition.nic.bytes.sent and
+      mainframe.partition.nic.bytes.received carry the same information at
+      IBM Z HMC resolution; this refinement enables cross-platform consumers
+      that understand hw.network.io to include mainframe virtual NIC traffic.
+    stability: development
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: mainframe.partition.name
+        requirement_level: required
+        note: >
+          The name of the partition that owns this virtual NIC.
+          Required to distinguish time series between partitions
+          on the same Central Processing Complex (CPC).
+          HMC source: partition object field `name`.
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The name of the virtual NIC this measurement belongs to.
+          Required to distinguish time series between multiple NICs
+          attached to the same partition.
+          HMC source: partition-attached-network-interface field `nic-id`.
+      - ref: network.io.direction
+        requirement_level: required
+        note: >
+          Set to 'transmit' for bytes sent (HMC field `bytes-sent`),
+          or 'receive' for bytes received (HMC field `bytes-received`).
+
+  # mainframe.partition.nic.packets.sent / received refine hw.network.packets
+  - id: refinement.mainframe.partition.nic.hw.network.packets
+    ref: hw.network.packets
+    brief: "Received and transmitted network traffic in packets through the mainframe virtual NIC."
+    note: >
+      Mainframe refinement of hw.network.packets for the mainframe.partition.nic
+      entity (DPM mode only, HMC ≥ 2.13.1). Use network.io.direction to
+      distinguish direction: 'transmit' maps to HMC field `packets-sent`,
+      'receive' maps to HMC field `packets-received`. The mainframe-specific
+      metrics mainframe.partition.nic.packets.sent and
+      mainframe.partition.nic.packets.received carry the same information at
+      IBM Z HMC resolution; this refinement enables cross-platform consumers
+      that understand hw.network.packets to include mainframe NIC packet counts.
+    stability: development
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+        note: >
+          Set to 'transmit' for packets sent (HMC field `packets-sent`),
+          or 'receive' for packets received (HMC field `packets-received`).

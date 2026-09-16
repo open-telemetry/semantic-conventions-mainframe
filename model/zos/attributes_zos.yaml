@@ -1,0 +1,22 @@
+file_format: definition/2
+attributes:
+  - key: zos.smf.id
+    type: string
+    stability: development
+    brief: "The System Management Facilities (SMF) identifier that uniquely identifies a z/OS system within a sysplex or standalone mainframe environment."
+    examples: ["SYS1", "PROD1", "TEST2"]
+    note: >
+      The SMF system identifier (SMFID) is a 1-4 character alphanumeric name set
+      at IPL time via the SMFPRMxx parmlib member. It is used throughout z/OS for
+      system identification in SMF records, RMF reports, and sysplex routing.
+
+  - key: zos.sysplex.name
+    type: string
+    stability: development
+    brief: "The name of the z/OS systems complex (SYSPLEX) to which this z/OS system belongs."
+    examples: ["SYSPLEX1", "PRODPLEX"]
+    note: >
+      A sysplex is a cluster of z/OS systems that cooperate using the coupling
+      facility (CF) for shared data and workload management. The sysplex name
+      is defined in the COUPLExx parmlib member. In distributed systems terms,
+      a sysplex is analogous to a high-availability cluster.
