@@ -59,7 +59,83 @@ entities:
           logical partition (LPAR). Reported by the HMC Web Services API
           partition object field `parent-object-uri`.
 
+  - type: mainframe.processor_pool
+    brief: >
+      An IBM Z shared processor pool — a group of physical processor engines
+      (CP, IFL, z Integrated Information Processor (zIIP), or Integrated
+      Coupling Facility (ICF)) with a defined capacity limit shared among
+      logical partitions. In distributed systems terms, this is analogous to
+      a Kubernetes Namespace ResourceQuota or a VMware vSphere Resource Pool.
+    stability: development
+    identity:
+      - ref: virtualization.resource_pool.name
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: recommended
+        note: >
+          The type of physical processor engines in this shared pool (cp, ifl,
+          iip, icf, etc.). Reported by the HMC Web Services API shared-processor-
+          pool object field `processor-type`.
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that contains this
+          shared processor pool.
 
+  - type: mainframe.zvm.hypervisor
+    brief: >
+      The z/VM Control Program (CP) running as a Type-1 software hypervisor
+      on an IBM Z Central Processing Complex (CPC) or inside a logical
+      partition (LPAR). In distributed systems terms, this is analogous to
+      a KVM or VMware ESXi hypervisor instance.
+    stability: development
+    identity:
+      - ref: mainframe.zvm.hypervisor.name
+    description:
+      - ref: virtualization.hypervisor.version
+        requirement_level: recommended
+        note: >
+          The version of the z/VM operating system running as the hypervisor.
+          Reported by the HMC Web Services API as the z/VM version string on
+          the logical-partition object.
+
+  - type: mainframe.zvm.guest
+    brief: >
+      A virtual machine (guest) managed by the z/VM hypervisor. In distributed
+      systems terms, this is analogous to a KVM guest domain or a VMware
+      virtual machine. Each z/VM guest is identified by a user directory entry
+      (userid).
+    stability: development
+    identity:
+      - ref: mainframe.zvm.guest.userid
+    description:
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The name of the z/VM hypervisor (LPAR name) that hosts this guest.
+          Corresponds to the virtualization.hypervisor identity for cross-platform
+          portability.
+      - ref: virtualization.vm.state
+        requirement_level: recommended
+        note: >
+          The operational state of the z/VM guest virtual machine.
+
+  - type: mainframe.vswitch
+    brief: >
+      A virtual Ethernet switch managed by the z/VM Control Program (CP) or
+      defined in IBM Z Dynamic Partition Manager (DPM) mode. Connects z/VM
+      guest virtual machines and DPM partitions to physical network adapters.
+      In distributed systems terms, this is analogous to a VMware vSwitch or
+      a Linux OVS bridge.
+    stability: development
+    identity:
+      - ref: mainframe.vswitch.name
+    description:
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The name of the z/VM hypervisor (LPAR) that owns this virtual switch.
+          In DPM mode, this corresponds to the CPC that hosts the virtual switch.
 entity_refinements:
   # mainframe.host refines the generic 'host' entity — a mainframe CPC is
   # physically a bare-metal host server. Using host as the base ensures that
@@ -164,3 +240,104 @@ entity_refinements:
         note: >
           The name of the CPC that hosts this LPAR. Corresponds to the
           virtualization.platform identity for cross-platform portability.
+
+  # mainframe.processor_pool refines virtualization.resource_pool — an IBM Z
+  # shared processor pool is a capacity-limited CPU pool, analogous to a
+  # resource pool.
+  - id: refinement.mainframe.processor_pool.virtualization.resource_pool
+    ref: virtualization.resource_pool
+    brief: >
+      Mainframe refinement of virtualization.resource_pool for an IBM Z shared
+      processor pool. A shared processor pool defines a capacity boundary for a
+      group of physical processor engines (CP, IFL, zIIP, ICF) shared by logical
+      partitions, directly analogous to virtualization.resource_pool in the
+      generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: recommended
+        note: >
+          The type of processor engines managed by this shared pool. Maps to the
+          processor-type property of the HMC Web Services API shared-processor-
+          pool object.
+
+  # mainframe.zvm.hypervisor refines virtualization.hypervisor — the z/VM
+  # Control Program is a software Type-1 hypervisor.
+  - id: refinement.mainframe.zvm.hypervisor.virtualization.hypervisor
+    ref: virtualization.hypervisor
+    brief: >
+      Mainframe refinement of virtualization.hypervisor for the z/VM Control
+      Program (CP). z/VM is a Type-1 software hypervisor that runs on IBM Z
+      hardware (bare-metal or inside a PR/SM LPAR) and manages hundreds to
+      thousands of guest virtual machines, directly analogous to
+      virtualization.hypervisor in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The name of the LPAR hosting the z/VM hypervisor instance. Maps to
+          the `name` field of the logical-partition HMC object.
+
+  # mainframe.zvm.guest refines virtualization.vm — a z/VM guest is a software
+  # VM managed by the z/VM hypervisor.
+  - id: refinement.mainframe.zvm.guest.virtualization.vm
+    ref: virtualization.vm
+    brief: >
+      Mainframe refinement of virtualization.vm for an IBM z/VM guest virtual
+      machine. A z/VM guest is a virtual machine managed by the z/VM Control
+      Program (CP), running Linux on Z or z/OS, directly analogous to
+      virtualization.vm in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.zvm.guest.userid
+        requirement_level: recommended
+        note: >
+          The z/VM user directory identifier for this guest. Maps to the
+          `zvm-guest-name` field of the HMC logical-partition object. This
+          is the z/VM equivalent of `virtualization.vm.name`.
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The LPAR name of the z/VM hypervisor hosting this guest. Used to
+          correlate guests with their hypervisor instance.
+
+  # mainframe.vswitch refines virtualization.vswitch — an IBM Z VSWITCH or
+  # DPM virtual switch is a virtual network switch.
+  - id: refinement.mainframe.vswitch.virtualization.vswitch
+    ref: virtualization.vswitch
+    brief: >
+      Mainframe refinement of virtualization.vswitch for an IBM z/VM VSWITCH
+      or DPM virtual switch. A mainframe virtual switch bridges partitions and
+      guest VMs to physical OSA-Express or RoCE network adapters, directly
+      analogous to virtualization.vswitch in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.vswitch.name
+        requirement_level: recommended
+        note: >
+          The name of the z/VM VSWITCH or DPM virtual switch. Maps to the
+          `name` field of the virtual-switch HMC object.
+
+  # mainframe.storage_group refines virtualization.storage_pool — a DPM storage
+  # group is a named collection of storage volumes backing partitions.
+  - id: refinement.mainframe.storage_group.virtualization.storage_pool
+    ref: virtualization.storage_pool
+    brief: >
+      Mainframe refinement of virtualization.storage_pool for an IBM Z DPM
+      storage group. A storage group aggregates FCP/SCSI or FICON/ECKD volumes
+      allocated to partitions and guests, directly analogous to
+      virtualization.storage_pool in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.storage.group.name
+        requirement_level: recommended
+        note: >
+          The name of the DPM storage group. Maps to the `name` field of the
+          storage-group HMC object. This is the z/VM/DPM equivalent of
+          `virtualization.storage_pool.name`.
+      - ref: mainframe.storage.group.type
+        requirement_level: recommended
+        note: >
+          The connectivity type of the storage group (fcp, fc, nvme). Maps to
+          the `type` field of the storage-group HMC object.

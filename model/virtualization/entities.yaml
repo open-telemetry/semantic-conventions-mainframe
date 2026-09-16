@@ -136,6 +136,74 @@ entities:
       - ref: virtualization.vm.nested_virtualization.enabled
         requirement_level: recommended
 
+  - type: virtualization.cluster
+    brief: >
+      A logical aggregation of physical platforms and hypervisors managed as a
+      single compute pool for scheduling, high availability, and failover.
+      Analogous to a VMware vSphere DRS/HA Cluster or a Kubernetes cluster in
+      distributed cloud environments.
+    stability: development
+    identity:
+      - ref: virtualization.cluster.name
+    description:
+      - ref: virtualization.cluster.id
+        requirement_level: recommended
+        note: >
+          A platform-specific opaque identifier for the cluster. For VMware
+          vSphere this is the cluster MoRef ID. For IBM Z HMC management domains
+          there is no single cluster UUID; omit when not available.
+
+  - type: virtualization.resource_pool
+    brief: >
+      A hierarchical boundary that controls CPU shares, memory reservations, and
+      capacity limits for the virtual machines or partitions it contains.
+      Analogous to a VMware vSphere Resource Pool, a Kubernetes Namespace
+      ResourceQuota, or an IBM Z PR/SM Shared Processor Pool.
+    stability: development
+    identity:
+      - ref: virtualization.resource_pool.name
+    description:
+      - ref: virtualization.resource_pool.id
+        requirement_level: recommended
+        note: >
+          A platform-specific opaque identifier for the resource pool. For VMware
+          vSphere this is the resource pool MoRef ID. For IBM Z PR/SM this is the
+          shared processor pool object-id reported by the HMC Web Services API.
+
+  - type: virtualization.vswitch
+    brief: >
+      A virtual network switch or bridge that provides network connectivity
+      between virtual machines, partitions, and physical networks. Analogous to
+      a VMware vSwitch or dvSwitch, a Linux OVS bridge, or an IBM z/VM VSWITCH.
+    stability: development
+    identity:
+      - ref: virtualization.vswitch.name
+    description:
+      - ref: virtualization.vswitch.id
+        requirement_level: recommended
+        note: >
+          A platform-specific opaque identifier for the virtual switch. For
+          VMware vSphere this is the switch MoRef ID. For IBM Z DPM mode this
+          is the virtual switch object-id reported by the HMC Web Services API.
+
+  - type: virtualization.storage_pool
+    brief: >
+      A storage abstraction that aggregates physical or logical volumes for
+      backing virtual machine disks and partition storage. Analogous to a
+      VMware Datastore, a Kubernetes StorageClass/PVC pool, or an IBM Z
+      DPM Storage Group.
+    stability: development
+    identity:
+      - ref: virtualization.storage_pool.name
+    description:
+      - ref: virtualization.storage_pool.id
+        requirement_level: recommended
+        note: >
+          A platform-specific opaque identifier for the storage pool. For
+          VMware vSphere this is the datastore MoRef ID. For IBM Z DPM mode
+          this is the storage-group object-id reported by the HMC Web Services
+          API.
+
 
 entity_refinements:
   # virtualization.platform refines the generic 'host' entity.
@@ -173,3 +241,50 @@ entity_refinements:
         note: >
           The firmware or microcode version as reported by the platform
           management interface. Not available in the base host entity.
+
+  # virtualization.partition refines the generic 'host' entity.
+  # A firmware partition is a hardware-isolated execution environment.
+  # Workloads running inside the partition observe it as a host.
+  - id: refinement.virtualization.partition.host
+    ref: host
+    brief: >
+      Refinement of the generic host entity for a firmware-enforced partition.
+      A virtualization partition is a hardware-isolated execution environment
+      — the mainframe equivalent of a virtual machine, but enforced at the
+      firmware level. The partition behaves as an independent host from the
+      perspective of workloads running inside it.
+    stability: development
+    description:
+      - ref: virtualization.partition.name
+        requirement_level: recommended
+        note: >
+          The partition name as configured in the hypervisor management
+          interface. Not available in the base host entity.
+      - ref: virtualization.partition.type
+        requirement_level: opt_in
+        note: >
+          The workload type or mode of the partition. Not available in the
+          base host entity.
+
+  # virtualization.vm refines the generic 'host' entity.
+  # A VM is a software-emulated guest machine; its guest OS treats it as a host.
+  - id: refinement.virtualization.vm.host
+    ref: host
+    brief: >
+      Refinement of the generic host entity for a virtual machine managed by
+      a software hypervisor. A virtualization VM is a software-emulated or
+      paravirtualized guest machine — the distributed equivalent of any cloud
+      compute instance. This refinement ensures that cross-platform consumers
+      that understand the base host entity can navigate VM data using standard
+      host attributes while the VM-specific attributes provide additional context.
+    stability: development
+    description:
+      - ref: virtualization.vm.name
+        requirement_level: recommended
+        note: >
+          The VM name as configured in the hypervisor management interface.
+          Not available in the base host entity.
+      - ref: virtualization.vm.state
+        requirement_level: opt_in
+        note: >
+          The operational state of the VM. Not available in the base host entity.
