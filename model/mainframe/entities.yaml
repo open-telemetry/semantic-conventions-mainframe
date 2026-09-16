@@ -42,100 +42,6 @@ entities:
       - ref: mainframe.cpu.type
         requirement_level: required
 
-  - type: mainframe.partition
-    brief: >
-      A logical partition (LPAR) running on the mainframe — the mainframe
-      equivalent of a virtual machine (VM). Each LPAR can run an independent
-      operating system such as z/OS, Linux, or z/VM.
-    stability: development
-    requirement_level: recommended
-    identity:
-      - ref: mainframe.partition.name
-    description:
-      - ref: host.name
-        requirement_level: recommended
-        note: >
-          The name of the Central Processing Complex (CPC) that hosts this
-          logical partition (LPAR). Reported by the HMC Web Services API
-          partition object field `parent-object-uri`.
-
-  - type: mainframe.processor_pool
-    brief: >
-      An IBM Z shared processor pool — a group of physical processor engines
-      (CP, IFL, z Integrated Information Processor (zIIP), or Integrated
-      Coupling Facility (ICF)) with a defined capacity limit shared among
-      logical partitions. In distributed systems terms, this is analogous to
-      a Kubernetes Namespace ResourceQuota or a VMware vSphere Resource Pool.
-    stability: development
-    identity:
-      - ref: virtualization.resource_pool.name
-    description:
-      - ref: mainframe.cpu.type
-        requirement_level: recommended
-        note: >
-          The type of physical processor engines in this shared pool (cp, ifl,
-          iip, icf, etc.). Reported by the HMC Web Services API shared-processor-
-          pool object field `processor-type`.
-      - ref: host.name
-        requirement_level: recommended
-        note: >
-          The name of the Central Processing Complex (CPC) that contains this
-          shared processor pool.
-
-  - type: mainframe.zvm.hypervisor
-    brief: >
-      The z/VM Control Program (CP) running as a Type-1 software hypervisor
-      on an IBM Z Central Processing Complex (CPC) or inside a logical
-      partition (LPAR). In distributed systems terms, this is analogous to
-      a KVM or VMware ESXi hypervisor instance.
-    stability: development
-    identity:
-      - ref: mainframe.zvm.hypervisor.name
-    description:
-      - ref: virtualization.hypervisor.version
-        requirement_level: recommended
-        note: >
-          The version of the z/VM operating system running as the hypervisor.
-          Reported by the HMC Web Services API as the z/VM version string on
-          the logical-partition object.
-
-  - type: mainframe.zvm.guest
-    brief: >
-      A virtual machine (guest) managed by the z/VM hypervisor. In distributed
-      systems terms, this is analogous to a KVM guest domain or a VMware
-      virtual machine. Each z/VM guest is identified by a user directory entry
-      (userid).
-    stability: development
-    identity:
-      - ref: mainframe.zvm.guest.userid
-    description:
-      - ref: mainframe.zvm.hypervisor.name
-        requirement_level: recommended
-        note: >
-          The name of the z/VM hypervisor (LPAR name) that hosts this guest.
-          Corresponds to the virtualization.hypervisor identity for cross-platform
-          portability.
-      - ref: virtualization.vm.state
-        requirement_level: recommended
-        note: >
-          The operational state of the z/VM guest virtual machine.
-
-  - type: mainframe.vswitch
-    brief: >
-      A virtual Ethernet switch managed by the z/VM Control Program (CP) or
-      defined in IBM Z Dynamic Partition Manager (DPM) mode. Connects z/VM
-      guest virtual machines and DPM partitions to physical network adapters.
-      In distributed systems terms, this is analogous to a VMware vSwitch or
-      a Linux OVS bridge.
-    stability: development
-    identity:
-      - ref: mainframe.vswitch.name
-    description:
-      - ref: mainframe.zvm.hypervisor.name
-        requirement_level: recommended
-        note: >
-          The name of the z/VM hypervisor (LPAR) that owns this virtual switch.
-          In DPM mode, this corresponds to the CPC that hosts the virtual switch.
 entity_refinements:
   # mainframe.host refines the generic 'host' entity — a mainframe CPC is
   # physically a bare-metal host server. Using host as the base ensures that
@@ -238,8 +144,25 @@ entity_refinements:
       - ref: host.name
         requirement_level: recommended
         note: >
-          The name of the CPC that hosts this LPAR. Corresponds to the
-          virtualization.platform identity for cross-platform portability.
+          The name of the Central Processing Complex (CPC) that hosts this
+          logical partition (LPAR). Corresponds to the virtualization.platform
+          identity for cross-platform portability.
+      - ref: mainframe.partition.name
+        requirement_level: recommended
+        note: >
+          The LPAR name as configured on the HMC. This is the primary
+          human-readable identifier for the partition.
+      - ref: mainframe.partition.number
+        requirement_level: recommended
+        note: >
+          The numeric partition index assigned by PR/SM. Used to correlate
+          HMC data with SMF records and hardware event logs that reference
+          partitions by number rather than by name.
+      - ref: mainframe.partition.type
+        requirement_level: recommended
+        note: >
+          The workload category of the partition. Determines which processor
+          types and software environments are licensed for this LPAR.
 
   # mainframe.processor_pool refines virtualization.resource_pool — an IBM Z
   # shared processor pool is a capacity-limited CPU pool, analogous to a

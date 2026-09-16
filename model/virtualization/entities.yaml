@@ -83,6 +83,13 @@ entities:
       - ref: virtualization.partition.id
       - ref: virtualization.platform.id
     description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this partition.
+          Use this attribute to discriminate partition metrics by platform —
+          e.g. filter on "ibm.prsm" to isolate IBM Z LPAR metrics from
+          generic virtualization partition metrics.
       - ref: virtualization.partition.name
         requirement_level: recommended
       - ref: virtualization.partition.number
@@ -121,6 +128,12 @@ entities:
     identity:
       - ref: virtualization.vm.id
     description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this VM. Use this
+          attribute to discriminate VM metrics by platform — e.g. filter on
+          "ibm.zvm" to isolate z/VM guest metrics.
       - ref: virtualization.vm.name
         requirement_level: recommended
       - ref: virtualization.vm.instance_id
@@ -163,6 +176,11 @@ entities:
     identity:
       - ref: virtualization.resource_pool.name
     description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this resource pool.
+          Filter on "ibm.prsm" to isolate IBM Z shared processor pool metrics.
       - ref: virtualization.resource_pool.id
         requirement_level: recommended
         note: >
@@ -179,6 +197,11 @@ entities:
     identity:
       - ref: virtualization.vswitch.name
     description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this virtual switch.
+          Filter on "ibm.zvm" to isolate IBM z/VM VSWITCH metrics.
       - ref: virtualization.vswitch.id
         requirement_level: recommended
         note: >
@@ -196,6 +219,11 @@ entities:
     identity:
       - ref: virtualization.storage_pool.name
     description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this storage pool.
+          Filter on "ibm.prsm" to isolate IBM Z DPM storage group metrics.
       - ref: virtualization.storage_pool.id
         requirement_level: recommended
         note: >

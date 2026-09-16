@@ -42,7 +42,7 @@ metrics:
             field: processor-count-sap
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -75,7 +75,7 @@ metrics:
             field: initial-processing-weight-capped
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -119,7 +119,7 @@ metrics:
             field: processor-count-iip-capped
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -163,7 +163,7 @@ metrics:
             field: processor-count-iip-reserved
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -208,7 +208,7 @@ metrics:
             field: maximum-processing-weight
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -244,7 +244,7 @@ metrics:
             field: initial-processing-weight-capped
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -324,7 +324,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -384,7 +384,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.13.1"
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -424,7 +424,7 @@ metrics:
             field: zvm-paging-rate
             mode: classic
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -467,7 +467,7 @@ metrics:
               formula: "value * 1000"
               multiplier: 1000
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -503,7 +503,7 @@ metrics:
             field: status
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -539,7 +539,7 @@ metrics:
             field: has-unacceptable-status
             mode: all
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -595,7 +595,7 @@ metrics:
             field: maximum-memory
             mode: dpm
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -632,7 +632,7 @@ metrics:
             field: defined-capacity
             mode: classic
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -666,7 +666,7 @@ metrics:
             field: workload-manager-enabled
             mode: classic
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -700,7 +700,7 @@ metrics:
             field: processor-mode
             mode: dpm
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
 
     attributes:
       - ref: mainframe.partition.name
@@ -733,7 +733,7 @@ metrics:
             field: threads-per-processor
             mode: dpm
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -757,7 +757,7 @@ metric_refinements:
       generic `virtualization.partition.cpu.type` in the upstream schema.
     stability: development
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.name
         requirement_level: required
@@ -783,7 +783,7 @@ metric_refinements:
       attribute provides the IBM Z-specific processor type breakdown.
     stability: development
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
@@ -802,7 +802,7 @@ metric_refinements:
       allocation category (central-initial, central-current, dpm-initial, etc.).
     stability: development
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.memory.type
         requirement_level: required
@@ -822,7 +822,7 @@ metric_refinements:
       `mainframe.partition.status`.
     stability: development
     entity_associations:
-      - mainframe.partition
+      - virtualization.partition
     attributes:
       - ref: mainframe.partition.status
         requirement_level: opt_in

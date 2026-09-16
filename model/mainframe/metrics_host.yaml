@@ -44,7 +44,7 @@ metrics:
             field: processor-count-cbp
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -76,7 +76,7 @@ metrics:
             field: processor-count-defective
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -107,7 +107,7 @@ metrics:
             field: processor-count-spare
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -154,7 +154,7 @@ metrics:
             field: storage-partitions-expanded-memory
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -186,7 +186,7 @@ metrics:
             field: storage-vfm-increment-size
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -216,7 +216,7 @@ metrics:
             field: storage-vfm-total-size
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -247,7 +247,7 @@ metrics:
             field: channel-usage
             mode: classic
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -292,7 +292,7 @@ metrics:
             field: processor-usage-iip
             mode: classic
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -329,7 +329,7 @@ metrics:
             field: exhaust-temperature
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -360,7 +360,7 @@ metrics:
             field: humidity
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -388,7 +388,7 @@ metrics:
             field: dew-point
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -445,7 +445,7 @@ metrics:
               formula: "value * 1055.06"
               multiplier: 1055.06
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -511,7 +511,7 @@ metrics:
               formula: "value * 1000"
               multiplier: 1000
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -550,7 +550,7 @@ metrics:
               formula: "value * 1000"
               multiplier: 1000
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -582,7 +582,7 @@ metrics:
             field: status
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -612,7 +612,7 @@ metrics:
             field: has-unacceptable-status
             mode: all
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
     attributes:
       - ref: host.name
@@ -668,7 +668,7 @@ metrics:
             field: crypto-usage
             mode: dpm
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: host.name
         requirement_level: required
@@ -694,7 +694,7 @@ metric_refinements:
       processor type being counted.
     stability: development
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
@@ -711,7 +711,7 @@ metric_refinements:
       processors of the specified type are installed.
     stability: development
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
     attributes:
       - ref: mainframe.cpu.type
         requirement_level: required
@@ -738,7 +738,7 @@ metric_refinements:
       other server hardware.
     stability: development
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
   # mainframe.host.temperature extends hw.host.ambient_temperature
   - id: refinement.mainframe.host.ambient_temperature
@@ -750,7 +750,7 @@ metric_refinements:
       the IBM Z HMC Web Services API CPC metric group field `ambient-temperature`.
     stability: development
     entity_associations:
-      - mainframe.host
+      - virtualization.platform
 
   # mainframe.host.memory.size (total) extends system.memory.limit
   - id: refinement.mainframe.host.memory.limit
@@ -766,4 +766,4 @@ metric_refinements:
       with that of standard servers.
     stability: development
     entity_associations:
-      - mainframe.host
+      - virtualization.platform

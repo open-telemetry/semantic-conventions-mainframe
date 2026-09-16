@@ -29,7 +29,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.group
+      - virtualization.storage_pool
     attributes:
       - ref: mainframe.storage.group.name
         requirement_level: required
@@ -63,7 +63,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.group
+      - virtualization.storage_pool
 
     attributes:
       - ref: mainframe.storage.group.name
@@ -94,7 +94,7 @@ metrics:
             mode: dpm
             min_hmc_version: "2.14.1"
     entity_associations:
-      - mainframe.storage.group
+      - virtualization.storage_pool
 
     attributes:
       - ref: mainframe.storage.group.name
