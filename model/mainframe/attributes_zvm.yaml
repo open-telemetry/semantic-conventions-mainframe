@@ -37,3 +37,30 @@ attributes:
       or container name. Reported by the HMC Web Services API as the
       `zvm-guest-name` field on the logical-partition object when the partition
       is running as a z/VM guest.
+
+  - key: mainframe.zvm.paging.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: logical-partition
+        field: zvm-paging-type
+        mode: classic
+    brief: "The storage tier involved in the z/VM hypervisor paging operation."
+    note: >
+      Reported by the IBM z/VM Monitor and HMC logical-partition performance
+      interfaces. In distributed virtualization terms, this is analogous to
+      hypervisor swap/balloon paging tiers.
+    type:
+      members:
+        - id: central
+          value: "central"
+          brief: "Paging operations between central storage (RAM) and auxiliary storage."
+          stability: development
+        - id: expanded
+          value: "expanded"
+          brief: "Paging operations between central storage and expanded storage."
+          stability: development
+        - id: dasd
+          value: "dasd"
+          brief: "Paging operations to and from backing Direct Access Storage Device (DASD) paging volumes."
+          stability: development

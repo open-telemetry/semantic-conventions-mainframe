@@ -47,3 +47,50 @@ attributes:
     note: >
       Reported by the HMC Web Services API channel-path object. Set to 'shared'
       when the channel is not dedicated to a single partition.
+
+  - key: mainframe.channel.id
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: channel-path
+        field: channel-path-id
+        mode: all
+    brief: "The channel path identifier (CHPID) in hexadecimal format."
+    examples: ["00", "2D", "E3"]
+    note: >
+      Reported by the HMC Web Services API channel-path object. In distributed
+      systems terms, this is analogous to a storage HBA port or channel identifier.
+
+  - key: mainframe.channel.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: channel-path
+        field: chpid-type
+        mode: all
+    brief: "The protocol and connectivity type of the I/O channel path."
+    note: >
+      Reported by the HMC Web Services API channel-path object field `chpid-type`.
+    type:
+      members:
+        - id: ficon
+          value: "ficon"
+          brief: "Fibre Channel Connection (FICON) channel path for high-speed DASD and tape storage connectivity."
+          stability: development
+        - id: zhyperlink
+          value: "zhyperlink"
+          brief: "zHyperLink express channel path providing ultra-low-latency synchronous PCIe storage access."
+          stability: development
+        - id: osa
+          value: "osa"
+          brief: "Open Systems Adapter (OSA) channel path for Ethernet LAN connectivity."
+          stability: development
+        - id: roce
+          value: "roce"
+          brief: "RDMA over Converged Ethernet (RoCE) channel path for high-speed memory-to-memory data transfers."
+          stability: development
+        - id: coupling
+          value: "coupling"
+          brief: "Coupling Facility link (Integrated Cluster Bus or Coupling Express) for sysplex communication."
+          stability: development
