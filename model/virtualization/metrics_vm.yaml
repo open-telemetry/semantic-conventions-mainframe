@@ -300,6 +300,71 @@ metrics:
       - ref: virtualization.vm.disk.direction
         requirement_level: required
 
+  - name: virtualization.vm.disk.latency.time
+    brief: "Total time spent waiting for virtual disk I/O operations to complete in seconds."
+    note: >
+      A monotonically increasing counter measuring cumulative time spent by the
+      hypervisor and backing storage stack processing guest read and write
+      operations. When divided by the delta of `virtualization.vm.disk.operations`
+      over the same interval, it yields average round-trip I/O latency in seconds
+      per operation. In VMware ESXi, this maps to `disk.totalReadLatency.average`
+      and `disk.totalWriteLatency.average` (accumulated). In KVM (libvirt), this
+      corresponds to virDomainBlockStats read_time and write_time fields
+      (libvirt_domain_block_stats_read_time_seconds_total). In OpenShift
+      Virtualization (KubeVirt), this maps to
+      kubevirt_vmi_storage_read_times_ms_total and write_times_ms_total converted
+      from milliseconds to seconds.
+    instrument: counter
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name. Omit when reporting aggregated across all
+          disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: required
+
+  - name: virtualization.vm.disk.errors
+    brief: "Number of storage I/O errors encountered on the virtual disk."
+    note: >
+      A monotonically increasing counter recording I/O failures, aborted
+      commands, SCSI check conditions, and timeout errors encountered when the
+      hypervisor accesses backing storage on behalf of the virtual machine. In
+      VMware ESXi, this corresponds to disk.commandsAborted.summation and
+      disk.busResets.summation. In KVM (libvirt), it maps to
+      libvirt_domain_block_stats_errors_total (virDomainBlockStats errs). In
+      OpenShift Virtualization (KubeVirt), it maps to
+      kubevirt_vmi_storage_errors_total.
+    instrument: counter
+    unit: "{error}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name. Omit when reporting aggregated across all
+          disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: recommended
+
   # ---------------------------------------------------------------------------
   # Power / State
   # ---------------------------------------------------------------------------
