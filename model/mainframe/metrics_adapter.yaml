@@ -1,0 +1,279 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Per-adapter utilization (DPM: adapter metric group; classic: type-specific groups)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.adapter.utilization
+    brief: "The fraction of time the mainframe I/O adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API. In DPM mode, the source is
+      the `adapter` metric group field `adapter-usage`. In classic mode, the
+      sources are the `crypto-usage` (HMC >= 2.12.0), `flash-memory-usage`
+      (HMC >= 2.12.0), and `roce-usage` (HMC >= 2.12.1) metric groups. Use the
+      `mainframe.adapter.type` attribute to distinguish crypto, flash, RoCE,
+      network, storage, and accelerator adapters. In distributed systems terms,
+      this is analogous to NIC, HBA, HSM card, NVMe flash card, or RDMA NIC
+      utilization.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter
+            field: adapter-usage
+            mode: dpm
+          - type: metric_group
+            name: crypto-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: flash-memory-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+          - type: metric_group
+            name: roce-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+      - ref: mainframe.adapter.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Adapter status (DPM only, from adapter-resource)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.adapter.status.code
+    brief: "The operational status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API adapter-resource metric group
+      field `status` (DPM mode only, HMC >= 2.13.1). Encoded as:
+      0=active, 1=not-active, 2=not-detected, 3=exceptions, 4=service, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter-resource
+            field: status
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+      - ref: mainframe.adapter.status
+        requirement_level: opt_in
+
+  - name: mainframe.adapter.physical_channel.status.code
+    brief: "The physical channel status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API adapter-resource metric group
+      field `physical-channel-status` (DPM mode only, HMC >= 2.13.1). Encoded
+      as: 0=operating, 1=no-power, 2=service, 3=stopped, 4=not-defined,
+      5=definition-error, 6=suspended, 7=check-stopped, 8=wrap-block,
+      9=permanent-error, 10=loss-of-signal, 11=loss-of-synchronization,
+      12=not-operational-link, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter-resource
+            field: physical-channel-status
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Crypto operations and queue metrics (from crypto-usage, classic mode)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.crypto.operations
+    brief: "The total number of cryptographic operations completed by the Crypto Express adapter, split by operation function."
+    note: >
+      Reported by the IBM Z HMC Web Services API `crypto-usage` metric group
+      (classic mode). Counted per cryptographic function type. In distributed
+      systems terms, this is analogous to request counters on a hardware security
+      module (HSM) or TLS accelerator. Use the `mainframe.crypto.function`
+      attribute to select the algorithm family (rsa, aes, ecc, etc.).
+    instrument: counter
+    unit: "{operation}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: crypto-usage
+            field: crypto-operations-rate
+            mode: classic
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+
+  - name: mainframe.crypto.queue.depth
+    brief: "The number of cryptographic work requests pending execution on the Crypto Express adapter domain."
+    note: >
+      Reported by the IBM Z HMC Web Services API `crypto-usage` metric group
+      (classic mode). A sustained high queue depth indicates that the crypto
+      adapter is saturated and incoming requests are queuing. In distributed
+      systems terms, this is analogous to the pending request queue depth of
+      an HSM or TLS offload engine.
+    instrument: gauge
+    unit: "{request}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: crypto-usage
+            field: crypto-queue-depth
+            mode: classic
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+
+  - name: mainframe.crypto.request.wait_time
+    brief: "The average time a cryptographic request waited in the queue before execution on the Crypto Express adapter, in seconds."
+    note: >
+      Reported by the IBM Z HMC Web Services API `crypto-usage` metric group
+      (classic mode). Elevated wait times indicate crypto adapter saturation.
+      In distributed systems terms, this is analogous to HSM request latency
+      or TLS handshake queue delay.
+    instrument: gauge
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: crypto-usage
+            field: crypto-request-wait-time
+            mode: classic
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # NNPA (on-chip Neural Network Processing Assist) metrics
+  # ---------------------------------------------------------------------------
+  - name: mainframe.nnpa.operations
+    brief: "The total number of inference operations completed by the on-chip Neural Network Processing Assist (NNPA) accelerator."
+    note: >
+      The Neural Network Processing Assist (NNPA) is an on-chip AI accelerator
+      introduced with the IBM Telum I processor (z16) and enhanced in Telum II
+      (z17). It accelerates neural-network inference workloads without consuming
+      general-purpose or IFL processor capacity. Reported by the IBM Z HMC Web
+      Services API (all modes). In distributed systems terms, this is analogous
+      to GPU inference operation counters on an AI accelerator.
+    instrument: counter
+    unit: "{operation}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: nnpa-operations
+            mode: all
+    entity_associations:
+      - virtualization.platform
+
+  - name: mainframe.nnpa.utilization
+    brief: "The fraction of time the on-chip Neural Network Processing Assist (NNPA) accelerator was busy executing inference work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      The Neural Network Processing Assist (NNPA) is an on-chip AI accelerator
+      introduced with the IBM Telum I processor (z16) and enhanced in Telum II
+      (z17). Reported by the IBM Z HMC Web Services API (all modes). In
+      distributed systems terms, this is analogous to GPU utilization on an AI
+      accelerator.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: nnpa-utilization
+            mode: all
+    entity_associations:
+      - virtualization.platform
+
+  # ---------------------------------------------------------------------------
+  # SMC (Shared Memory Communications) transfer metrics
+  # ---------------------------------------------------------------------------
+  - name: mainframe.smc.transfer.bytes
+    brief: "The total number of bytes transferred using the IBM Shared Memory Communications (SMC) protocol."
+    note: >
+      Shared Memory Communications (SMC) is an IBM Z networking protocol that
+      replaces TCP/IP socket I/O with direct memory access via ISM (SMC-D) or
+      RDMA over RoCE (SMC-R) to achieve lower latency and higher throughput
+      between z/OS, Linux on Z, or z/VM guests. Reported by the IBM Z HMC Web
+      Services API (all modes). Use the `mainframe.smc.type` attribute to
+      distinguish SMC-D (ISM) from SMC-R (RoCE) transfers. In distributed
+      systems terms, this is analogous to RDMA byte counters on a high-speed
+      interconnect.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: smc-telemetry
+            field: smc-transfer-bytes
+            mode: all
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: mainframe.smc.type
+        requirement_level: required

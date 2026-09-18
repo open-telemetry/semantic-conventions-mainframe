@@ -67,3 +67,68 @@ attributes:
     note: >
       Reported by the HMC Web Services API adapter object. Set to 'shared' when
       the adapter is not dedicated to a single partition.
+
+  - key: mainframe.crypto.function
+    stability: development
+    annotations:
+      hmc_source:
+        object: crypto-usage
+        field: crypto-function
+        mode: classic
+    brief: "The cryptographic algorithm family executed by the Crypto Express adapter."
+    note: >
+      Reported by the IBM Z HMC Web Services API `crypto-usage` metric group
+      (classic mode). Identifies the algorithm family so that operation counts
+      can be disaggregated by cryptographic workload type.
+    type:
+      members:
+        - id: rsa
+          value: "rsa"
+          brief: "RSA public-key cryptography operations (encryption, decryption, signing, verification)."
+          stability: development
+        - id: aes
+          value: "aes"
+          brief: "AES symmetric encryption and decryption operations."
+          stability: development
+        - id: ecc
+          value: "ecc"
+          brief: "Elliptic Curve Cryptography (ECC) operations (key generation, ECDSA signing, ECDH key exchange)."
+          stability: development
+        - id: dilithium
+          value: "dilithium"
+          brief: "CRYSTALS-Dilithium post-quantum digital signature operations."
+          stability: development
+        - id: kyber
+          value: "kyber"
+          brief: "CRYSTALS-Kyber post-quantum key encapsulation mechanism operations."
+          stability: development
+        - id: other
+          value: "other"
+          brief: "Other cryptographic operations not covered by the above categories."
+          stability: development
+
+  - key: mainframe.smc.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: smc-telemetry
+        field: smc-type
+        mode: all
+    brief: "The variant of the IBM Shared Memory Communications (SMC) protocol used for the data transfer."
+    note: >
+      Shared Memory Communications (SMC) has two variants: SMC-D uses the
+      Internal Shared Memory (ISM) virtual PCI device for intra-CPC
+      communication, while SMC-R uses RDMA over Converged Ethernet (RoCE)
+      for inter-CPC or CPC-to-external communication. Reported by the IBM Z
+      HMC Web Services API SMC telemetry. In distributed systems terms, these
+      are analogous to shared-memory IPC and RDMA transports respectively.
+    type:
+      members:
+        - id: smc_d
+          value: "smc_d"
+          brief: "SMC-D — Shared Memory Communications over the Internal Shared Memory (ISM) direct device, used for intra-CPC communication."
+          stability: development
+        - id: smc_r
+          value: "smc_r"
+          brief: "SMC-R — Shared Memory Communications over RDMA via RoCE (RDMA over Converged Ethernet), used for inter-CPC or external communication."
+          stability: development
