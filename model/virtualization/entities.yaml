@@ -156,6 +156,7 @@ entities:
       Analogous to a VMware vSphere DRS/HA Cluster or a Kubernetes cluster in
       distributed cloud environments.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: virtualization.cluster.name
     description:
@@ -173,6 +174,7 @@ entities:
       Analogous to a VMware vSphere Resource Pool, a Kubernetes Namespace
       ResourceQuota, or an IBM Z PR/SM Shared Processor Pool.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: virtualization.resource_pool.name
     description:
@@ -194,6 +196,7 @@ entities:
       between virtual machines, partitions, and physical networks. Analogous to
       a VMware vSwitch or dvSwitch, a Linux OVS bridge, or an IBM z/VM VSWITCH.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: virtualization.vswitch.name
     description:
@@ -216,6 +219,7 @@ entities:
       VMware Datastore, a Kubernetes StorageClass/PVC pool, or an IBM Z
       DPM Storage Group.
     stability: development
+    requirement_level: recommended
     identity:
       - ref: virtualization.storage_pool.name
     description:
