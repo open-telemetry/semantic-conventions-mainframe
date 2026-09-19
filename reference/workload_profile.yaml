@@ -1,0 +1,513 @@
+apiVersion: semconv.simulation/v1alpha1
+kind: WorkloadProfile
+metadata:
+  name: ibm-z-enterprise-workload
+spec:
+  default_sampling_interval: 10s
+  default_temporality: cumulative
+
+  rules:
+    # -------------------------------------------------------------------------
+    # 1. Mainframe Host / CPC Level Metrics (Physical Machine & Environment)
+    # -------------------------------------------------------------------------
+    # Temperature (Celsius)
+    - match:
+        pattern: "^mainframe\\.host\\.temperature$"
+      generator:
+        function: gaussian
+        params:
+          mean: 23.5
+          stddev: 1.2
+          clamp_min: 18.0
+          clamp_max: 32.0
+
+    # Humidity (%)
+    - match:
+        pattern: "^mainframe\\.host\\.humidity$"
+      generator:
+        function: gaussian
+        params:
+          mean: 45.0
+          stddev: 3.0
+          clamp_min: 30.0
+          clamp_max: 60.0
+
+    # Dewpoint (Celsius)
+    - match:
+        pattern: "^mainframe\\.host\\.dewpoint$"
+      generator:
+        function: gaussian
+        params:
+          mean: 11.2
+          stddev: 0.8
+          clamp_min: 5.0
+          clamp_max: 18.0
+
+    # Heat Load (BTU/hr or Watts)
+    - match:
+        pattern: "^mainframe\\.host\\.heatload$"
+      generator:
+        function: diurnal
+        params:
+          min: 18000.0
+          max: 34000.0
+          base: 25000.0
+          amplitude: 7000.0
+          period: 86400.0
+          noise_sigma: 200.0
+
+    # Power Usage (Watts) - Host total & cord level
+    - match:
+        pattern: "^mainframe\\.host\\.power\\..*$"
+      generator:
+        function: diurnal
+        params:
+          min: 4500.0
+          max: 8200.0
+          base: 6200.0
+          amplitude: 1600.0
+          period: 86400.0
+          noise_sigma: 50.0
+
+    # MSU Capacity (Millions of Service Units)
+    - match:
+        pattern: "^mainframe\\.host\\.msu\\.capacity$"
+      generator:
+        function: gaussian
+        params:
+          mean: 2850.0
+          stddev: 0.0
+          clamp_min: 2850.0
+
+    # Hardware Status Unacceptable flags (0 = Normal, 1 = Error)
+    - match:
+        pattern: "^.*\\.status\\.unacceptable$"
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 0.0
+          spike_magnitude: 1.0
+          spike_probability: 0.001
+
+    # Hardware Engine Counts (Active, Spare, Defective, SAP, IFP)
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.active\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 190.0
+          stddev: 0.0
+          clamp_min: 190.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.sap\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 24.0
+          stddev: 0.0
+          clamp_min: 24.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.ifp\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 8.0
+          stddev: 0.0
+          clamp_min: 8.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.spare\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 6.0
+          stddev: 0.0
+          clamp_min: 6.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.defective\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+
+    # Virtual Flash Memory (VFM) & Physical Storage
+    - match:
+        pattern: "^mainframe\\.host\\.memory\\.vfm\\.size$"
+      generator:
+        function: gaussian
+        params:
+          mean: 4398046511104.0 # 4 TiB
+          stddev: 0.0
+          clamp_min: 4398046511104.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.memory\\.vfm\\.increment\\.size$"
+      generator:
+        function: gaussian
+        params:
+          mean: 17179869184.0 # 16 GiB
+          stddev: 0.0
+          clamp_min: 17179869184.0
+
+    # -------------------------------------------------------------------------
+    # 2. Mainframe Partition / LPAR Metrics (PR/SM Resource Allocation)
+    # -------------------------------------------------------------------------
+    # Defined Capacity (MSU)
+    - match:
+        pattern: "^mainframe\\.partition\\.capacity\\.defined$"
+      generator:
+        function: gaussian
+        params:
+          mean: 450.0
+          stddev: 0.0
+          clamp_min: 450.0
+
+    # WLM Enabled flag (1 = Enabled)
+    - match:
+        pattern: "^mainframe\\.partition\\.wlm\\.enabled$"
+      generator:
+        function: gaussian
+        params:
+          mean: 1.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # CPU Weight (0 - 999)
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.weight\\.value$"
+      generator:
+        function: gaussian
+        params:
+          mean: 200.0
+          stddev: 0.0
+          clamp_min: 200.0
+
+    # Partition Threads Per Processor (1 = SMT-1, 2 = SMT-2)
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.threads_per_processor$"
+      generator:
+        function: gaussian
+        params:
+          mean: 2.0
+          stddev: 0.0
+          clamp_min: 2.0
+
+    # z/VM Paging Rate (pages/sec)
+    - match:
+        pattern: "^mainframe\\.partition\\.zvm\\.paging\\.rate$"
+      generator:
+        function: diurnal
+        params:
+          min: 12.0
+          max: 850.0
+          base: 180.0
+          amplitude: 150.0
+          period: 86400.0
+          noise_sigma: 15.0
+
+    # Partition Power Usage (Watts)
+    - match:
+        pattern: "^mainframe\\.partition\\.power\\.usage$"
+      generator:
+        function: diurnal
+        params:
+          min: 600.0
+          max: 1800.0
+          base: 1100.0
+          amplitude: 450.0
+          period: 86400.0
+          noise_sigma: 25.0
+
+    # Virtual, Reserved, and Capped Processor Counts
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.virtual\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 16.0
+          stddev: 0.0
+          clamp_min: 16.0
+
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.reserved\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 4.0
+          stddev: 0.0
+          clamp_min: 4.0
+
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.capped\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+
+    # -------------------------------------------------------------------------
+    # 3. Dedicated Accelerators & Coprocessors (Crypto, NNPA, SMC)
+    # -------------------------------------------------------------------------
+    # Crypto Coprocessor Operations (Operations/sec monotonic accumulation)
+    - match:
+        pattern: "^mainframe\\.crypto\\.operations$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 14500.0 # 14.5k ops/sec
+              amplitude: 8500.0
+              period: 86400.0
+              noise_sigma: 250.0
+
+    # Crypto Queue Depth (requests waiting)
+    - match:
+        pattern: "^mainframe\\.crypto\\.queue\\.depth$"
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 2.0
+          spike_magnitude: 45.0
+          spike_probability: 0.03
+
+    # Crypto Request Wait Time (seconds)
+    - match:
+        pattern: "^mainframe\\.crypto\\.request\\.wait_time$"
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 0.00015 # 150 microseconds
+          spike_magnitude: 0.0035 # 3.5 milliseconds
+          spike_probability: 0.03
+
+    # On-Chip Neural Network Processing Assist (NNPA) Operations
+    - match:
+        pattern: "^mainframe\\.nnpa\\.operations$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 3200.0
+              amplitude: 2400.0
+              period: 86400.0
+              noise_sigma: 100.0
+
+    # NNPA Utilization (Ratio 0..1)
+    - match:
+        pattern: "^mainframe\\.nnpa\\.utilization$"
+      generator:
+        function: diurnal
+        params:
+          min: 0.02
+          max: 0.88
+          base: 0.35
+          amplitude: 0.28
+          period: 86400.0
+          noise_sigma: 0.02
+
+    # Shared Memory Communications (SMC-R / SMC-D Transfer Bytes)
+    - match:
+        pattern: "^mainframe\\.smc\\.transfer\\.bytes$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 524288000.0 # 500 MiB/s transfer
+              amplitude: 314572800.0
+              period: 86400.0
+              noise_sigma: 20971520.0
+
+    # Channel Subsystem Latency (seconds)
+    - match:
+        pattern: "^mainframe\\.channel\\.latency$"
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 0.00008 # 80 microseconds
+          spike_magnitude: 0.0012
+          spike_probability: 0.015
+
+    # -------------------------------------------------------------------------
+    # 4. Universal Base Rules by Metric Unit & Instrument Kind
+    # -------------------------------------------------------------------------
+    # Ratio 0..1 Gauges (e.g., CPU, SMT, Channel, Adapter, Partition utilization)
+    - match:
+        unit: "1"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 0.05
+          max: 0.95
+          base: 0.52
+          amplitude: 0.32
+          period: 86400.0
+          noise_sigma: 0.02
+
+    # Percentage Gauges (0..100)
+    - match:
+        unit: "%"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 5.0
+          max: 95.0
+          base: 52.0
+          amplitude: 32.0
+          period: 86400.0
+          noise_sigma: 2.0
+
+    # Byte Storage & Memory Gauges (Memory allocations, Pools, VFM)
+    - match:
+        unit: "By"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 68719476736.0 # 64 GiB baseline
+          stddev: 2147483648.0 # 2 GiB variance
+          clamp_min: 1073741824.0
+
+    # Byte Transfer Sums (Disk, Network I/O)
+    - match:
+        unit: "By"
+        type: sum
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 104857600.0 # 100 MiB/s
+              amplitude: 62914560.0
+              period: 86400.0
+              noise_sigma: 5242880.0
+
+    # Monotonic Counters ({operation}, {packet}, {error}, etc.)
+    - match:
+        type: sum
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 2500.0
+              amplitude: 1500.0
+              period: 86400.0
+              noise_sigma: 80.0
+
+    # Latencies & Timers (seconds)
+    - match:
+        unit: "s"
+        type: gauge
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 0.0002
+          spike_magnitude: 0.005
+          spike_probability: 0.02
+
+    # =========================================================================
+    # Gap 5 fixes — rules added to cover the 19 previously-unmatched metrics
+    # =========================================================================
+
+    # --- 5a. MiBy (Mebibyte) memory gauges -----------------------------------
+    # Covers: mainframe.host.memory.size, mainframe.partition.memory.size,
+    #         virtualization.*.memory.* (size, total, used, allocated,
+    #         balloon, rss, swapped), virtualization.resource_pool.memory.allocated
+    - match:
+        unit: "MiBy"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 65536.0      # 64 GiB expressed in MiB
+          stddev: 2048.0     # 2 GiB variance
+          clamp_min: 512.0
+
+    # --- 5b. GiBy (Gibibyte) gauges (VFM, large pool sizes) -----------------
+    - match:
+        unit: "GiBy"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 4096.0       # 4 TiB expressed in GiB
+          stddev: 0.0
+          clamp_min: 4096.0
+
+    # --- 5c. Watt (W) gauges not covered by the mainframe.host.power pattern -
+    # Covers: virtualization.platform.power.usage
+    - match:
+        unit: "W"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 4500.0
+          max: 8200.0
+          base: 6200.0
+          amplitude: 1600.0
+          period: 86400.0
+          noise_sigma: 50.0
+
+    # --- 5d. Small integer updowncounters (unit-annotated counts) ------------
+    # Covers: virtualization.platform.partition.count  {partition}
+    #         virtualization.platform.vm.count         {vm}
+    #         virtualization.cluster.host.count        {host}
+    #         virtualization.cluster.vm.count          {vm}
+    #         virtualization.vm.cpu.count              {vcpu}
+    #         virtualization.partition.cpu.count       {vcpu}
+    #         virtualization.resource_pool.cpu.allocated {cpu}
+    - match:
+        type: updowncounter
+      generator:
+        function: gaussian
+        params:
+          mean: 4.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # --- 5e. CPU allocation gauge (unit={cpu}, instrument=gauge) -------------
+    # Covers: virtualization.resource_pool.cpu.allocated
+    - match:
+        pattern: "^.*\\.cpu\\.allocated$"
+      generator:
+        function: gaussian
+        params:
+          mean: 8.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # --- Resolved from metric_refinements: via upstream registry ---------------
+
+    # container.cpu.usage — unit={cpu} gauge (fractional vCPU count)
+    - match:
+        pattern: "^container\\.cpu\\.usage$"
+      generator:
+        function: gaussian
+        params:
+          mean: 1.5
+          stddev: 0.3
+          clamp_min: 0.0
+
+    # hw.host.ambient_temperature / hw.host.heating_margin — unit=Cel gauge
+    - match:
+        unit: "Cel"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 23.5
+          stddev: 1.2
+          clamp_min: 15.0
+          clamp_max: 40.0
