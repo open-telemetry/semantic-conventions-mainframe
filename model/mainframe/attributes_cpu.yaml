@@ -1,0 +1,81 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.cpu.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: name
+        mode: all
+    brief: "The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number."
+    examples: ["IFL01", "CP02", "zIIP03"]
+    note: >
+      Reported by the HMC Web Services API processor object. In distributed
+      systems terms, a mainframe processor is analogous to a physical CPU core.
+
+  - key: mainframe.cpu.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: type
+        mode: all
+    brief: "The type of mainframe processor within the Central Processing Complex (CPC)."
+    type:
+      members:
+        - id: all
+          value: "all"
+          brief: "All types of mainframe processors combined."
+          stability: development
+        - id: cp
+          value: "cp"
+          brief: "Central Processor (CP), the general-purpose processor that hosts a mainframe operating system such as z/OS."
+          stability: development
+        - id: icf
+          value: "icf"
+          brief: "Integrated Coupling Facility (ICF), a processor dedicated to running coupling facility workloads for high-speed communication between systems in a sysplex."
+          stability: development
+        - id: ifl
+          value: "ifl"
+          brief: "Integrated Facility for Linux (IFL), a processor dedicated to running Linux workloads on the mainframe."
+          stability: development
+        - id: iip
+          value: "iip"
+          brief: "z Integrated Information Processor (zIIP), a processor dedicated to offloading eligible workloads such as Java applications from general-purpose processors."
+          stability: development
+        - id: aap
+          value: "aap"
+          brief: "Application Assist Processor (AAP), a processor dedicated to accelerating Java and XML processing for database workloads."
+          stability: development
+        - id: sap
+          value: "sap"
+          brief: "System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads."
+          stability: development
+        - id: cbp
+          value: "cbp"
+          brief: "Coupling Bus Processor (CBP), a processor dedicated to high-speed coupling facility (CF) bus communication between systems in a sysplex. Present only in HMC versions 2.14.0 through 2.15.0."
+          stability: development
+
+  - key: mainframe.cpu.sharing.mode
+    stability: development
+    annotations:
+      hmc_source:
+        object: processor
+        field: allocation-type
+        mode: all
+    brief: "The sharing mode of the mainframe processor — whether it is dedicated to one partition or shared across multiple partitions."
+    type:
+      members:
+        - id: all
+          value: "all"
+          brief: "All mainframe processors, both shared and dedicated."
+          stability: development
+        - id: dedicated
+          value: "dedicated"
+          brief: "The processor is dedicated to a specific partition and cannot be shared with other partitions."
+          stability: development
+        - id: shared
+          value: "shared"
+          brief: "The processor can be shared among multiple partitions and is not dedicated to a specific partition."
+          stability: development

@@ -1,0 +1,315 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.adapter.port.id
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: network-physical-adapter-port
+        field: network-port-id
+        mode: dpm
+        min_hmc_version: "2.13.1"
+    brief: "The identifier of the physical port on a mainframe network adapter."
+    examples: ["0", "1"]
+    note: >
+      Reported by the HMC Web Services API network-physical-adapter-port metric
+      group field `network-port-id`. In distributed systems terms, this is
+      analogous to the port number on a multi-port NIC.
+
+  - key: mainframe.partition.nic.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: partition-attached-network-interface
+        field: nic-id
+        mode: dpm
+        min_hmc_version: "2.13.1"
+    brief: "The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode."
+    examples: ["nic-0", "nic-mgmt", "nic-prod"]
+    note: >
+      Reported by the HMC Web Services API partition-attached-network-interface
+      metric group. In distributed systems terms, this is analogous to a virtual
+      NIC (vNIC) attached to a virtual machine.
+
+  - key: mainframe.partition.status
+    stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: status
+        mode: all
+    brief: "The operational status of the logical partition (LPAR) or DPM partition."
+    note: >
+      In classic mode (LPAR), reported by the HMC Web Services API partition
+      object field `status` with values: operating, not-operating, not-activated,
+      exceptions.
+      In DPM mode, reported with values: active, degraded, paused, stopped,
+      starting, stopping, reservation-error, terminated, communications-not-active,
+      status-check.
+    type:
+      members:
+        - id: operating
+          value: "operating"
+          brief: "The partition (classic mode) or DPM partition is operating normally."
+          stability: development
+        - id: active
+          value: "active"
+          brief: "The DPM partition is active and operating normally."
+          stability: development
+        - id: degraded
+          value: "degraded"
+          brief: "The DPM partition is active but running in a degraded state."
+          stability: development
+        - id: not_operating
+          value: "not-operating"
+          brief: "The classic-mode partition is not operating."
+          stability: development
+        - id: not_activated
+          value: "not-activated"
+          brief: "The classic-mode partition is not activated."
+          stability: development
+        - id: exceptions
+          value: "exceptions"
+          brief: "The partition has exceptions that require operator attention."
+          stability: development
+        - id: paused
+          value: "paused"
+          brief: "The DPM partition is paused."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "The DPM partition is stopped."
+          stability: development
+        - id: starting
+          value: "starting"
+          brief: "The DPM partition is starting up."
+          stability: development
+        - id: stopping
+          value: "stopping"
+          brief: "The DPM partition is in the process of stopping."
+          stability: development
+        - id: reservation_error
+          value: "reservation-error"
+          brief: "The DPM partition is in a reservation error state."
+          stability: development
+        - id: terminated
+          value: "terminated"
+          brief: "The DPM partition has terminated."
+          stability: development
+        - id: communications_not_active
+          value: "communications-not-active"
+          brief: "Communications with the DPM partition are not active."
+          stability: development
+        - id: status_check
+          value: "status-check"
+          brief: "The DPM partition is in a status check state requiring operator attention."
+          stability: development
+
+  - key: mainframe.partition.memory.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: partition
+        field: storage-central-allocation
+        mode: all
+    brief: "The type of memory allocation for the logical partition (LPAR) being measured."
+    note: >
+      Reported by the HMC Web Services API partition object storage allocation
+      properties. Central storage is equivalent to RAM; expanded storage is an
+      additional address extension beyond central storage. IBM Virtual Flash
+      Memory (VFM) is a solid-state tier extending the memory address space.
+    type:
+      members:
+        - id: central_initial
+          value: "central-initial"
+          brief: "Initial amount of central storage (RAM) allocated to the partition at activation."
+          stability: development
+        - id: central_current
+          value: "central-current"
+          brief: "Current amount of central storage (RAM) allocated to the partition."
+          stability: development
+        - id: central_maximum
+          value: "central-maximum"
+          brief: "Maximum amount of central storage (RAM) the operating system in the partition may allocate."
+          stability: development
+        - id: expanded_initial
+          value: "expanded-initial"
+          brief: "Initial amount of expanded storage allocated to the partition at activation."
+          stability: development
+        - id: expanded_current
+          value: "expanded-current"
+          brief: "Current amount of expanded storage allocated to the partition."
+          stability: development
+        - id: expanded_maximum
+          value: "expanded-maximum"
+          brief: "Maximum amount of expanded storage the operating system in the partition may allocate."
+          stability: development
+        - id: vfm_initial
+          value: "vfm-initial"
+          brief: "Initial amount of IBM Virtual Flash Memory (VFM) allocated at partition activation, in GiB."
+          stability: development
+        - id: vfm_current
+          value: "vfm-current"
+          brief: "Current amount of IBM Virtual Flash Memory (VFM) allocated to the partition, in GiB."
+          stability: development
+        - id: vfm_maximum
+          value: "vfm-maximum"
+          brief: "Maximum amount of IBM Virtual Flash Memory (VFM) that can be allocated to the partition, in GiB."
+          stability: development
+        - id: dpm_initial
+          value: "dpm-initial"
+          brief: "Initial amount of memory (RAM) allocated when the DPM partition becomes active, in MiB."
+          stability: development
+        - id: dpm_reserved
+          value: "dpm-reserved"
+          brief: "Amount of memory reserved but not yet allocated (maximum minus initial) for the DPM partition, in MiB."
+          stability: development
+        - id: dpm_maximum
+          value: "dpm-maximum"
+          brief: "Maximum amount of memory to which the operating system in the DPM partition can increase the allocation, in MiB."
+          stability: development
+
+  - key: mainframe.adapter.status
+    stability: development
+    annotations:
+      hmc_source:
+        object: adapter
+        field: status
+        mode: dpm
+        min_hmc_version: "2.13.1"
+    brief: "The operational status of the mainframe I/O adapter."
+    note: >
+      Reported by the HMC Web Services API adapter object field `status` (DPM mode).
+    type:
+      members:
+        - id: active
+          value: "active"
+          brief: "The adapter is active and operating normally."
+          stability: development
+        - id: not_active
+          value: "not-active"
+          brief: "The adapter is not active."
+          stability: development
+        - id: not_detected
+          value: "not-detected"
+          brief: "The adapter is not detected by the system."
+          stability: development
+        - id: exceptions
+          value: "exceptions"
+          brief: "The adapter has exceptions that require operator attention."
+          stability: development
+        - id: service
+          value: "service"
+          brief: "The adapter is in service mode."
+          stability: development
+
+  - key: mainframe.storage.group.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: name
+        mode: dpm
+        min_hmc_version: "2.14.1"
+    brief: "The name of the DPM storage group attached to the Central Processing Complex (CPC)."
+    examples: ["sg-fcp-prod", "sg-nvme-test"]
+    note: >
+      Reported by the HMC Web Services API storage-group resource object field
+      `name` (DPM mode only, HMC ≥ 2.14.1). A storage group aggregates storage
+      volumes of the same connectivity type (FCP, FC, NVMe) that are managed
+      together and can be attached to partitions.
+
+  - key: mainframe.storage.group.type
+    stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: type
+        mode: dpm
+        min_hmc_version: "2.14.1"
+    brief: "The connectivity type of the DPM storage group."
+    note: >
+      Reported by the HMC Web Services API storage-group object field `type`
+      (DPM mode only, HMC ≥ 2.14.1).
+    type:
+      members:
+        - id: fcp
+          value: "fcp"
+          brief: "FCP (Fibre Channel Protocol) storage group — SCSI over Fibre Channel."
+          stability: development
+        - id: fc
+          value: "fc"
+          brief: "FC (native Fibre Channel / ECKD) storage group — IBM ECKD disk format."
+          stability: development
+        - id: nvme
+          value: "nvme"
+          brief: "NVMe storage group — NVMe over Fabrics."
+          stability: development
+
+  - key: mainframe.storage.group.volume.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        object: storage-volume
+        field: name
+        mode: dpm
+        min_hmc_version: "2.14.1"
+    brief: "The name of the DPM storage volume within a storage group."
+    examples: ["vol-boot-0", "vol-data-1"]
+    note: >
+      Reported by the HMC Web Services API storage-volume resource object field
+      `name` (DPM mode only, HMC ≥ 2.14.1). A storage volume is a single
+      logical unit of block storage (LUN / ECKD DASD cylinder set / NVMe
+      namespace) within a storage group.
+
+  - key: mainframe.storage.fulfillment.state
+    stability: development
+    annotations:
+      hmc_source:
+        object: storage-group
+        field: fulfillment-state
+        mode: dpm
+        min_hmc_version: "2.14.1"
+    brief: "The fulfillment state of the DPM storage group or storage volume."
+    note: >
+      Reported by the HMC Web Services API storage-group or storage-volume
+      object field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1).
+      In distributed systems terms, this is analogous to the binding phase
+      of a Kubernetes Persistent Volume Claim.
+    type:
+      members:
+        - id: complete
+          value: "complete"
+          brief: "The storage resource is fully configured and available."
+          stability: development
+        - id: pending
+          value: "pending"
+          brief: "The storage resource is pending configuration by the storage administrator."
+          stability: development
+        - id: pending_with_mismatches
+          value: "pending-with-mismatches"
+          brief: "The storage resource is pending but has configuration mismatches that must be resolved."
+          stability: development
+        - id: checking_migration
+          value: "checking-migration"
+          brief: "The storage resource is being checked for migration eligibility."
+          stability: development
+        - id: incomplete
+          value: "incomplete"
+          brief: "The storage resource is incompletely configured and not fully available."
+          stability: development
+        - id: configuration_error
+          value: "configuration-error"
+          brief: "The storage volume has a configuration error."
+          stability: development
+        - id: deleting
+          value: "deleting"
+          brief: "The storage volume is being deleted."
+          stability: development
+        - id: overprovisioned
+          value: "overprovisioned"
+          brief: "The storage volume is overprovisioned."
+          stability: development

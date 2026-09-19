@@ -1,0 +1,30 @@
+file_format: definition/2
+# Metric refinements for upstream disk/storage metrics in the mainframe domain.
+
+metric_refinements:
+  # -------------------------------------------------------------------------
+  # system.disk.io — add mainframe.channel dimensions
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.system.disk.io
+    ref: system.disk.io
+    brief: "Disk bytes transferred, extended for IBM Z FICON and zHyperLink channel paths."
+    stability: development
+    entity_associations:
+      - mainframe.channel
+    attributes:
+      - ref: disk.io.direction
+        requirement_level: required
+        note: >
+          Direction of data transfer: read or write.
+      - ref: mainframe.channel.name
+        requirement_level: required
+        note: >
+          The CSS.CHPID name of the I/O channel path.
+      - ref: mainframe.channel.id
+        requirement_level: opt_in
+        note: >
+          The hexadecimal Channel Path Identifier (CHPID).
+      - ref: mainframe.channel.type
+        requirement_level: opt_in
+        note: >
+          Identifies the channel protocol (ficon, zhyperlink, etc.).
