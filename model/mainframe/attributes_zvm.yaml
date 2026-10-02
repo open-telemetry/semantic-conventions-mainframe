@@ -1,0 +1,36 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.zvm.hypervisor.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: name
+            mode: classic
+    brief: "The name of the z/VM hypervisor instance (the LPAR running z/VM)."
+    examples: ["ZVMPROD", "ZVMTEST", "VMDEV01"]
+    note: >
+      The z/VM (z/Virtual Machine) Control Program (CP) runs as a software
+      hypervisor inside a PR/SM logical partition (LPAR). The hypervisor
+      instance is identified by the LPAR name that hosts it. In distributed
+      systems terms, this is analogous to the hypervisor hostname.
+      Reported by the HMC Web Services API as the `name` field of the
+      logical-partition object that contains the z/VM instance.
+
+  - key: mainframe.zvm.guest.userid
+    type: string
+    stability: development
+    brief: "The z/VM user identifier (userid) of the guest virtual machine."
+    examples: ["LINUXVM1", "PRODDB01", "DEVGUEST"]
+    note: >
+      Each z/VM guest is identified by a unique userid defined in the z/VM
+      CP user directory. The userid is the z/VM equivalent of a virtual machine
+      name on other hypervisor platforms (e.g., a VMware VM name or a
+      KVM domain name). Userids are 1–8 uppercase alphanumeric characters.
+      In distributed systems terms, this is analogous to a virtual machine name
+      or container name. Reported by the HMC Web Services API as the
+      `zvm-guest-name` field on the logical-partition object when the partition
+      is running as a z/VM guest.

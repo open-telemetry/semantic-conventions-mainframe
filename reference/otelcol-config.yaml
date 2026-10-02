@@ -1,0 +1,63 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 75
+    spike_limit_percentage: 20
+
+  batch:
+    send_batch_size: 256
+    timeout: 2s
+
+  transform:
+    error_mode: ignore
+    metric_statements:
+      - context: resource
+        statements:
+          - set(attributes["telemetry.simulator"], "otel-semconv-sim")
+
+exporters:
+  # Prometheus exporter endpoint for Prometheus to scrape
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: "ibm_z"
+    send_timestamps: true
+
+  # Optional OTLP fan-out to external APM backends (Instana, Dynatrace, Splunk, etc.)
+  # This exporter is defined but intentionally NOT included in the default pipelines
+  # below. Including it with the default endpoint (127.0.0.1:4317 = this collector)
+  # would create a recursive ingestion loop in the default Compose setup.
+  #
+  # To enable backend fan-out, set TARGET_OTLP_ENDPOINT and TARGET_OTLP_KEY in the
+  # environment (e.g. via .env file), then add otlp/backend to the exporters lists
+  # in the metrics and logs pipelines below.
+  otlp/backend:
+    endpoint: ${env:TARGET_OTLP_ENDPOINT:-"http://127.0.0.1:4317"}
+    tls:
+      insecure: true
+    headers:
+      "x-api-key": ${env:TARGET_OTLP_KEY:-""}
+
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, transform, batch]
+      exporters: [prometheus, debug]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, transform, batch]
+      exporters: [debug]
+  telemetry:
+    logs:
+      level: info

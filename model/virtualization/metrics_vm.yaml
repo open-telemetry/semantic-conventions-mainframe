@@ -1,0 +1,474 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # CPU
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.cpu.utilization
+    brief: "The fraction of time the virtual machine's virtual CPUs (vCPUs) were busy executing work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Measures active execution time from the guest's perspective, aggregated
+      across all vCPUs. In IBM Z PR/SM (classic mode) this maps to the
+      processor-usage fields in the logical-partition-usage metric group via
+      the HMC Web Services API. In IBM z/VM it corresponds to CP usage per
+      guest virtual machine. In VMware ESXi it corresponds to the
+      cpu.usage.average performance counter. In Microsoft Hyper-V it
+      corresponds to the "% Total Run Time" counter on the Hyper-V Virtual
+      Processor object. In KVM (libvirt) environments it corresponds to the
+      cpu_time field from the virDomainGetCPUStats() API, converted to a
+      ratio by dividing by (elapsed_ns × vCPU_count). In OpenShift
+      Virtualization (KubeVirt) it corresponds to the
+      kubevirt_vmi_cpu_usage_seconds_total counter, rate-converted to a ratio.
+      A value of 1 means all vCPUs were 100% busy during the measurement interval.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this utilization
+          measurement belongs to.
+
+  - name: virtualization.vm.cpu.ready_time
+    brief: "The cumulative time the virtual machine's virtual CPUs (vCPUs) were ready to run but waiting for physical CPU time from the hypervisor."
+    note: >
+      Measures hypervisor scheduling contention from the guest's perspective.
+      High ready time indicates the physical host is overcommitted and vCPUs
+      are competing for physical CPU time. In IBM z/VM this corresponds to the
+      dispatch wait time per guest. In VMware ESXi it corresponds to the
+      cpu.ready.summation counter converted from milliseconds to seconds.
+      In Microsoft Hyper-V it
+      corresponds to "% Hypervisor Run Time" on the Hyper-V Virtual Processor
+      object. Not directly available in IBM Z PR/SM (classic mode) —
+      implementations may omit this metric on that platform.
+    instrument: counter
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  - name: virtualization.vm.cpu.count
+    brief: "The number of virtual CPUs (vCPUs) currently allocated to the virtual machine."
+    note: >
+      Reports the current vCPU allocation, which may differ from the maximum
+      configured count on hypervisors that support hot-add of vCPUs. In IBM Z
+      PR/SM (classic mode) this corresponds to the total processor count fields
+      on the logical partition object via the HMC Web Services API. In VMware
+      ESXi it corresponds to config.numCpu. In Microsoft Hyper-V it corresponds
+      to the virtual processor count property of the VM configuration.
+    instrument: updowncounter
+    unit: "{vcpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Memory
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.memory.allocated
+    brief: "The total amount of memory currently allocated to the virtual machine by the hypervisor, in mebibytes (MiB)."
+    note: >
+      Reports the memory allocation as seen by the hypervisor — the amount
+      committed to this VM regardless of what the guest OS is actively using.
+      In IBM Z PR/SM (classic mode) this corresponds to the initial-memory or
+      current central storage allocation on the partition object via the HMC
+      Web Services API. In IBM z/VM it is the real storage assigned to the
+      guest. In VMware ESXi it corresponds to mem.granted.average converted
+      from kilobytes to mebibytes. In Microsoft Hyper-V it is the physical
+      memory assigned as reported by Dynamic Memory or static configuration.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  - name: virtualization.vm.memory.used
+    brief: "The amount of memory actively used by the virtual machine's guest operating system, in mebibytes (MiB)."
+    note: >
+      Reports memory that the guest OS is actively using, as estimated by the
+      hypervisor. This is a subset of virtualization.vm.memory.allocated.
+      In IBM z/VM it corresponds to in-use pages reported for the guest. In
+      VMware ESXi it corresponds to mem.active.average converted from
+      kilobytes to mebibytes. In Microsoft Hyper-V it is the current physical
+      memory in use as reported by the Dynamic Memory guest component.
+      In OpenShift Virtualization (KubeVirt) it corresponds to
+      kubevirt_vmi_memory_available_bytes subtracted from the total allocation.
+      Not available in IBM Z PR/SM (classic mode) — implementations may omit
+      this metric on that platform.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  - name: virtualization.vm.memory.balloon
+    brief: "The amount of memory reclaimed from the virtual machine by the hypervisor's memory ballooning mechanism, in mebibytes (MiB)."
+    note: >
+      Memory ballooning is a technique where the hypervisor inflates a balloon
+      driver inside the guest OS to reclaim memory under host pressure. A
+      non-zero value indicates the hypervisor is reclaiming memory from this
+      VM. In VMware ESXi this corresponds to mem.vmmemctl.average converted
+      from kilobytes to mebibytes. In Microsoft Hyper-V it relates to memory
+      pressure adjustments via the Dynamic Memory mechanism. Not applicable
+      on IBM Z PR/SM or IBM z/VM — implementations on those platforms should
+      omit this metric or report 0.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  - name: virtualization.vm.memory.swapped
+    brief: "The amount of memory swapped from the virtual machine to the hypervisor's swap space, in mebibytes (MiB)."
+    note: >
+      Reports memory that the hypervisor has swapped from the VM's physical
+      memory to disk because the host ran out of physical memory. High values
+      indicate severe memory pressure at the hypervisor level. In VMware ESXi
+      it corresponds to mem.swapped.average converted from kilobytes to
+      mebibytes. In Microsoft Hyper-V it corresponds to memory pressure as
+      reported by the Hyper-V Dynamic Memory VM performance object. Not
+      confirmed available in IBM Z environments (PR/SM classic mode or z/VM)
+      — implementations should omit this metric on IBM Z platforms where no
+      direct source is available.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Network I/O
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.network.io
+    brief: "The cumulative number of bytes transferred through the virtual machine's virtual network interface."
+    note: >
+      A monotonically increasing counter of bytes transferred through the
+      virtual network interface since the VM started or the counter last reset.
+      The direction (receive or transmit) is carried by the
+      `network.io.direction` attribute. Use rate() in Prometheus or equivalent
+      to derive throughput in bytes per second. In IBM Z DPM mode this maps to
+      the partition NIC bytes metrics from the partition-attached-network-interface
+      metric group via the HMC Web Services API. In IBM z/VM it maps to guest
+      NIC statistics. In VMware ESXi it corresponds to net.bytesRx.average and
+      net.bytesTx.average converted from kilobits per second to bytes per
+      second and then accumulated. In Microsoft Hyper-V it corresponds to the
+      "Bytes Received/sec" and "Bytes Sent/sec" counters on the Hyper-V Virtual
+      Network Adapter object, accumulated as a counter.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.network.interface.name
+        requirement_level: recommended
+        note: >
+          The virtual NIC name as reported by the hypervisor. Omit when
+          reporting aggregated across all interfaces on the VM.
+      - ref: network.io.direction
+        requirement_level: required
+        examples: ["receive", "transmit"]
+        note: >
+          One of `receive` or `transmit`. Upstream OTel attribute used to
+          disambiguate receive vs. transmit byte counts on the same interface.
+
+  # ---------------------------------------------------------------------------
+  # Disk I/O
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.disk.io
+    brief: "The cumulative number of bytes transferred to or from the virtual machine's virtual disk."
+    note: >
+      A monotonically increasing counter of bytes transferred to or from the
+      virtual disk since the VM started or the counter last reset. The
+      direction (read or write) is carried by the `virtualization.vm.disk.direction`
+      attribute. Use rate() in Prometheus or equivalent to derive throughput
+      in bytes per second. In VMware ESXi it corresponds to disk.read.average
+      and disk.write.average converted from kilobytes per second to cumulative
+      bytes. In Microsoft Hyper-V it corresponds to "Read Bytes/sec" and
+      "Write Bytes/sec" on the Hyper-V Virtual Storage Device object,
+      accumulated as a counter. No confirmed direct HMC Web Services API or
+      z/VM Monitor Record source for raw byte counts has been identified for
+      IBM Z environments; implementations on IBM Z should derive byte
+      throughput from available channel-path or device timing data where
+      possible, or omit this metric.
+    instrument: counter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name as reported by the hypervisor. Omit when
+          reporting aggregated across all disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: required
+
+  - name: virtualization.vm.disk.operations
+    brief: "The cumulative number of read or write operations completed on the virtual machine's virtual disk."
+    note: >
+      A monotonically increasing counter of completed I/O operations since
+      the VM started or the counter last reset. The direction (read or write)
+      is carried by the `virtualization.vm.disk.direction` attribute. Use
+      rate() in Prometheus or equivalent to derive IOPS. In VMware ESXi this
+      corresponds to disk.numberRead.summation and disk.numberWrite.summation.
+      In Microsoft Hyper-V it corresponds to "Read Operations/sec" and
+      "Write Operations/sec" on the Hyper-V Virtual Storage Device object,
+      accumulated as a counter. No confirmed direct HMC Web Services API
+      source has been identified for IBM Z environments; implementations on
+      IBM Z should omit this metric or derive I/O operation counts from
+      available DASD device activity data where possible.
+    instrument: counter
+    unit: "{operation}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name. Omit when reporting aggregated across all
+          disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: required
+
+  - name: virtualization.vm.disk.latency.time
+    brief: "Total time spent waiting for virtual disk I/O operations to complete in seconds."
+    note: >
+      A monotonically increasing counter measuring cumulative time spent by the
+      hypervisor and backing storage stack processing guest read and write
+      operations. When divided by the delta of `virtualization.vm.disk.operations`
+      over the same interval, it yields average round-trip I/O latency in seconds
+      per operation. In VMware ESXi, this maps to `disk.totalReadLatency.average`
+      and `disk.totalWriteLatency.average` (accumulated). In KVM (libvirt), this
+      corresponds to virDomainBlockStats read_time and write_time fields
+      (libvirt_domain_block_stats_read_time_seconds_total). In OpenShift
+      Virtualization (KubeVirt), this maps to
+      kubevirt_vmi_storage_read_times_ms_total and write_times_ms_total converted
+      from milliseconds to seconds.
+    instrument: counter
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name. Omit when reporting aggregated across all
+          disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: required
+
+  - name: virtualization.vm.disk.errors
+    brief: "Number of storage I/O errors encountered on the virtual disk."
+    note: >
+      A monotonically increasing counter recording I/O failures, aborted
+      commands, SCSI check conditions, and timeout errors encountered when the
+      hypervisor accesses backing storage on behalf of the virtual machine. In
+      VMware ESXi, this corresponds to disk.commandsAborted.summation and
+      disk.busResets.summation. In KVM (libvirt), it maps to
+      libvirt_domain_block_stats_errors_total (virDomainBlockStats errs). In
+      OpenShift Virtualization (KubeVirt), it maps to
+      kubevirt_vmi_storage_errors_total.
+    instrument: counter
+    unit: "{error}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.disk.name
+        requirement_level: recommended
+        note: >
+          The virtual disk name. Omit when reporting aggregated across all
+          disks attached to the VM.
+      - ref: virtualization.vm.disk.direction
+        requirement_level: recommended
+
+  # ---------------------------------------------------------------------------
+  # Power / State
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.power.state
+    brief: "The current power state of the virtual machine encoded as a numeric gauge (1=in this state, 0=not in this state)."
+    note: >
+      Reports the operational lifecycle state of the VM as a dimensioned gauge.
+      For each VM, exactly one state value will be 1 at any given time; all
+      others will be 0. This encoding enables Prometheus alerting rules and
+      state-change detection without label-value cardinality issues. In IBM Z
+      PR/SM (classic mode) this maps to the partition status field on the
+      logical-partition object via the HMC Web Services API. In IBM z/VM it
+      maps to guest state. In VMware ESXi it maps to runtime.powerState. In
+      Microsoft Hyper-V it maps to the VM operational state property.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.state
+        requirement_level: required
+        note: >
+          The state whose membership is being reported. One record per state
+          value is emitted per VM; the value is 1 for the current state and
+          0 for all others.
+
+  # ---------------------------------------------------------------------------
+  # KVM / KubeVirt — additional signals
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.vm.cpu.steal_time
+    brief: "The cumulative time the virtual machine's virtual CPUs (vCPUs) were runnable but could not execute because the hypervisor was running other guests."
+    note: >
+      CPU steal time quantifies the scheduling overhead imposed by the hypervisor
+      on this VM. A high steal time indicates the physical host is overcommitted
+      and the hypervisor is not honouring the VM's CPU allocations. This is
+      distinct from `virtualization.vm.cpu.ready_time` which measures time
+      waiting in the scheduler queue. In KVM (libvirt) environments it corresponds
+      to the steal_time field from virDomainGetCPUStats(), converted from
+      nanoseconds to seconds. In OpenShift Virtualization (KubeVirt) it
+      corresponds to the kubevirt_vmi_vcpu_wait_seconds_total
+      counter. Not available on IBM Z PR/SM (classic
+      mode), IBM z/VM, VMware ESXi, or Microsoft Hyper-V — implementations on
+      those platforms should omit this metric.
+    instrument: counter
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.node.name
+        requirement_level: recommended
+        note: >
+          The Kubernetes node (or KVM host) on which the VM is running.
+          High steal time on one node may indicate host overcommitment specific
+          to that node's physical CPU count.
+
+  - name: virtualization.vm.memory.rss
+    brief: "The amount of physical host memory (resident set size) currently mapped to the virtual machine's address space, in mebibytes (MiB)."
+    note: >
+      Resident Set Size (RSS) reports the actual physical host memory pages
+      that back the VM at a given moment. Unlike `virtualization.vm.memory.allocated`
+      (which reflects the configured allocation), RSS reflects real consumption
+      accounting for memory ballooning, KSM (Kernel Same-page Merging), and
+      huge page backing. A VM with high allocated memory but low RSS is not
+      causing physical memory pressure. In KVM (libvirt) environments it
+      corresponds to the rss field from the memory.stat output of
+      virDomainMemoryStats(), converted from kilobytes to mebibytes. In
+      OpenShift Virtualization (KubeVirt) it corresponds to the
+      kubevirt_vmi_memory_resident_bytes metric (converted from bytes to MiB).
+      Not directly available on IBM Z PR/SM, IBM z/VM, VMware ESXi, or
+      Microsoft Hyper-V — implementations on those platforms should omit this
+      metric or approximate it using `virtualization.vm.memory.used`.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+      - ref: virtualization.vm.node.name
+        requirement_level: recommended
+        note: >
+          The Kubernetes node (or KVM host) on which the VM is running.
+          Useful for correlating RSS with per-node NUMA memory topology.

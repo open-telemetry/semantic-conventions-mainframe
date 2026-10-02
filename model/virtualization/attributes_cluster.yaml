@@ -1,0 +1,22 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.cluster.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization cluster."
+    examples: ["cluster-001", "8c3f2a1b-4d56-4e78-9f01-2a3b4c5d6e7f"]
+    note: >
+      A platform-specific opaque identifier that uniquely identifies this
+      cluster within its management domain. For VMware vSphere this is
+      the MoRef ID of the ClusterComputeResource object.
+
+  - key: virtualization.cluster.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization cluster."
+    examples: ["prod-cluster-01", "us-east-zone-a"]
+    note: >
+      The name as configured in the cluster management interface. For VMware
+      vSphere this is the cluster name shown in vCenter. For IBM Z HMC
+      multi-CPC management domains this corresponds to the HMC ensemble or
+      management domain name.

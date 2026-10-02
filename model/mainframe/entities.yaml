@@ -1,0 +1,260 @@
+file_format: definition/2
+entities:
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.channel.name
+    description:
+      - ref: mainframe.channel.mode
+        requirement_level: required
+      - ref: mainframe.channel.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.adapter.name
+    description:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+      - ref: mainframe.adapter.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.cpu
+    brief: >
+      A physical mainframe processor within the Central Processing Complex (CPC)
+      — the mainframe equivalent of a CPU core in a distributed server.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: mainframe.cpu.name
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+entity_refinements:
+  # mainframe.host refines the generic 'host' entity — a mainframe CPC is
+  # physically a bare-metal host server. Using host as the base ensures that
+  # cross-platform consumers that understand the OTel host entity can also
+  # navigate mainframe CPC data. The mainframe.host entity already uses
+  # host.name as its identity and host.id / host.type / host.arch in its
+  # description, making it fully aligned with the host entity contract.
+  - id: refinement.mainframe.host
+    ref: host
+    brief: >
+      Mainframe refinement of the generic host entity for the IBM Z Central
+      Processing Complex (CPC). A CPC is a physical bare-metal server — the
+      mainframe equivalent of any host. The IBM Z-specific attributes
+      (serial number, machine type, machine model) extend the generic host
+      description while preserving full compatibility with consumers that
+      understand the base host entity.
+    stability: development
+    identity:
+      - ref: host.name
+        note: >
+          The name of the Central Processing Complex (CPC) as configured on
+          the HMC. Reported by the HMC Web Services API CPC object field `name`.
+    description:
+      - ref: host.id
+        requirement_level: recommended
+        note: >
+          The host.id SHOULD be the object-id UUID of the Central Processing
+          Complex (CPC) as defined by the HMC Web Services API CPC object.
+      - ref: host.type
+        requirement_level: recommended
+        note: >
+          SHOULD be the concatenation of the IBM machine type and model of the
+          Central Processing Complex (CPC), e.g., "9175-ME1".
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+        note: >
+          Mainframe-specific serial number of the CPC. Consumers that
+          understand only the base host entity should use host.id instead.
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+        note: >
+          IBM four-digit machine type (e.g. "9175"). Consumers that understand
+          only the base host entity should use host.type instead.
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+        note: >
+          IBM machine model tier (e.g. "ME1"). Combined with
+          mainframe.host.machine_type this forms the full type-model string
+          that populates host.type.
+
+  # mainframe.host also refines virtualization.platform — a mainframe CPC is a
+  # physical computing platform capable of hosting firmware partitions (LPARs)
+  # and is the IBM Z equivalent of virtualization.platform.
+  - id: refinement.mainframe.host.virtualization.platform
+    ref: virtualization.platform
+    brief: >
+      Mainframe refinement of virtualization.platform for the IBM Z Central
+      Processing Complex (CPC). A CPC is a physical computing platform that
+      hosts firmware-enforced logical partitions (LPARs) via PR/SM, directly
+      analogous to virtualization.platform in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+        note: >
+          Mainframe-specific serial number of the CPC. Use alongside
+          virtualization.platform.serial_number for cross-platform consumers.
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+        note: >
+          IBM four-digit machine type (e.g. "9175"). Use alongside
+          virtualization.platform.model for cross-platform consumers.
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+        note: >
+          IBM machine model tier (e.g. "ME1"). Combined with
+          mainframe.host.machine_type, this forms the full type-model string.
+
+  # mainframe.partition refines virtualization.partition — an LPAR is a
+  # hardware/firmware-enforced partition, analogous to virtualization.partition.
+  - id: refinement.mainframe.partition.virtualization.partition
+    ref: virtualization.partition
+    brief: >
+      Mainframe refinement of virtualization.partition for an IBM Z logical
+      partition (LPAR).  An LPAR is a firmware-enforced partition managed by
+      PR/SM, directly analogous to virtualization.partition in the generic
+      virtualization schema.
+    stability: development
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that hosts this
+          logical partition (LPAR). Corresponds to the virtualization.platform
+          identity for cross-platform portability.
+      - ref: mainframe.partition.name
+        requirement_level: recommended
+        note: >
+          The LPAR name as configured on the HMC. This is the primary
+          human-readable identifier for the partition.
+      - ref: mainframe.partition.number
+        requirement_level: recommended
+        note: >
+          The numeric partition index assigned by PR/SM. Used to correlate
+          HMC data with SMF records and hardware event logs that reference
+          partitions by number rather than by name.
+      - ref: mainframe.partition.type
+        requirement_level: recommended
+        note: >
+          The workload category of the partition. Determines which processor
+          types and software environments are licensed for this LPAR.
+
+  # mainframe.processor_pool refines virtualization.resource_pool — an IBM Z
+  # shared processor pool is a capacity-limited CPU pool, analogous to a
+  # resource pool.
+  - id: refinement.mainframe.processor_pool.virtualization.resource_pool
+    ref: virtualization.resource_pool
+    brief: >
+      Mainframe refinement of virtualization.resource_pool for an IBM Z shared
+      processor pool. A shared processor pool defines a capacity boundary for a
+      group of physical processor engines (CP, IFL, zIIP, ICF) shared by logical
+      partitions, directly analogous to virtualization.resource_pool in the
+      generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: recommended
+        note: >
+          The type of processor engines managed by this shared pool. Maps to the
+          processor-type property of the HMC Web Services API shared-processor-
+          pool object.
+
+  # mainframe.zvm.hypervisor refines virtualization.hypervisor — the z/VM
+  # Control Program is a software Type-1 hypervisor.
+  - id: refinement.mainframe.zvm.hypervisor.virtualization.hypervisor
+    ref: virtualization.hypervisor
+    brief: >
+      Mainframe refinement of virtualization.hypervisor for the z/VM Control
+      Program (CP). z/VM is a Type-1 software hypervisor that runs on IBM Z
+      hardware (bare-metal or inside a PR/SM LPAR) and manages hundreds to
+      thousands of guest virtual machines, directly analogous to
+      virtualization.hypervisor in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The name of the LPAR hosting the z/VM hypervisor instance. Maps to
+          the `name` field of the logical-partition HMC object.
+
+  # mainframe.zvm.guest refines virtualization.vm — a z/VM guest is a software
+  # VM managed by the z/VM hypervisor.
+  - id: refinement.mainframe.zvm.guest.virtualization.vm
+    ref: virtualization.vm
+    brief: >
+      Mainframe refinement of virtualization.vm for an IBM z/VM guest virtual
+      machine. A z/VM guest is a virtual machine managed by the z/VM Control
+      Program (CP), running Linux on Z or z/OS, directly analogous to
+      virtualization.vm in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.zvm.guest.userid
+        requirement_level: recommended
+        note: >
+          The z/VM user directory identifier for this guest. Maps to the
+          `zvm-guest-name` field of the HMC logical-partition object. This
+          is the z/VM equivalent of `virtualization.vm.name`.
+      - ref: mainframe.zvm.hypervisor.name
+        requirement_level: recommended
+        note: >
+          The LPAR name of the z/VM hypervisor hosting this guest. Used to
+          correlate guests with their hypervisor instance.
+
+  # mainframe.vswitch refines virtualization.vswitch — an IBM Z VSWITCH or
+  # DPM virtual switch is a virtual network switch.
+  - id: refinement.mainframe.vswitch.virtualization.vswitch
+    ref: virtualization.vswitch
+    brief: >
+      Mainframe refinement of virtualization.vswitch for an IBM z/VM VSWITCH
+      or DPM virtual switch. A mainframe virtual switch bridges partitions and
+      guest VMs to physical OSA-Express or RoCE network adapters, directly
+      analogous to virtualization.vswitch in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.vswitch.name
+        requirement_level: recommended
+        note: >
+          The name of the z/VM VSWITCH or DPM virtual switch. Maps to the
+          `name` field of the virtual-switch HMC object.
+
+  # mainframe.storage_group refines virtualization.storage_pool — a DPM storage
+  # group is a named collection of storage volumes backing partitions.
+  - id: refinement.mainframe.storage_group.virtualization.storage_pool
+    ref: virtualization.storage_pool
+    brief: >
+      Mainframe refinement of virtualization.storage_pool for an IBM Z DPM
+      storage group. A storage group aggregates FCP/SCSI or FICON/ECKD volumes
+      allocated to partitions and guests, directly analogous to
+      virtualization.storage_pool in the generic virtualization schema.
+    stability: development
+    description:
+      - ref: mainframe.storage.group.name
+        requirement_level: recommended
+        note: >
+          The name of the DPM storage group. Maps to the `name` field of the
+          storage-group HMC object. This is the z/VM/DPM equivalent of
+          `virtualization.storage_pool.name`.
+      - ref: mainframe.storage.group.type
+        requirement_level: recommended
+        note: >
+          The connectivity type of the storage group (fcp, fc, nvme). Maps to
+          the `type` field of the storage-group HMC object.

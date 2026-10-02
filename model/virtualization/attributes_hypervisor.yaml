@@ -1,0 +1,60 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.hypervisor.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the hypervisor instance."
+    examples: ["8c3f2a1b-4d56-4e78-9f01-2a3b4c5d6e7f"]
+    note: >
+      A UUID or other platform-specific opaque identifier that uniquely
+      identifies this hypervisor instance within the virtualization platform.
+
+  - key: virtualization.hypervisor.version
+    type: string
+    stability: development
+    brief: "The version string of the hypervisor software."
+    examples: ["6.4.0", "2024.1.1", "4.2.1-release"]
+    note: >
+      The version as reported by the hypervisor software itself.
+      Format is hypervisor-specific and should be used for informational
+      purposes and correlation with vendor release notes.
+
+  - key: virtualization.hypervisor.type
+    stability: development
+    brief: "The type of hypervisor controlling the virtual machines."
+    note: >
+      Classifies the hypervisor by its position in the virtualization stack.
+      Type-1 (bare-metal) hypervisors run directly on hardware; Type-2
+      (hosted) hypervisors run within a host operating system.
+    type:
+      members:
+        - id: type1
+          value: "type1"
+          brief: "Type-1 (bare-metal) hypervisor running directly on hardware."
+          stability: development
+        - id: type2
+          value: "type2"
+          brief: "Type-2 (hosted) hypervisor running within a host operating system."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Hypervisor type is not known."
+          stability: development
+
+  - key: virtualization.hypervisor.state
+    stability: development
+    brief: "The operational state of the hypervisor."
+    type:
+      members:
+        - id: active
+          value: "active"
+          brief: "Hypervisor is running and managing virtual machines."
+          stability: development
+        - id: inactive
+          value: "inactive"
+          brief: "Hypervisor is not currently running."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Hypervisor state is not known."
+          stability: development

@@ -1,0 +1,24 @@
+[project]
+name = "otel-semconv-sim"
+version = "0.1.0"
+description = "OpenTelemetry Semantic Convention Simulator for mainframe and virtualization signals"
+requires-python = ">=3.12"
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# -v: verbose per-test output so CI logs show individual pass/fail
+# -p no:warnings: keep the output clean; warnings are visible in --tb=short
+addopts = "-v --tb=short"
+
+[tool.uv]
+# Resolve all extras when locking (used by `uv sync --all-extras`)
+# The test group is used by CI; production installations use the base deps only.

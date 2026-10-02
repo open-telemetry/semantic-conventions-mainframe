@@ -1,0 +1,166 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.vm.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtual machine instance."
+    examples: ["vm-0abc1234", "8c3f2a1b-4d56-4e78-9f01-2a3b4c5d6e7f"]
+    note: >
+      A UUID or other platform-specific opaque identifier that uniquely
+      identifies this virtual machine within the hypervisor. Analogous to
+      `host.id` for physical machines or a container ID for containers.
+
+  - key: virtualization.vm.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtual machine."
+    examples: ["my-web-server", "prod-db-01", "test-vm"]
+    note: >
+      The name as configured in the hypervisor management interface.
+      Names are not guaranteed to be unique across hypervisors; use
+      `virtualization.vm.id` for unambiguous identification.
+
+  - key: virtualization.vm.instance_id
+    type: string
+    stability: development
+    brief: "The cloud or platform provider's instance identifier for the virtual machine."
+    examples: ["i-0abc123def456789", "1234567890abcdef0"]
+    note: >
+      A provider-assigned instance identifier, distinct from the hypervisor's
+      own identifier (`virtualization.vm.id`). For example, on AWS this would
+      be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition
+      object-id.
+
+  - key: virtualization.vm.state
+    stability: development
+    brief: "The operational state of the virtual machine."
+    type:
+      members:
+        - id: running
+          value: "running"
+          brief: "Virtual machine is running and processing workloads."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "Virtual machine is stopped and not consuming CPU resources."
+          stability: development
+        - id: paused
+          value: "paused"
+          brief: "Virtual machine is suspended with state preserved in memory."
+          stability: development
+        - id: migrating
+          value: "migrating"
+          brief: "Virtual machine is being live-migrated to another host without interruption."
+          stability: development
+        - id: scheduling
+          value: "scheduling"
+          brief: "Virtual machine has been requested but is waiting for the scheduler to assign it to a host node."
+          stability: development
+        - id: scheduled
+          value: "scheduled"
+          brief: "Virtual machine has been assigned to a host node and is being prepared to start."
+          stability: development
+        - id: failed
+          value: "failed"
+          brief: "Virtual machine has encountered a fatal error and cannot recover without operator intervention."
+          stability: development
+        - id: succeeded
+          value: "succeeded"
+          brief: "Virtual machine completed its workload and terminated cleanly (applicable to batch or ephemeral VMs)."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Virtual machine state is not known or cannot be determined."
+          stability: development
+
+  - key: virtualization.vm.cpu.count
+    type: int
+    stability: development
+    brief: "The number of virtual CPUs (vCPUs) allocated to the virtual machine."
+    examples: [1, 2, 4, 8]
+    note: >
+      The number of virtual CPUs visible to the guest operating system.
+      This may differ from the number of physical CPUs on the underlying host.
+
+  - key: virtualization.vm.memory.size
+    type: int
+    stability: development
+    brief: "The amount of memory allocated to the virtual machine, in mebibytes (MiB)."
+    examples: [1024, 4096, 16384]
+    note: >
+      The total memory allocation visible to the guest operating system,
+      expressed in mebibytes (MiB). This is the configured allocation, not
+      necessarily the currently consumed amount.
+
+  - key: virtualization.vm.machine_type
+    type: string
+    stability: development
+    brief: "The machine type or hardware profile assigned to the virtual machine."
+    examples: ["n1-standard-2", "t3.medium", "9175-ME1"]
+    note: >
+      A string identifying the virtual machine's hardware configuration class
+      as defined by the hypervisor or cloud provider. For IBM Z DPM partitions
+      this corresponds to the partition type profile.
+
+  - key: virtualization.vm.nested_virtualization.enabled
+    type: boolean
+    stability: development
+    brief: "Indicates whether nested virtualization is enabled on this virtual machine."
+    note: >
+      When `true`, the virtual machine is configured to expose virtualization
+      extensions to its guest operating system, allowing a hypervisor to run
+      inside the VM. Not all hypervisors or platforms support this capability.
+
+  - key: virtualization.vm.disk.name
+    type: string
+    stability: development
+    brief: "The name or identifier of the virtual disk attached to the virtual machine."
+    examples: ["Hard Disk 1", "sda", "vhd-0001.vmdk"]
+    note: >
+      The disk name as reported by the hypervisor management API. Used to
+      attribute per-disk I/O metrics to a specific virtual disk when a VM
+      has multiple disks attached. For IBM Z DPM partitions this corresponds
+      to the storage volume name; for VMware ESXi it is the datastore path;
+      for Microsoft Hyper-V it is the virtual hard disk file name.
+
+  - key: virtualization.vm.disk.direction
+    stability: development
+    brief: "The direction of disk I/O operations on the virtual machine's storage device."
+    type:
+      members:
+        - id: read
+          value: "read"
+          brief: "Data is being read from the virtual disk into the virtual machine."
+          stability: development
+        - id: write
+          value: "write"
+          brief: "Data is being written from the virtual machine to the virtual disk."
+          stability: development
+
+  - key: virtualization.vm.network.interface.name
+    type: string
+    stability: development
+    brief: "The name of the virtual network interface (vNIC) attached to the virtual machine."
+    examples: ["Network adapter 1", "eth0", "vmxnet3-0"]
+    note: >
+      The interface name as reported by the hypervisor management API.
+      Used to attribute per-NIC throughput metrics when a VM has multiple
+      virtual network interfaces. For IBM Z DPM partitions this corresponds
+      to the NIC object name reported by the HMC Web Services API; for
+      VMware ESXi it is the network adapter label; for Microsoft Hyper-V
+      it is the virtual network adapter name.
+
+  - key: virtualization.vm.node.name
+    type: string
+    stability: development
+    brief: "The name of the host node on which the virtual machine is currently scheduled to run."
+    examples: ["worker-node-01", "compute-az1-007", "rhcos-node-03"]
+    note: >
+      In KVM-based environments managed by Kubernetes such as OpenShift Virtualization
+      (KubeVirt), a virtual machine instance (VMI) runs as a pod on a Kubernetes node.
+      This attribute corresponds to the Kubernetes node name (spec.nodeName on the VMI
+      pod) and is equivalent to `k8s.node.name` for standard workloads. It is used to
+      correlate VM performance with the physical host's resource availability.
+      In standalone KVM environments managed by libvirt, this corresponds to the
+      hypervisor hostname. Not applicable on IBM Z PR/SM or cloud hypervisors where
+      VM placement is opaque to the consumer.
