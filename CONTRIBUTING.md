@@ -113,7 +113,7 @@ and add your topic to the
 ### Maintainers
 
 - [Antoine Toulme](https://github.com/atoulme), Splunk
-- [Greg Shriver](https://github.com/gshriver), Broadcom
+- [Matt Hogstrom](https://github.com/hogstrom), Broadcom
 - [Ruediger Schulze](https://github.com/rrschulze), IBM
 
 For more information about the maintainer role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
@@ -121,7 +121,7 @@ For more information about the maintainer role, see the [community repository](h
 ### Approvers
 
 - [Antoine Toulme](https://github.com/atoulme), Splunk
-- [Greg Shriver](https://github.com/gshriver), Broadcom
+- [Matt Hogstrom](https://github.com/hogstrom), Broadcom
 - [Ruediger Schulze](https://github.com/rrschulze), IBM
 
 For more information about the approver role, see the [community repository](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
