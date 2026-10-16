@@ -1,0 +1,417 @@
+apiVersion: semconv.simulation/v1alpha1
+kind: SimulatorConfig
+metadata:
+  name: mainframe-semconv-verification
+spec:
+  registry:
+    # upstream_path: optional path to the upstream OTel Semantic Conventions
+    # v1 registry (groups: format). The simulator loads metric stubs from here
+    # so that metric_refinements: ref: entries can be resolved into emittable
+    # MetricDef objects without duplicating upstream definitions in the local
+    # v2 model.
+    # Populated by `make filter-upstream` — points at .build/sc-upstream-filtered/
+    upstream_path: "../.build/sc-upstream-filtered"
+
+    # Local v2 model paths (relative to this config file)
+    paths:
+      - "../model/mainframe"
+      - "../model/virtualization"
+    schema_format: definition/2
+
+  sampling_interval: 10.0
+
+  selection:
+    signals: [metrics, logs]
+    include_namespaces:
+      # Local v2 mainframe and virtualization metrics
+      - "^mainframe\\..*"
+      - "^virtualization\\..*"
+      # Upstream base metrics resolved via metric_refinements:
+      - "^system\\..*"
+      - "^hw\\..*"
+      - "^container\\..*"
+    min_stability: development
+
+  topology:
+    entities:
+      # -----------------------------------------------------------------------
+      # IBM z16 Central Processor Complex (CPC)
+      # Modelled as virtualization.platform — the canonical entity for CPC-level
+      # metrics (mainframe.host.* signals carry entity_associations:
+      # [virtualization.platform]).
+      # Identity: host.name (per virtualization.platform entity definition)
+      # -----------------------------------------------------------------------
+      - type: virtualization.platform
+        identity:
+          host.name: "CPC01"
+        attributes:
+          virtualization.platform.id: "IBM-3931-0000000000045A01"
+          virtualization.system.name: "ibm.prsm"
+          host.id: "IBM-3931-0000000000045A01"
+          mainframe.host.machine_type: "3931"
+          mainframe.host.machine_model: "704"
+          mainframe.host.serial_number: "0000000000045A01"
+          # Dimensions for platform-level aggregate metrics
+          mainframe.cpu.type: "cp"
+          mainframe.cpu.sharing.mode: "dedicated"
+          mainframe.host.heatload.type: "total"
+          mainframe.memory.type: "central"  # representative; total/hsa/partitions/expanded/available also supported
+          mainframe.host.power.cord: "A"
+          mainframe.host.power.phase: "3-phase"
+          mainframe.host.power.usage.type: "total"
+          mainframe.host.temperature.type: "inlet"
+          mainframe.adapter.type: "roce"
+          virtualization.partition.state: "active"
+          virtualization.platform.vm.state: "running"
+        children:
+          # -------------------------------------------------------------------
+          # CPC-level hardware: CPUs, channels, adapters are physical resources
+          # owned by the platform (CPC), not by any specific LPAR.
+          # -------------------------------------------------------------------
+
+          # --- CPUs: all valid mainframe.cpu.type enum values ---
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "CP0"
+            attributes:
+              mainframe.cpu.type: "cp"
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "CP1"
+            attributes:
+              mainframe.cpu.type: "cp"
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "zIIP0"
+            attributes:
+              mainframe.cpu.type: "iip"
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "ICF0"
+            attributes:
+              mainframe.cpu.type: "icf"
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "AAP0"
+            attributes:
+              mainframe.cpu.type: "aap"
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "SAP0"
+            attributes:
+              mainframe.cpu.type: "sap"
+          # IFL is the Linux/z/VM processor type — physically belongs to the CPC
+          - type: mainframe.cpu
+            identity:
+              mainframe.cpu.name: "IFL0"
+            attributes:
+              mainframe.cpu.type: "ifl"
+
+          # --- Channels: one per mainframe.channel.mode value ---
+          - type: mainframe.channel
+            identity:
+              mainframe.channel.name: "0.1A"
+            attributes:
+              mainframe.channel.mode: "shared"
+          - type: mainframe.channel
+            identity:
+              mainframe.channel.name: "0.1B"
+            attributes:
+              mainframe.channel.mode: "shared"
+          - type: mainframe.channel
+            identity:
+              mainframe.channel.name: "0.2A"
+            attributes:
+              mainframe.channel.mode: "dedicated"
+          - type: mainframe.channel
+            identity:
+              mainframe.channel.name: "0.3A"
+            attributes:
+              mainframe.channel.mode: "shared"
+          - type: mainframe.channel
+            identity:
+              mainframe.channel.name: "0.4A"
+            attributes:
+              mainframe.channel.mode: "shared"
+
+          # --- Adapters: one per mainframe.adapter.type enum value ---
+          # mainframe.adapter.name uses CSS.CHPID format per model definition.
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.40"
+            attributes:
+              mainframe.adapter.type: "crypto"
+              mainframe.adapter.owning.partition: "shared"
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.80"
+            attributes:
+              mainframe.adapter.type: "roce"
+              mainframe.adapter.owning.partition: "shared"
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.A0"
+            attributes:
+              mainframe.adapter.type: "flash"
+              mainframe.adapter.owning.partition: "shared"
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.B0"
+            attributes:
+              mainframe.adapter.type: "accelerator"
+              mainframe.adapter.owning.partition: "shared"
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.C0"
+            attributes:
+              mainframe.adapter.type: "network"
+              mainframe.adapter.owning.partition: "shared"
+          - type: mainframe.adapter
+            identity:
+              mainframe.adapter.name: "0.D0"
+            attributes:
+              mainframe.adapter.type: "storage"
+              mainframe.adapter.owning.partition: "shared"
+
+          # --- Physical adapter ports (for system.network.* refinements) ---
+          # Identity: mainframe.adapter.name + mainframe.adapter.port.id
+          # network.io.direction is a required discriminating dimension for the
+          # system.network.io and related refinements (receive vs transmit series).
+          - type: mainframe.adapter.port
+            identity:
+              mainframe.adapter.name: "0.80"
+              mainframe.adapter.port.id: "0"
+            attributes:
+              network.io.direction: "receive"
+          - type: mainframe.adapter.port
+            identity:
+              mainframe.adapter.name: "0.80"
+              mainframe.adapter.port.id: "0"
+            attributes:
+              network.io.direction: "transmit"
+          - type: mainframe.adapter.port
+            identity:
+              mainframe.adapter.name: "0.C0"
+              mainframe.adapter.port.id: "0"
+            attributes:
+              network.io.direction: "receive"
+          - type: mainframe.adapter.port
+            identity:
+              mainframe.adapter.name: "0.C0"
+              mainframe.adapter.port.id: "0"
+            attributes:
+              network.io.direction: "transmit"
+
+          # -------------------------------------------------------------------
+          # Production z/OS LPAR
+          # Identity: mainframe.partition.name (per mainframe.partition definition)
+          # virtualization.partition.id added as description attribute.
+          # Dimension attributes for partition-level metrics are included so that
+          # required series (per cpu.type, memory.type, etc.) are emitted.
+          # -------------------------------------------------------------------
+          - type: virtualization.partition
+            identity:
+              virtualization.partition.id: "01"
+            attributes:
+              virtualization.partition.name: "PROD01"
+              virtualization.system.name: "ibm.prsm"
+              mainframe.partition.name: "PROD01"
+              mainframe.partition.number: 1
+              # Dimension for mainframe.partition.cpu.* metrics
+              mainframe.cpu.type: "cp"
+              # Dimension for mainframe.partition.memory.size
+              mainframe.partition.memory.type: "central-current"
+              # Dimension for mainframe.partition.status.*
+              mainframe.partition.status: "operating"
+              # Required dimension for virtualization.partition.state.code
+              virtualization.partition.state: "active"
+              # Dimensions for virtualization.partition.cpu.*
+              virtualization.partition.cpu.type: "cp"
+              # Dimension for virtualization.partition.cpu.weight
+              mainframe.partition.weight.type: "initial"
+              virtualization.partition.id: "01"
+
+          # -------------------------------------------------------------------
+          # z/VM Hypervisor LPAR
+          # The z/VM Control Program (CP) runs inside partition ZVM01, not as a
+          # sibling of the partition. The hypervisor and its guest VMs are
+          # therefore children of this partition.
+          # -------------------------------------------------------------------
+          - type: virtualization.partition
+            identity:
+              virtualization.partition.id: "02"
+            attributes:
+              virtualization.partition.name: "ZVM01"
+              virtualization.system.name: "ibm.prsm"
+              mainframe.partition.name: "ZVM01"
+              mainframe.partition.number: 2
+              mainframe.cpu.type: "ifl"
+              mainframe.partition.memory.type: "central-current"
+              mainframe.partition.status: "operating"
+              # Required dimension for virtualization.partition.state.code
+              virtualization.partition.state: "active"
+              # Dimensions for virtualization.partition.cpu.*
+              virtualization.partition.cpu.type: "ifl"
+              # Dimension for virtualization.partition.cpu.weight
+              mainframe.partition.weight.type: "initial"
+            children:
+              # Virtual NIC attached to this partition (DPM mode)
+              # Identity: mainframe.partition.name + mainframe.partition.nic.name
+              # Two direction series per NIC for system.network.* refinements.
+              - type: mainframe.partition.nic
+                identity:
+                  mainframe.partition.name: "ZVM01"
+                  mainframe.partition.nic.name: "nic-0"
+                attributes:
+                  network.io.direction: "receive"
+              - type: mainframe.partition.nic
+                identity:
+                  mainframe.partition.name: "ZVM01"
+                  mainframe.partition.nic.name: "nic-0"
+                attributes:
+                  network.io.direction: "transmit"
+
+              # z/VM hypervisor running inside the ZVM01 partition
+              # Identity: virtualization.hypervisor.id
+              - type: virtualization.hypervisor
+                identity:
+                  virtualization.hypervisor.id: "ZVM01-CP"
+                attributes:
+                  virtualization.hypervisor.type: "type1"
+                  virtualization.hypervisor.state: "active"
+                  virtualization.system.name: "ibm.zvm"
+                children:
+                  - type: virtualization.vswitch
+                    identity:
+                      virtualization.vswitch.name: "VSWITCH1"
+                    attributes:
+                      virtualization.vswitch.id: "VSW1"
+                  # VMs: two power-state series each (running + stopped) and
+                  # two disk-direction series so required dimensions are present.
+                  - type: virtualization.vm
+                    identity:
+                      virtualization.vm.id: "LINUX01"
+                    attributes:
+                      virtualization.vm.name: "LINUX01"
+                      virtualization.system.name: "ibm.zvm"
+                      virtualization.vm.state: "running"
+                      virtualization.vm.disk.direction: "read"
+                      network.io.direction: "receive"
+                  - type: virtualization.vm
+                    identity:
+                      virtualization.vm.id: "LINUX01"
+                    attributes:
+                      virtualization.vm.name: "LINUX01"
+                      virtualization.system.name: "ibm.zvm"
+                      virtualization.vm.state: "running"
+                      virtualization.vm.disk.direction: "write"
+                      network.io.direction: "transmit"
+                  - type: virtualization.vm
+                    identity:
+                      virtualization.vm.id: "LINUX02"
+                    attributes:
+                      virtualization.vm.name: "LINUX02"
+                      virtualization.system.name: "ibm.zvm"
+                      virtualization.vm.state: "running"
+                      virtualization.vm.disk.direction: "read"
+                      network.io.direction: "receive"
+                  - type: virtualization.vm
+                    identity:
+                      virtualization.vm.id: "LINUX02"
+                    attributes:
+                      virtualization.vm.name: "LINUX02"
+                      virtualization.system.name: "ibm.zvm"
+                      virtualization.vm.state: "running"
+                      virtualization.vm.disk.direction: "write"
+                      network.io.direction: "transmit"
+
+          # -------------------------------------------------------------------
+          # DPM Storage Groups and Volumes
+          # Identity: mainframe.storage.group.name (entity contract)
+          # host.name is inherited from the parent CPC via parent-context.
+          # Three storage groups (FCP, FC, NVMe) with 8 volumes total.
+          # -------------------------------------------------------------------
+          - type: mainframe.storage.group
+            identity:
+              mainframe.storage.group.name: "sg-fcp-prod"
+            attributes:
+              mainframe.storage.group.type: "fcp"
+              # Dimension required by mainframe.storage.group.volume.capacity
+              mainframe.storage.fulfillment.state: "complete"
+            children:
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fcp-prod"
+                  mainframe.storage.group.volume.name: "vol-boot-0"
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fcp-prod"
+                  mainframe.storage.group.volume.name: "vol-data-1"
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fcp-prod"
+                  mainframe.storage.group.volume.name: "vol-data-2"
+          - type: mainframe.storage.group
+            identity:
+              mainframe.storage.group.name: "sg-fc-eckd"
+            attributes:
+              mainframe.storage.group.type: "fc"
+            children:
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fc-eckd"
+                  mainframe.storage.group.volume.name: "vol-eckd-0"
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fc-eckd"
+                  mainframe.storage.group.volume.name: "vol-eckd-1"
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-fc-eckd"
+                  mainframe.storage.group.volume.name: "vol-eckd-2"
+          - type: mainframe.storage.group
+            identity:
+              mainframe.storage.group.name: "sg-nvme-test"
+            attributes:
+              mainframe.storage.group.type: "nvme"
+            children:
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-nvme-test"
+                  mainframe.storage.group.volume.name: "vol-nvme-0"
+              - type: mainframe.storage.group.volume
+                identity:
+                  mainframe.storage.group.name: "sg-nvme-test"
+                  mainframe.storage.group.volume.name: "vol-nvme-1"
+
+          # Storage and Resource Pools (platform-level, not partition-level)
+          # Identity uses name per entity contract (not id)
+          - type: virtualization.storage_pool
+            identity:
+              virtualization.storage_pool.name: "ECKD_POOL_01"
+            attributes:
+              virtualization.storage_pool.id: "POOL01"
+              virtualization.system.name: "ibm.prsm"
+          - type: virtualization.resource_pool
+            identity:
+              virtualization.resource_pool.name: "GENERAL_COMPUTE"
+            attributes:
+              virtualization.resource_pool.id: "RPOOL01"
+              virtualization.system.name: "ibm.prsm"
+
+      # Sysplex cluster (for virtualization.cluster.* metrics)
+      # Identity: virtualization.cluster.name per entity contract
+      - type: virtualization.cluster
+        identity:
+          virtualization.cluster.name: "IBM-Z-Sysplex-PROD"
+        attributes:
+          virtualization.cluster.id: "CLUSTER01"
+          # Dimensions for cluster aggregate metrics
+          virtualization.system.name: "ibm.prsm"
+          virtualization.vm.state: "running"
+
+  workload_profile_ref: "./workload_profile.yaml"
+
+  exporter:
+    otlp:
+      http_endpoint: "http://localhost:4318"

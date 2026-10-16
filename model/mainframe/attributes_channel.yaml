@@ -1,0 +1,109 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.channel.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: channel-path
+            field: channel-path-id
+            mode: all
+    brief: "The name of the I/O channel in the form CSS.Chpid."
+    examples: ["0.00", "0.2D", "1.E3"]
+    note: >
+      The channel subsystem (CSS) index and channel path identifier (CHPID) are
+      concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D.
+      Reported by the HMC Web Services API channel-path object.
+
+  - key: mainframe.channel.mode
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: channel-usage
+            field: shared-channel
+            mode: classic
+    brief: "The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions."
+    type:
+      members:
+        - id: dedicated
+          value: "dedicated"
+          brief: "The I/O channel is dedicated to a specific partition and cannot be shared with other partitions."
+          stability: development
+        - id: shared
+          value: "shared"
+          brief: "The I/O channel can be shared among multiple partitions and is not dedicated to a specific partition."
+          stability: development
+
+  - key: mainframe.channel.owning.partition
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: channel-usage
+            field: logical-partition-name
+            mode: classic
+    brief: "The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions."
+    examples: ["LPAR01", "shared"]
+    note: >
+      Reported by the IBM Z HMC Web Services API `channel-usage` metric group
+      field `logical-partition-name`. The field is 'shared' when the channel is
+      shared across partitions, and an empty string for channel types that do
+      not expose an owning partition (for example coupling channels).
+
+  - key: mainframe.channel.id
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: channel-path
+            field: channel-path-id
+            mode: all
+    brief: "The channel path identifier (CHPID) in hexadecimal format."
+    examples: ["00", "2D", "E3"]
+    note: >
+      Reported by the HMC Web Services API channel-path object. In distributed
+      systems terms, this is analogous to a storage HBA port or channel identifier.
+
+  - key: mainframe.channel.type
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: type
+            mode: all
+    brief: "The protocol and connectivity type of the I/O channel path."
+    note: >
+      Reported by the IBM Z HMC Web Services API adapter object property `type`,
+      whose values include `ficon`, `osa`, `hipersockets` and `network-express`.
+    type:
+      members:
+        - id: ficon
+          value: "ficon"
+          brief: "Fibre Channel Connection (FICON) channel path for high-speed DASD and tape storage connectivity."
+          stability: development
+        - id: zhyperlink
+          value: "zhyperlink"
+          brief: "zHyperLink express channel path providing ultra-low-latency synchronous PCIe storage access."
+          stability: development
+        - id: osa
+          value: "osa"
+          brief: "Open Systems Adapter (OSA) channel path for Ethernet LAN connectivity."
+          stability: development
+        - id: roce
+          value: "roce"
+          brief: "RDMA over Converged Ethernet (RoCE) channel path for high-speed memory-to-memory data transfers."
+          stability: development
+        - id: coupling
+          value: "coupling"
+          brief: "Coupling Facility link (Integrated Cluster Bus or Coupling Express) for sysplex communication."
+          stability: development

@@ -1,0 +1,204 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # CPU
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.platform.cpu.utilization
+    brief: "The fraction of total physical CPU capacity of the virtualization platform currently in use across all hosted workloads and hypervisor overhead, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reports aggregate CPU utilization at the physical platform level,
+      combining processor time consumed by all hosted partitions or virtual
+      machines plus hypervisor overhead. In IBM Z PR/SM (classic mode) this
+      maps to the processor-usage-* fields in the cpc-usage-overview metric
+      group from the HMC Web Services API. In IBM z/VM it corresponds to CP
+      pool utilization. In VMware ESXi it corresponds to the host-level
+      cpu.usage.average performance counter. In Microsoft Hyper-V it
+      corresponds to the "% Total Run Time" counter on the Hyper-V Hypervisor
+      Logical Processor object, aggregated across all physical processors.
+      Analogous to `mainframe.host.cpu.utilization` in the mainframe namespace.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this measurement
+          belongs to. This is the identity attribute of the
+          virtualization.platform entity. HMC source: CPC object field `name`.
+
+  # ---------------------------------------------------------------------------
+  # Memory
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.platform.memory.total
+    brief: "The total physical memory installed in the virtualization platform, in mebibytes (MiB)."
+    note: >
+      On IBM Z PR/SM, reported by CPC object property `storage-total-installed`
+      via GET /api/cpcs/{cpc-id} (all modes). On VMware ESXi, use
+      mem.total.average. On Hyper-V, use total physical memory. Typically static
+      for the lifetime of the platform.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: cpc
+            field: storage-total-installed
+            mode: all
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this measurement
+          belongs to. HMC source: CPC object property `name`.
+
+  - name: virtualization.platform.memory.used
+    brief: "The amount of physical memory on the virtualization platform currently allocated to hosted workloads and hypervisor overhead, in mebibytes (MiB)."
+    note: >
+      On IBM Z PR/SM, derived as `storage-customer-central +
+      storage-customer-expanded` from CPC object properties via
+      GET /api/cpcs/{cpc-id} (all modes). On VMware ESXi, use
+      mem.usage.average. On Hyper-V, use total minus available memory.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: cpc
+            field: storage-customer-central
+            mode: all
+          - type: object_property
+            object: cpc
+            field: storage-customer-expanded
+            mode: all
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this measurement
+          belongs to. HMC source: CPC object property `name`.
+
+  # ---------------------------------------------------------------------------
+  # Inventory counts
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.platform.vm.count
+    brief: "The number of virtual machines hosted on the virtualization platform, optionally broken down by power state."
+    note: >
+      Reports the count of virtual machines (VMs) currently known to the
+      hypervisor. The optional `virtualization.platform.vm.state` attribute
+      enables breakdown by running, stopped, paused, or all. In IBM z/VM
+      this corresponds to the number of active guest virtual machines. In
+      VMware ESXi it corresponds to numVms on the host summary object. In
+      Microsoft Hyper-V it corresponds to the number of virtual machine
+      objects known to the hypervisor. Not applicable on IBM Z PR/SM
+      (classic mode) which uses firmware partitions rather than software
+      VMs — use `virtualization.platform.partition.count` on that platform.
+    instrument: updowncounter
+    unit: "{vm}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this count
+          belongs to. HMC source: CPC object field `name`.
+      - ref: virtualization.platform.vm.state
+        requirement_level: recommended
+        note: >
+          When present, the count is filtered to VMs in the specified power
+          state. When absent or set to `all`, the count covers all VMs
+          regardless of state.
+
+  - name: virtualization.platform.partition.count
+    brief: "The number of firmware-enforced partitions currently active on the virtualization platform."
+    note: >
+      Reports the count of hardware or firmware partitions such as IBM Z
+      logical partitions (LPARs) currently active on the platform. This is
+      distinct from software VMs managed by a hypervisor. In IBM Z PR/SM
+      (classic mode) this corresponds to the count of active logical partitions
+      as reported by the HMC Web Services API. This metric is primarily
+      applicable to platforms that use firmware-level partitioning such as
+      IBM Z PR/SM. On VMware ESXi and Microsoft Hyper-V, use
+      `virtualization.platform.vm.count` instead.
+    instrument: updowncounter
+    unit: "{partition}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this count
+          belongs to. HMC source: CPC object field `name`.
+      - ref: virtualization.partition.state
+        requirement_level: recommended
+        note: >
+          When present, the count is filtered to partitions in the specified
+          state. When absent, the count covers all known partitions.
+
+  # ---------------------------------------------------------------------------
+  # Power
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.platform.power.usage
+    brief: "The total power consumption of the virtualization platform hardware in Watts."
+    note: >
+      Reports the aggregate power draw of the physical platform including
+      all processors, memory, I/O adapters, and cooling infrastructure. In
+      IBM Z PR/SM (classic mode) and DPM mode this maps to the `power` field
+      in the zcpc-environmentals-and-power metric group from the HMC Web
+      Services API; the HMC reports the value in kilowatts (kW) which must
+      be converted to Watts by multiplying by 1000. In VMware ESXi it
+      corresponds to the power.power performance counter on the host object
+      which is already in Watts. In Microsoft Hyper-V it corresponds to
+      platform power data available from IPMI or vendor management agents.
+      Analogous to `mainframe.host.power.usage` in the mainframe namespace.
+    instrument: gauge
+    unit: "W"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (host) this measurement
+          belongs to. HMC source: CPC object field `name`.

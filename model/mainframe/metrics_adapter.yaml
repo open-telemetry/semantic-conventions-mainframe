@@ -1,0 +1,127 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Per-adapter utilization (DPM: adapter metric group; classic: type-specific groups)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.adapter.utilization
+    brief: "The fraction of time the mainframe I/O adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API. In DPM mode, source is the
+      `adapter-usage` metric group field `adapter-usage`. In classic mode, sources are
+      `crypto-usage` field `adapter-usage` (HMC >= 2.12.0), `flash-memory-usage`
+      field `adapter-usage` (HMC >= 2.12.0). SC27-2646-01 v2.17.0 declares no
+      `roce-usage` metric group; RoCE adapter utilization is reported through
+      the DPM `adapter-usage` group. Note that the classic-mode `crypto-usage`
+      and `flash-memory-usage` groups have Applicable Managed Object Class
+      `cpc`, not `adapter`: one entry is produced per adapter, and the adapter
+      identity must be reconstructed from the in-group `channel-id` (and
+      `crypto-id` for cryptos) rather than taken from the object the metric
+      group is attached to. The HMC reports an integer percentage (0-100), which is divided by 100 to yield the 0-1 ratio this metric declares.
+      Use `mainframe.adapter.type` to distinguish
+      adapter categories. Analogous to NIC, HBA, or RDMA NIC utilization.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: adapter-usage
+            field: adapter-usage
+            mode: dpm
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: crypto-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: flash-memory-usage
+            field: adapter-usage
+            mode: classic
+            min_hmc_version: "2.12.0"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+      - ref: mainframe.adapter.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Adapter status (DPM only, from adapter-resource)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.adapter.status.code
+    brief: "The operational status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API Adapter object property `status`
+      (DPM mode only, HMC >= 2.13.1) via GET /api/adapters/{adapter-id}. Encoded
+      as: 0=active, 1=not-active, 2=not-detected, 3=exceptions, 4=service, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: status
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+      - ref: mainframe.adapter.status
+        requirement_level: opt_in
+
+  - name: mainframe.adapter.physical_channel.status.code
+    brief: "The physical channel status of the mainframe I/O adapter as a numeric code."
+    note: >
+      Reported by the IBM Z HMC Web Services API Adapter object property
+      `physical-channel-status` (DPM mode only, HMC >= 2.13.1) via
+      GET /api/adapters/{adapter-id}. Encoded as: 0=operating, 1=no-power,
+      2=service, 3=stopped, 4=not-defined, 5=definition-error, 6=suspended,
+      7=check-stopped, 8=wrap-block, 9=permanent-error, 10=loss-of-signal,
+      11=loss-of-synchronization, 12=not-operational-link, 99=unknown.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: physical-channel-status
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    entity_associations:
+      - mainframe.adapter
+    attributes:
+      - ref: mainframe.adapter.name
+        requirement_level: required
+

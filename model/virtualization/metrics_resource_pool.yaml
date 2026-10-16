@@ -1,0 +1,66 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Resource Pool Capacity and Allocation
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.resource_pool.cpu.allocated
+    brief: "The total CPU capacity allocated or reserved for the resource pool in virtual CPU cores."
+    note: >
+      Represents the compute boundary (reservation, limit, or entitlement)
+      enforced on workloads residing within the resource pool. In VMware
+      vCenter, this maps to `respool.cpu.allocation` or `cpu.reservation`. In
+      KVM (libvirt), it maps to `cpu_shares` or cgroup quota allocations for the
+      pool domain. In OpenShift Virtualization (KubeVirt), it maps to the CPU
+      ResourceQuota or LimitRange assigned to the VM namespace. In IBM Z
+      PR/SM, it corresponds to the shared processor pool entitlement.
+    instrument: gauge
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.resource_pool
+    attributes:
+      - ref: virtualization.resource_pool.name
+        requirement_level: required
+      - ref: virtualization.resource_pool.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the resource pool.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this resource pool.
+
+  - name: virtualization.resource_pool.memory.allocated
+    brief: "The total memory capacity allocated or reserved for the resource pool in mebibytes."
+    note: >
+      Represents the memory boundary (reservation, limit, or quota) enforced on
+      workloads residing within the resource pool. In VMware vCenter, this maps
+      to `respool.mem.allocation` or `mem.reservation`. In KVM (libvirt), it
+      corresponds to the pool memory limits. In OpenShift Virtualization
+      (KubeVirt), it maps to the memory ResourceQuota assigned to the VM
+      namespace. In IBM Z PR/SM, it corresponds to shared storage limits.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.resource_pool
+    attributes:
+      - ref: virtualization.resource_pool.name
+        requirement_level: required
+      - ref: virtualization.resource_pool.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the resource pool.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this resource pool.

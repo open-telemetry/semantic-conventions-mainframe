@@ -1,0 +1,170 @@
+file_format: definition/2
+# Class A — metric_refinements for upstream system.* metrics.
+#
+# These refinements extend existing upstream metrics with:
+#   1. entity_associations pointing to the relevant virtualization entity.
+#   2. One additional discriminating attribute absent from the upstream definition.
+#
+# The ref: field names the upstream metric being extended.
+# instrument, unit, and name are NOT redeclared — they are inherited from the
+# upstream definition via ref:.
+#
+# Reference: virtualization-metrics.md §Upstream Metrics Inventory — Class A
+
+metric_refinements:
+  # -------------------------------------------------------------------------
+  # system.cpu.time — add virtualization.partition.cpu.type
+  # -------------------------------------------------------------------------
+  # The upstream metric uses cpu.mode (Linux OS-level concept). IBM Z partitions
+  # expose CPU consumption by processor specialisation type (CP, IFL, zIIP, ICF),
+  # not by OS mode. The opt-in virtualization.partition.cpu.type dimension is
+  # added alongside the existing cpu.mode attribute.
+  - id: refinement.virtualization.system.cpu.time
+    ref: system.cpu.time
+    brief: "Seconds each logical CPU spent on each mode, extended for virtualization entities."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+      - virtualization.partition
+      - virtualization.vm
+    attributes:
+      - ref: cpu.mode
+        note: "Following states SHOULD be used: `user`, `system`, `nice`, `idle`, `iowait`, `interrupt`, `steal`"
+      - ref: cpu.logical_number
+        requirement_level: opt_in
+      - ref: virtualization.partition.cpu.type
+        requirement_level: opt_in
+        note: >
+          IBM Z-specific dimension. Identifies the processor specialisation type
+          (cp, ifl, iip, icf, etc.) whose CPU time is being reported. Use `all`
+          for an aggregate across all types. Omit on platforms that do not
+          differentiate by processor type.
+
+  # -------------------------------------------------------------------------
+  # system.cpu.utilization — add virtualization.partition.cpu.type
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.system.cpu.utilization
+    ref: system.cpu.utilization
+    brief: "Per-logical-CPU utilization by mode, extended for virtualization entities."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+      - virtualization.partition
+      - virtualization.vm
+    attributes:
+      - ref: cpu.mode
+        note: "Following modes SHOULD be used: `user`, `system`, `nice`, `idle`, `iowait`, `interrupt`, `steal`"
+      - ref: cpu.logical_number
+        requirement_level: opt_in
+      - ref: virtualization.partition.cpu.type
+        requirement_level: opt_in
+        note: >
+          IBM Z-specific dimension. Identifies the processor specialisation type
+          (cp, ifl, iip, icf, etc.) whose utilization is being reported. Use `all`
+          for an aggregate across all types. Omit on platforms that do not
+          differentiate by processor type.
+
+  # -------------------------------------------------------------------------
+  # system.disk.limit — add virtualization.storage_pool.name
+  # -------------------------------------------------------------------------
+  # The upstream metric uses system.device to identify the disk. Adding
+  # virtualization.storage_pool.name enables pool-level capacity aggregation
+  # across all devices belonging to the same storage pool.
+  - id: refinement.virtualization.system.disk.limit
+    ref: system.disk.limit
+    brief: "Total storage capacity of the disk, extended for virtualization storage pool entities."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+      - virtualization.storage_pool
+    attributes:
+      - ref: system.device
+      - ref: virtualization.storage_pool.name
+        requirement_level: opt_in
+        note: >
+          When set, identifies the virtualization storage pool (e.g. VMware
+          Datastore, IBM Z DPM Storage Group) that the device belongs to.
+          Enables pool-level capacity aggregation across multiple devices.
+
+  # -------------------------------------------------------------------------
+  # system.network.io — add virtualization.vswitch.name
+  # -------------------------------------------------------------------------
+  # network.interface.name identifies the OS-level NIC. virtualization.vswitch.name
+  # is added to bind traffic to the hypervisor-level virtual switch entity.
+  - id: refinement.virtualization.system.network.io
+    ref: system.network.io
+    brief: "Bytes transmitted and received, extended for virtualization vswitch entities."
+    stability: development
+    entity_associations:
+      - virtualization.partition
+      - virtualization.vm
+      - virtualization.vswitch
+    attributes:
+      - ref: network.interface.name
+      - ref: network.io.direction
+      - ref: virtualization.vswitch.name
+        requirement_level: opt_in
+        note: >
+          When set, identifies the virtual switch (e.g. IBM z/VM VSWITCH,
+          VMware vSwitch/dvSwitch) that the network interface is attached to.
+          Enables per-switch traffic aggregation across multiple interfaces.
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.dropped — add virtualization.vswitch.name
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.system.network.packet.dropped
+    ref: system.network.packet.dropped
+    brief: "Dropped packet count, extended for virtualization vswitch entities."
+    stability: development
+    entity_associations:
+      - virtualization.partition
+      - virtualization.vm
+      - virtualization.vswitch
+    attributes:
+      - ref: network.interface.name
+      - ref: network.io.direction
+      - ref: virtualization.vswitch.name
+        requirement_level: opt_in
+        note: >
+          When set, identifies the virtual switch the network interface is attached
+          to. Enables per-switch drop rate aggregation.
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.count — add virtualization.vswitch.name
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.system.network.packet.count
+    ref: system.network.packet.count
+    brief: "Packet transfer count, extended for virtualization vswitch entities."
+    stability: development
+    entity_associations:
+      - virtualization.partition
+      - virtualization.vm
+      - virtualization.vswitch
+    attributes:
+      - ref: network.interface.name
+      - ref: network.io.direction
+      - ref: virtualization.vswitch.name
+        requirement_level: opt_in
+        note: >
+          When set, identifies the virtual switch the network interface is attached
+          to. Enables per-switch packet rate aggregation.
+
+  # -------------------------------------------------------------------------
+  # system.network.errors — add virtualization.vswitch.name
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.system.network.errors
+    ref: system.network.errors
+    brief: "Network error count, extended for virtualization vswitch entities."
+    stability: development
+    entity_associations:
+      - virtualization.partition
+      - virtualization.vm
+      - virtualization.vswitch
+    attributes:
+      - ref: network.interface.name
+      - ref: network.io.direction
+      - ref: virtualization.vswitch.name
+        requirement_level: opt_in
+        note: >
+          When set, identifies the virtual switch the network interface is attached
+          to. Enables per-switch error rate aggregation.
