@@ -1,0 +1,209 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # CPU
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.partition.cpu.utilization
+    brief: "The fraction of time processors allocated to the firmware partition were busy executing work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reports CPU utilization for a hardware or firmware enforced partition
+      such as an IBM Z logical partition (LPAR) managed by PR/SM (Processor
+      Resource/Systems Manager). Unlike `virtualization.vm.cpu.utilization`,
+      this metric applies to partitions managed at the firmware level rather
+      than by a software hypervisor. In IBM Z PR/SM (classic mode) this maps
+      to the processor-usage fields in the logical-partition-usage metric group
+      from the HMC Web Services API. The `virtualization.partition.cpu.type`
+      attribute breaks down utilization by processor specialisation type
+      (cp, ifl, icf, iip, etc.). Analogous to
+      `mainframe.partition.cpu.utilization` in the mainframe namespace.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+      - ref: virtualization.partition.cpu.type
+        requirement_level: recommended
+        note: >
+          Identifies the processor type whose utilization is being reported.
+          Use `all` for an aggregate across all types. Omit on platforms
+          that do not differentiate by processor type.
+
+  - name: virtualization.partition.cpu.count
+    brief: "The number of virtual processors of the specified type currently allocated to the firmware partition."
+    note: >
+      Reports the current virtual processor allocation for the partition. In
+      IBM Z PR/SM (classic mode) this maps to the processor-count-* fields on
+      the logical-partition or partition object in the HMC Web Services API.
+      Analogous to `mainframe.partition.cpu.virtual.count` in the mainframe
+      namespace.
+    instrument: updowncounter
+    unit: "{vcpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+      - ref: virtualization.partition.cpu.type
+        requirement_level: recommended
+        note: >
+          Identifies the processor type being counted. Use `all` for the
+          total count across all processor types.
+
+  - name: virtualization.partition.cpu.time
+    brief: "The cumulative amount of CPU time charged to the firmware partition, in seconds."
+    note: >
+      Reports the total processor execution time accumulated by the partition
+      since last activation or metrics reset. The
+      `virtualization.partition.cpu.type` attribute discriminates by processor
+      specialisation type (ifl, cp, icf, etc.). Analogous to the cumulative
+      CPU time counters exposed by Linux cgroups (`cpuacct.usage`) or
+      Kubernetes pod metrics (`container_cpu_usage_seconds_total`). No
+      confirmed direct HMC Web Services API source has been identified for
+      this metric; implementations should derive the value from hypervisor-
+      level CPU timer data where available.
+    instrument: counter
+    unit: "s"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+      - ref: virtualization.partition.cpu.type
+        requirement_level: recommended
+        note: >
+          Identifies the processor type whose cumulative time is being
+          reported. Use `all` for an aggregate across all types.
+
+  - name: virtualization.partition.cpu.weight
+    brief: "The processor scheduling weight assigned to the firmware partition."
+    note: >
+      The weight determines the proportion of available processor cycles
+      allocated to this partition relative to other partitions when spare
+      capacity is available. Higher weights grant proportionally more CPU
+      time under contention. In IBM Z PR/SM the weight is an integer in the
+      range 1–999 set on the logical partition or partition object via the HMC
+      Web Services API properties `initial-processing-weight`,
+      `minimum-processing-weight`, `current-processing-weight`, and
+      `maximum-processing-weight` (all modes). Use the
+      `mainframe.partition.weight.type` attribute to discriminate between
+      weight categories on IBM Z; omit on platforms that do not expose
+      multiple weight categories.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+      - ref: mainframe.partition.weight.type
+        requirement_level: opt_in
+        note: >
+          IBM Z–specific. Identifies the weight category being reported
+          (initial, minimum, current, or maximum). Omit on platforms that
+          do not differentiate processing weight by category.
+
+  - name: virtualization.partition.cpu.is_capped
+    brief: "Indicates whether processor capping is enabled for the firmware partition (0=false, 1=true)."
+    note: >
+      When capping is enabled the partition cannot exceed its allocated
+      processor count or scheduling weight ceiling regardless of spare
+      capacity on the platform. In IBM Z PR/SM this corresponds to the
+      `is-processing-weight-capped` field on the logical-partition or
+      partition object in the HMC Web Services API (all modes). Equivalent
+      concepts exist on VMware vSphere (CPU limit), KVM (cputune quota),
+      and Hyper-V (processor bandwidth limits).
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Memory
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.partition.memory.size
+    brief: "The amount of memory allocated to the firmware partition, in mebibytes (MiB)."
+    note: >
+      Reports the memory allocation for the partition as configured at the
+      platform level. In IBM Z PR/SM (classic mode) this corresponds to the
+      initial-memory or current central storage allocation reported by the
+      HMC Web Services API logical-partition or partition object. Analogous
+      to `mainframe.partition.memory.size` in the mainframe namespace.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # State
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.partition.state.code
+    brief: "The operational state of the firmware partition encoded as a numeric gauge (1=in this state, 0=not in this state)."
+    note: >
+      Reports the current lifecycle state of the partition. For each partition,
+      exactly one state value will be 1 at any given time; all others will be 0.
+      This encoding enables Prometheus alerting rules and state-change detection
+      without label-value cardinality issues. In IBM Z PR/SM (classic mode) this
+      maps to the status field reported by the HMC Web Services API for the
+      logical partition object. Valid state values are defined by the
+      `virtualization.partition.state` attribute enum (active, not_activated,
+      stopped, unknown). Analogous to `mainframe.partition.status.code` in
+      the mainframe namespace.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: virtualization.partition.id
+        requirement_level: required
+      - ref: virtualization.partition.state
+        requirement_level: required
+        note: >
+          The state whose membership is being reported. One record per state
+          value is emitted per partition; the value is 1 for the current
+          state and 0 for all others.

@@ -1,0 +1,112 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.partition.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: name
+            mode: all
+    brief: "The name of the logical partition (LPAR) running on the mainframe."
+    examples: ["LPAR01", "PRODZ", "TEST1"]
+    note: >
+      A logical partition (LPAR) is the mainframe equivalent of a virtual machine
+      (VM) in distributed cloud environments. Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+      Reported by the HMC Web Services API partition object field `name`.
+
+  - key: mainframe.partition.weight.type
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: initial-processing-weight
+            mode: all
+    brief: "The scheduling weight type that determines how processor time is allocated to the logical partition (LPAR)."
+    type:
+      members:
+        - id: initial
+          value: "initial"
+          brief: "The initial processor weight assigned to the partition at activation, representing its baseline entitlement."
+          stability: development
+        - id: minimum
+          value: "minimum"
+          brief: "The minimum processor weight guaranteed to the partition, below which its allocation will not fall."
+          stability: development
+        - id: current
+          value: "current"
+          brief: "The current processor weight actively in use by the partition at the time of observation."
+          stability: development
+        - id: maximum
+          value: "maximum"
+          brief: "The maximum processor weight the partition may consume when spare capacity is available."
+          stability: development
+
+  - key: mainframe.partition.number
+    type: int
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: partition-number
+            mode: classic
+    brief: "The numeric index assigned by PR/SM that identifies the logical partition (LPAR) within its Central Processing Complex (CPC)."
+    examples: [1, 3, 15]
+    note: >
+      Each logical partition on an IBM Z Central Processing Complex (CPC) is
+      assigned a unique partition number (1–64) by the Processor Resource/Systems
+      Manager (PR/SM). The partition number is static for the lifetime of the LPAR
+      configuration.
+      In distributed systems terms, this is analogous to a slot index or NUMA node
+      number — a small integer that identifies a hardware-allocated execution domain.
+      Reported by the HMC Web Services API logical-partition object field
+      `partition-number` (Classic mode). Not applicable in DPM mode where partitions
+      are identified by UUID only.
+
+  - key: mainframe.partition.type
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: activation-mode
+            mode: classic
+    brief: "The workload category of the logical partition (LPAR), reflecting which operating environment it is configured to run."
+    note: >
+      IBM Z Processor Resource/Systems Manager (PR/SM) and Dynamic Partition Manager
+      (DPM) classify each partition by its intended workload type. This controls
+      which processor types the partition may use and which IBM Z software licences
+      apply. In distributed systems terms, this is analogous to an instance type or
+      VM profile that constrains what workloads can run on it.
+      Reported by the HMC Web Services API logical-partition or partition object
+      field `partition-type`.
+    type:
+      members:
+        - id: general_purpose
+          value: "general_purpose"
+          stability: development
+          brief: "General-purpose partition that can run any IBM Z operating system including z/OS, Linux on Z, or z/VM, using all licensed processor types."
+        - id: linux_only
+          value: "linux_only"
+          stability: development
+          brief: "Linux-only partition restricted to running Linux on Z; cannot activate a z/OS or z/VM image. Uses only Integrated Facility for Linux (IFL) processors."
+        - id: zvm
+          value: "zvm"
+          stability: development
+          brief: "Partition configured to host a z/VM hypervisor instance as its primary workload; can manage hundreds of guest virtual machines."
+        - id: ssc
+          value: "ssc"
+          stability: development
+          brief: "Secure Service Container (SSC) partition for IBM Z security appliances; provides a hardware-isolated, tamper-evident execution environment."
+        - id: unknown
+          value: "unknown"
+          stability: development
+          brief: "The partition type is not known or could not be determined from the available HMC API response."

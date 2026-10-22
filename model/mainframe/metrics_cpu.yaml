@@ -1,0 +1,138 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Per-physical-processor utilization (from zcpc-processor-usage metric group)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.cpu.utilization
+    brief: "The fraction of time the mainframe physical processor was busy executing work, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      `zcpc-processor-usage` field `processor-usage` (all modes). The HMC
+      reports an integer percentage (0-100), which is divided by 100 to yield
+      the 0-1 ratio this metric declares. Provides
+      individual physical-processor-level telemetry, unlike
+      `mainframe.host.cpu.utilization` which reports a CPC-level aggregate.
+      In distributed systems terms, this is analogous to per-core CPU
+      utilization from a system performance tool.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: processor-usage
+            mode: all
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.cpu
+    attributes:
+      - ref: mainframe.cpu.name
+        requirement_level: required
+
+  - name: mainframe.cpu.smt_mode.utilization
+    brief: "The fraction of time the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      `zcpc-processor-usage` field `smt-usage` (all modes). A value of -1
+      indicates that the mainframe model does not support simultaneous
+      multithreading (SMT). When SMT is active, a single physical processor
+      executes two hardware threads concurrently (SMT-2), improving instruction
+      throughput.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: smt-usage
+            mode: all
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.cpu
+    attributes:
+      - ref: mainframe.cpu.name
+        requirement_level: required
+
+  - name: mainframe.cpu.thread0.utilization
+    brief: "The fraction of time hardware thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      `zcpc-processor-usage` field `thread-0-usage` (all modes). Thread 0 is
+      the primary hardware thread of a processor running in SMT mode. A value
+      of -1 indicates the mainframe model does not support SMT. In distributed
+      systems terms, this is analogous to per-hardware-thread CPU utilization
+      from a profiling tool.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread-0-usage
+            mode: all
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.cpu
+    attributes:
+      - ref: mainframe.cpu.name
+        requirement_level: required
+
+  - name: mainframe.cpu.thread1.utilization
+    brief: "The fraction of time hardware thread 1 was busy when the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1."
+    note: >
+      Reported by the IBM Z HMC Web Services API CPC metric group
+      `zcpc-processor-usage` field `thread-1-usage` (all modes). Thread 1 is
+      the secondary hardware thread of a processor running in SMT mode. A value
+      of -1 indicates the mainframe model does not support SMT. In distributed
+      systems terms, this is analogous to per-hardware-thread CPU utilization
+      from a profiling tool.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: zcpc-processor-usage
+            field: thread-1-usage
+            mode: all
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.cpu
+    attributes:
+      - ref: mainframe.cpu.name
+        requirement_level: required

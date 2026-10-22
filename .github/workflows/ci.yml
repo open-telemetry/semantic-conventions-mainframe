@@ -55,7 +55,13 @@ jobs:
 
       - name: Load shared version pins
         id: versions
-        uses: $/.github/actions/load-version-pins
+        shell: bash
+        run: |
+          weaver_version="$(sed -n 's/^WEAVER_VERSION=v\{0,1\}//p' versions.env)"
+          if [[ -z "$weaver_version" ]]; then
+            echo "Failed to load WEAVER_VERSION from versions.env" >&2; exit 1
+          fi
+          echo "weaver_version=$weaver_version" >> "$GITHUB_OUTPUT"
 
       - name: Install Weaver
         uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
@@ -75,7 +81,13 @@ jobs:
 
       - name: Load shared version pins
         id: versions
-        uses: $/.github/actions/load-version-pins
+        shell: bash
+        run: |
+          weaver_version="$(sed -n 's/^WEAVER_VERSION=v\{0,1\}//p' versions.env)"
+          if [[ -z "$weaver_version" ]]; then
+            echo "Failed to load WEAVER_VERSION from versions.env" >&2; exit 1
+          fi
+          echo "weaver_version=$weaver_version" >> "$GITHUB_OUTPUT"
 
       - name: Install Weaver
         uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
@@ -86,7 +98,8 @@ jobs:
 
       - name: Regenerate and check committed outputs are in sync
         run: |
-          make generate-all
+          rm -rf ./docs/registry
+          make generate-all WEAVER=weaver
           if ! git diff --exit-code -- ./docs/registry 'model/gen-ai/gen-ai-*.json'; then
             echo "FAIL: committed generated outputs are out of sync!"
             echo "Run 'make generate-all' and commit the changes."
@@ -120,6 +133,60 @@ jobs:
 
   #     - name: Check Python formatting
   #       run: uv tool run --from ruff ruff format --check src scenarios
+
+  # ── Simulator Unit Tests ──────────────────────────────────────────────────
+  reference-simulator-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: reference
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+
+      # Materialise the upstream semconv registry so metric_refinements can
+      # be resolved and the per-entity emission tests work end-to-end.
+      - name: Load shared version pins
+        id: versions
+        working-directory: ${{ github.workspace }}
+        shell: bash
+        run: |
+          weaver_version="$(sed -n 's/^WEAVER_VERSION=v\{0,1\}//p' versions.env)"
+          if [[ -z "$weaver_version" ]]; then
+            echo "Failed to load WEAVER_VERSION from versions.env" >&2; exit 1
+          fi
+          echo "weaver_version=$weaver_version" >> "$GITHUB_OUTPUT"
+
+      - name: Materialize upstream semconv dependency
+        working-directory: ${{ github.workspace }}
+        run: |
+          make filter-upstream
+
+      - name: Install test dependencies
+        run: uv sync --extra test
+
+      - name: Run simulator unit tests
+        run: |
+          uv run --no-project pytest tests/ \
+            -v \
+            --tb=short \
+            -p no:warnings \
+            --no-header \
+            2>&1 | tee pytest-output.txt
+          # Surface the acceptance summary prominently in the CI log
+          echo ""
+          echo "──────────────────────────────────────────────────────────────────"
+          echo "SIMULATOR TEST RESULTS"
+          echo "──────────────────────────────────────────────────────────────────"
+          grep -A 200 "ACCEPTANCE SUMMARY" pytest-output.txt || true
+          echo "──────────────────────────────────────────────────────────────────"
 
   author-self-review:
     runs-on: ubuntu-latest
@@ -211,6 +278,7 @@ jobs:
       - generated-docs
   #    - reference-python-lint
       - author-self-review
+      - reference-simulator-tests
   #    - reference-scenario-matrix
   #    - reference-scenarios
   #    - reference-status-report

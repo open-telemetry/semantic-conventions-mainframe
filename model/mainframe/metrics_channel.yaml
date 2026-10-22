@@ -1,0 +1,42 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Channel utilization (per CHPID, from channel-usage metric group)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.channel.utilization
+    brief: "The fraction of time the I/O channel path was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API channel-usage metric group
+      field `channel-usage` (classic mode). The HMC reports an integer percentage (0-100), which is divided by 100 to yield the 0-1 ratio this metric declares.
+      A channel path identifier (CHPID)
+      is the unique identifier for a hardware I/O channel. Use the
+      `mainframe.channel.name` attribute in CSS.CHPID format to identify
+      the specific channel path. In distributed systems terms, this is
+      analogous to the link utilization of a network interface or storage
+      HBA port.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: channel-usage
+            field: channel-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - mainframe.channel
+    attributes:
+      - ref: mainframe.channel.name
+        requirement_level: required
+      - ref: mainframe.channel.mode
+        requirement_level: recommended
+

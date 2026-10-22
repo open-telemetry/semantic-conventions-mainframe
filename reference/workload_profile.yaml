@@ -1,0 +1,616 @@
+apiVersion: semconv.simulation/v1alpha1
+kind: WorkloadProfile
+metadata:
+  name: ibm-z-enterprise-workload
+spec:
+  default_sampling_interval: 10s
+  default_temporality: cumulative
+
+  rules:
+    # -------------------------------------------------------------------------
+    # 1. Mainframe Host / CPC Level Metrics (Physical Machine & Environment)
+    # -------------------------------------------------------------------------
+    # Temperature (Celsius)
+    - match:
+        pattern: "^mainframe\\.host\\.temperature$"
+      generator:
+        function: gaussian
+        params:
+          mean: 23.5
+          stddev: 1.2
+          clamp_min: 18.0
+          clamp_max: 32.0
+
+    # Humidity (ratio 0–1): mainframe.host.humidity unit is "1" (fraction)
+    - match:
+        pattern: "^mainframe\\.host\\.humidity$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.45       # 45% relative humidity as a 0–1 ratio
+          stddev: 0.03
+          clamp_min: 0.30
+          clamp_max: 0.65
+
+    # Dewpoint (Celsius)
+    - match:
+        pattern: "^mainframe\\.host\\.dewpoint$"
+      generator:
+        function: gaussian
+        params:
+          mean: 11.2
+          stddev: 0.8
+          clamp_min: 5.0
+          clamp_max: 18.0
+
+    # Heat Load (J/h): mainframe.host.heatload unit is "J/h".
+    # A typical z16 CPC dissipates 19 000–35 000 BTU/h → 20 050 000–36 930 000 J/h
+    # (1 BTU/h = 1055.06 J/h). Values below are in J/h, not BTU/h.
+    - match:
+        pattern: "^mainframe\\.host\\.heatload$"
+      generator:
+        function: diurnal
+        params:
+          min: 19000000.0      # ≈18 000 BTU/h × 1055.06
+          max: 35900000.0      # ≈34 000 BTU/h × 1055.06
+          base: 26376500.0     # ≈25 000 BTU/h × 1055.06
+          amplitude: 7385420.0 # ≈7 000 BTU/h × 1055.06
+          period: 86400.0
+          noise_sigma: 211012.0 # ≈200 BTU/h × 1055.06
+
+    # Power Usage (Watts) - Host total & cord level
+    - match:
+        pattern: "^mainframe\\.host\\.power\\..*$"
+      generator:
+        function: diurnal
+        params:
+          min: 4500.0
+          max: 8200.0
+          base: 6200.0
+          amplitude: 1600.0
+          period: 86400.0
+          noise_sigma: 50.0
+
+    # Hardware Status Unacceptable flags (boolean 0/1 gauge: 0 = Normal, 1 = Error).
+    # pareto_spikes can return values > 1 via expovariate; clamp to [0, 1] by using
+    # a gaussian that is almost always 0, with a very-low-probability spike clamped
+    # to the declared boolean domain.
+    - match:
+        pattern: "^.*\\.status\\.unacceptable$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+          clamp_max: 1.0
+
+    # Hardware Engine Counts (Active, Spare, Defective, SAP, IFP)
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.active\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 190.0
+          stddev: 0.0
+          clamp_min: 190.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.sap\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 24.0
+          stddev: 0.0
+          clamp_min: 24.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.ifp\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 8.0
+          stddev: 0.0
+          clamp_min: 8.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.spare\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 6.0
+          stddev: 0.0
+          clamp_min: 6.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.cpu\\.defective\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+
+    # Virtual Flash Memory (VFM) & Physical Storage
+    - match:
+        pattern: "^mainframe\\.host\\.memory\\.vfm\\.size$"
+      generator:
+        function: gaussian
+        params:
+          mean: 4398046511104.0 # 4 TiB
+          stddev: 0.0
+          clamp_min: 4398046511104.0
+
+    - match:
+        pattern: "^mainframe\\.host\\.memory\\.vfm\\.increment\\.size$"
+      generator:
+        function: gaussian
+        params:
+          mean: 17179869184.0 # 16 GiB
+          stddev: 0.0
+          clamp_min: 17179869184.0
+
+    # -------------------------------------------------------------------------
+    # 2. Mainframe Partition / LPAR Metrics (PR/SM Resource Allocation)
+    # -------------------------------------------------------------------------
+    # Defined Capacity (MSU)
+    - match:
+        pattern: "^mainframe\\.partition\\.capacity\\.defined$"
+      generator:
+        function: gaussian
+        params:
+          mean: 450.0
+          stddev: 0.0
+          clamp_min: 450.0
+
+    # WLM Enabled flag (1 = Enabled)
+    - match:
+        pattern: "^mainframe\\.partition\\.wlm\\.enabled$"
+      generator:
+        function: gaussian
+        params:
+          mean: 1.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # CPU Weight (0 - 999) — now at virtualization.partition.cpu.weight
+    - match:
+        pattern: "^virtualization\\.partition\\.cpu\\.weight$"
+      generator:
+        function: gaussian
+        params:
+          mean: 200.0
+          stddev: 0.0
+          clamp_min: 200.0
+
+    # Partition Threads Per Processor (1 = SMT-1, 2 = SMT-2)
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.threads_per_processor$"
+      generator:
+        function: gaussian
+        params:
+          mean: 2.0
+          stddev: 0.0
+          clamp_min: 2.0
+
+    # z/VM Paging Rate (pages/sec)
+    - match:
+        pattern: "^mainframe\\.partition\\.zvm\\.paging\\.rate$"
+      generator:
+        function: diurnal
+        params:
+          min: 12.0
+          max: 850.0
+          base: 180.0
+          amplitude: 150.0
+          period: 86400.0
+          noise_sigma: 15.0
+
+    # Partition Power Usage (Watts)
+    - match:
+        pattern: "^mainframe\\.partition\\.power\\.usage$"
+      generator:
+        function: diurnal
+        params:
+          min: 600.0
+          max: 1800.0
+          base: 1100.0
+          amplitude: 450.0
+          period: 86400.0
+          noise_sigma: 25.0
+
+    # Virtual, Reserved, and Capped Processor Counts
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.virtual\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 16.0
+          stddev: 0.0
+          clamp_min: 16.0
+
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.reserved\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 4.0
+          stddev: 0.0
+          clamp_min: 4.0
+
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.capped\\.count$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+
+    # -------------------------------------------------------------------------
+    # 3. Universal Base Rules by Metric Unit & Instrument Kind
+    # -------------------------------------------------------------------------
+    # Boolean 0/1 State Gauges — MUST appear BEFORE the broad `unit:1, type:gauge`
+    # rule; otherwise that rule's diurnal generator emits continuous 0.05–0.95 values
+    # for metrics that are semantically one-hot or boolean.
+
+    # virtualization.partition.cpu.is_capped and virtualization.vm.cpu.is_capped
+    # — boolean gauge: 0 = uncapped (normal), 1 = capped (rare operational event).
+    - match:
+        pattern: "^.*\\.cpu\\.is_capped$"
+      generator:
+        function: gaussian
+        params:
+          mean: 0.0
+          stddev: 0.0
+          clamp_min: 0.0
+          clamp_max: 1.0
+
+    # virtualization.vm.power.state — one-hot boolean gauge (0 or 1).
+    # Exactly one state dimension will be 1; all others 0.
+    # One-hot gauge: 1 when the VM is in the named state, 0 otherwise.
+    # Every VM node in the topology carries virtualization.vm.state: "running",
+    # so the "running" series emits 1 and no stopped/paused node is present.
+    - match:
+        pattern: "^virtualization\\.vm\\.power\\.state$"
+      generator:
+        function: gaussian
+        params:
+          mean: 1.0
+          stddev: 0.0
+          clamp_min: 0.0
+          clamp_max: 1.0
+
+    # Ratio 0..1 Gauges (e.g., CPU, SMT, Channel, Adapter, Partition utilization)
+    # =========================================================================
+    # Discrete coded gauges — must precede the `unit: 1, type: gauge` catch-all
+    # below, which would otherwise drive a status code with a 0.05-0.95 diurnal
+    # curve.  Each emits a single valid enum code with zero variance.
+    # =========================================================================
+
+    # Adapter status: 0=active (see mainframe.adapter.status.code)
+    - match:
+        pattern: "^mainframe\\.adapter\\.status\\.code$"
+      generator:
+        function: gaussian
+        params: {mean: 0.0, stddev: 0.0, clamp_min: 0.0, clamp_max: 4.0}
+
+    # Physical channel status code
+    - match:
+        pattern: "^mainframe\\.adapter\\.physical_channel\\.status\\.code$"
+      generator:
+        function: gaussian
+        params: {mean: 0.0, stddev: 0.0, clamp_min: 0.0, clamp_max: 4.0}
+
+    # Partition status: 0=operating
+    - match:
+        pattern: "^mainframe\\.partition\\.status\\.code$"
+      generator:
+        function: gaussian
+        params: {mean: 0.0, stddev: 0.0, clamp_min: 0.0, clamp_max: 4.0}
+
+    # DPM partition processor mode: 0=shared, 1=dedicated
+    - match:
+        pattern: "^mainframe\\.partition\\.cpu\\.mode$"
+      generator:
+        function: gaussian
+        params: {mean: 0.0, stddev: 0.0, clamp_min: 0.0, clamp_max: 1.0}
+
+    # Virtualization partition state code
+    - match:
+        pattern: "^virtualization\\.partition\\.state\\.code$"
+      generator:
+        function: gaussian
+        params: {mean: 0.0, stddev: 0.0, clamp_min: 0.0, clamp_max: 4.0}
+
+    # =========================================================================
+    # VM disk and network counters — no shape fallback covers `{operation}`,
+    # `{error}` or per-VM `By` counters, so they are named explicitly.
+    # =========================================================================
+
+    # vCPU contention counters (seconds). Both accumulate far slower than wall
+    # clock on a healthy host; these model a lightly contended platform.
+    - match:
+        pattern: "^virtualization\\.vm\\.cpu\\.ready_time$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 0.03, amplitude: 0.025, period: 86400.0, noise_sigma: 0.004}
+
+    - match:
+        pattern: "^virtualization\\.vm\\.cpu\\.steal_time$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 0.015, amplitude: 0.012, period: 86400.0, noise_sigma: 0.003}
+
+    - match:
+        pattern: "^virtualization\\.vm\\.network\\.io$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 1250000.0, amplitude: 900000.0, period: 86400.0, noise_sigma: 60000.0}
+
+    - match:
+        pattern: "^virtualization\\.vm\\.disk\\.io$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 2400000.0, amplitude: 1600000.0, period: 86400.0, noise_sigma: 90000.0}
+
+    - match:
+        pattern: "^virtualization\\.vm\\.disk\\.operations$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 320.0, amplitude: 210.0, period: 86400.0, noise_sigma: 15.0}
+
+    # Cumulative service time, so it advances more slowly than wall clock
+    - match:
+        pattern: "^virtualization\\.vm\\.disk\\.latency\\.time$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 0.35, amplitude: 0.25, period: 86400.0, noise_sigma: 0.02}
+
+    - match:
+        pattern: "^virtualization\\.vm\\.disk\\.errors$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params: {base: 0.002, amplitude: 0.002, period: 86400.0, noise_sigma: 0.0005}
+
+    - match:
+        unit: "1"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 0.05
+          max: 0.95
+          base: 0.52
+          amplitude: 0.32
+          period: 86400.0
+          noise_sigma: 0.02
+
+    # Percentage Gauges (0..100)
+    - match:
+        unit: "%"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 5.0
+          max: 95.0
+          base: 52.0
+          amplitude: 32.0
+          period: 86400.0
+          noise_sigma: 2.0
+
+    # Byte Storage & Memory Gauges (Memory allocations, Pools, VFM)
+    - match:
+        unit: "By"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 68719476736.0 # 64 GiB baseline
+          stddev: 2147483648.0 # 2 GiB variance
+          clamp_min: 1073741824.0
+
+    # Byte Storage UpDownCounters (storage group/volume capacities, filesystem sizes)
+    # This more-specific rule must appear before the generic `type: updowncounter` rule
+    # below (which produces small integer counts).
+    # Covers: mainframe.storage.group.capacity    By
+    #         mainframe.storage.group.usage        By
+    #         mainframe.storage.group.volume.capacity By
+    #         container.filesystem.capacity        By (upstream UpDownCounter)
+    #         container.filesystem.usage           By (upstream UpDownCounter)
+    #         container.filesystem.available       By (upstream UpDownCounter)
+    #         container.memory.available           By (upstream UpDownCounter)
+    - match:
+        unit: "By"
+        type: updowncounter
+      generator:
+        function: gaussian
+        params:
+          mean: 107374182400.0  # 100 GiB baseline
+          stddev: 21474836480.0 # 20 GiB variance
+          clamp_min: 1073741824.0 # 1 GiB minimum
+
+    # Non-monotonic UpDownCounters (current counts: VMs, partitions, vCPUs, etc.)
+    # This rule MUST appear before the broad `unit: By, type: sum` and generic
+    # `type: sum` rules below because the simulator normalises `updowncounter` to
+    # `instrument=sum` while preserving the original keyword in `original_instrument`.
+    # The `_match_rule` logic checks `original_instrument` first; placing this rule
+    # here prevents `counter_accumulator` from capturing current-value metrics such
+    # as container.filesystem.available and container.memory.available (upstream
+    # UpDownCounters) and emitting them as monotonically increasing totals.
+    # Covers: virtualization.platform.partition.count  {partition}
+    #         virtualization.platform.vm.count         {vm}
+    #         virtualization.cluster.host.count        {host}
+    #         virtualization.cluster.vm.count          {vm}
+    #         virtualization.vm.cpu.count              {vcpu}
+    #         virtualization.partition.cpu.count       {vcpu}
+    #         virtualization.resource_pool.cpu.allocated {cpu}
+    #         container.filesystem.*                   (upstream UpDownCounter)
+    #         container.memory.available               (upstream UpDownCounter)
+    - match:
+        type: updowncounter
+      generator:
+        function: gaussian
+        params:
+          mean: 4.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # Byte Transfer Sums (Disk, Network I/O)
+    - match:
+        unit: "By"
+        type: sum
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 104857600.0 # 100 MiB/s
+              amplitude: 62914560.0
+              period: 86400.0
+              noise_sigma: 5242880.0
+
+    # Monotonic Counters ({operation}, {packet}, {error}, etc.)
+    - match:
+        type: sum
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 2500.0
+              amplitude: 1500.0
+              period: 86400.0
+              noise_sigma: 80.0
+
+    # Latencies & Timers (seconds)
+    - match:
+        unit: "s"
+        type: gauge
+      generator:
+        function: pareto_spikes
+        params:
+          baseline: 0.0002
+          spike_magnitude: 0.005
+          spike_probability: 0.02
+
+    # =========================================================================
+    # Gap 5 fixes — rules added to cover the 19 previously-unmatched metrics
+    # =========================================================================
+
+    # --- 5a. MiBy (Mebibyte) memory gauges -----------------------------------
+    # Covers: mainframe.host.memory.size, mainframe.partition.memory.size,
+    #         virtualization.*.memory.* (size, total, used, allocated,
+    #         balloon, rss, swapped), virtualization.resource_pool.memory.allocated
+    - match:
+        unit: "MiBy"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 65536.0      # 64 GiB expressed in MiB
+          stddev: 2048.0     # 2 GiB variance
+          clamp_min: 512.0
+
+    # --- 5b. GiBy (Gibibyte) gauges (VFM, large pool sizes) -----------------
+    - match:
+        unit: "GiBy"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 4096.0       # 4 TiB expressed in GiB
+          stddev: 0.0
+          clamp_min: 4096.0
+
+    # --- 5c. Watt (W) gauges not covered by the mainframe.host.power pattern -
+    # Covers: virtualization.platform.power.usage
+    - match:
+        unit: "W"
+        type: gauge
+      generator:
+        function: diurnal
+        params:
+          min: 4500.0
+          max: 8200.0
+          base: 6200.0
+          amplitude: 1600.0
+          period: 86400.0
+          noise_sigma: 50.0
+
+    # NOTE: 5d (updowncounter rule) was moved before `type: sum` in section 3
+    # so it fires before the generic counter_accumulator path. See the
+    # "Non-monotonic UpDownCounters" block above.
+
+    # --- 5e. CPU allocation gauge (unit={cpu}, instrument=gauge) -------------
+    # Covers: virtualization.resource_pool.cpu.allocated
+    - match:
+        pattern: "^.*\\.cpu\\.allocated$"
+      generator:
+        function: gaussian
+        params:
+          mean: 8.0
+          stddev: 0.0
+          clamp_min: 1.0
+
+    # --- Resolved from metric_refinements: via upstream registry ---------------
+
+    # container.cpu.usage — unit={cpu} gauge (fractional vCPU count)
+    - match:
+        pattern: "^container\\.cpu\\.usage$"
+      generator:
+        function: gaussian
+        params:
+          mean: 1.5
+          stddev: 0.3
+          clamp_min: 0.0
+
+    # hw.host.ambient_temperature / hw.host.heating_margin — unit=Cel gauge
+    - match:
+        unit: "Cel"
+        type: gauge
+      generator:
+        function: gaussian
+        params:
+          mean: 23.5
+          stddev: 1.2
+          clamp_min: 15.0
+          clamp_max: 40.0
+
+    # =========================================================================
+    # Gap 6 — rules for metrics moved/renamed in refactor
+    # =========================================================================
+
+    # NOTE: virtualization.partition.cpu.is_capped / virtualization.vm.cpu.is_capped
+    # are covered by the `^.*\.cpu\.is_capped$` pattern in section 3 (boolean state
+    # rules, placed before the broad `unit:1, type:gauge` catch-all). No separate
+    # entry needed here — the earlier rule fires first and emits a valid 0/1 value.
+
+    # --- 6a. virtualization.partition.cpu.time (cumulative seconds counter) --
+    # Models accumulated partition CPU time in seconds (no confirmed direct HMC source).
+    - match:
+        pattern: "^virtualization\\.partition\\.cpu\\.time$"
+      generator:
+        function: counter_accumulator
+        params:
+          rate_generator:
+            params:
+              base: 500.0       # ~500 CPU-seconds per wall-clock second at 50% load
+              amplitude: 350.0
+              period: 86400.0
+              noise_sigma: 20.0

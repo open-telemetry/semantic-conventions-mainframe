@@ -1,0 +1,217 @@
+file_format: definition/2
+# Metric refinements for upstream network metrics in the mainframe domain.
+
+metric_refinements:
+  # -------------------------------------------------------------------------
+  # system.network.io (Physical Adapter Port)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.port.system.network.io
+    ref: system.network.io
+    brief: "Network bytes transmitted and received through the mainframe physical adapter port."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-sent
+            mode: dpm
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: bytes-received
+            mode: dpm
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+        note: >
+          Direction of network traffic: transmit or receive.
+      - ref: mainframe.adapter.port.id
+        requirement_level: required
+        note: >
+          Physical network port identifier on the adapter.
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.count (Physical Adapter Port)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.port.system.network.packet.count
+    ref: system.network.packet.count
+    brief: "Network packets transferred through the mainframe physical adapter port."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent
+            mode: dpm
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-received
+            mode: dpm
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.adapter.port.id
+        requirement_level: required
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.dropped (Physical Adapter Port)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.port.system.network.packet.dropped
+    ref: system.network.packet.dropped
+    brief: "Network packets dropped on the mainframe physical adapter port."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-dropped
+            mode: dpm
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-received-dropped
+            mode: dpm
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.adapter.port.id
+        requirement_level: required
+
+  # -------------------------------------------------------------------------
+  # system.network.errors (Physical Adapter Port)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.port.system.network.errors
+    ref: system.network.errors
+    brief: "Count of network errors detected on the mainframe physical adapter port."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-sent-discarded
+            mode: dpm
+          - type: metric_group
+            name: network-physical-adapter-port
+            field: packets-received-discarded
+            mode: dpm
+    entity_associations:
+      - mainframe.adapter.port
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.adapter.port.id
+        requirement_level: required
+
+  # -------------------------------------------------------------------------
+  # system.network.io (Partition Virtual NIC)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.nic.system.network.io
+    ref: system.network.io
+    brief: "Network bytes transmitted and received through the partition virtual NIC."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-sent
+            mode: dpm
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: bytes-received
+            mode: dpm
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+        note: >
+          The virtual NIC identifier attached to the partition.
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.count (Partition Virtual NIC)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.nic.system.network.packet.count
+    ref: system.network.packet.count
+    brief: "Network packets transferred through the partition virtual NIC."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent
+            mode: dpm
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-received
+            mode: dpm
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+
+  # -------------------------------------------------------------------------
+  # system.network.packet.dropped (Partition Virtual NIC)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.nic.system.network.packet.dropped
+    ref: system.network.packet.dropped
+    brief: "Network packets dropped on the partition virtual NIC."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-dropped
+            mode: dpm
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-received-dropped
+            mode: dpm
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.partition.nic.name
+        requirement_level: required
+
+  # -------------------------------------------------------------------------
+  # system.network.errors (Partition Virtual NIC)
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.nic.system.network.errors
+    ref: system.network.errors
+    brief: "Count of network errors detected on the partition virtual NIC."
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-sent-discarded
+            mode: dpm
+          - type: metric_group
+            name: partition-attached-network-interface
+            field: packets-received-discarded
+            mode: dpm
+    entity_associations:
+      - mainframe.partition.nic
+    attributes:
+      - ref: network.io.direction
+        requirement_level: required
+      - ref: mainframe.partition.nic.name
+        requirement_level: required

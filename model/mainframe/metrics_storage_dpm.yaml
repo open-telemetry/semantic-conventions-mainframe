@@ -1,0 +1,112 @@
+file_format: definition/2
+# DPM Storage Group and Storage Volume metrics.
+# These metrics are associated with the mainframe.storage.group and
+# mainframe.storage.group.volume entities defined in entities_dpm.yaml.
+# All metrics are DPM-mode only (HMC >= 2.14.1).
+
+metrics:
+  # ---------------------------------------------------------------------------
+  # Storage Group Metrics (storagegroup-resource object)
+  # ---------------------------------------------------------------------------
+
+  - name: mainframe.storage.group.capacity
+    brief: "Total provisioned storage capacity of the DPM storage group."
+    note: >
+      No IBM Z HMC Web Services API source is currently known: SC27-2646-01
+      defines no storage-group capacity property, and the zhmc-prometheus-exporter
+      `storagegroup-resource` group exposes only `type`, `fulfillment-state`,
+      `shared` and `max-partitions`. Derive it by summing the `size` property of
+      the group's storage volumes. This is the sum of the sizes of all backing
+      storage volumes in the group,
+      analogous to the total capacity of a Kubernetes StorageClass or cloud
+      storage pool.
+    instrument: updowncounter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.group
+    attributes:
+      - ref: mainframe.storage.group.name
+        requirement_level: required
+      - ref: mainframe.storage.group.type
+        requirement_level: required
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that owns this
+          storage group.
+
+  - name: mainframe.storage.group.usage
+    brief: "Currently allocated storage in the DPM storage group."
+    note: >
+      No IBM Z HMC Web Services API source is currently known: SC27-2646-01
+      defines no storage-group allocation property, and the
+      zhmc-prometheus-exporter `storagegroup-resource` group does not expose one.
+      Represents the total storage currently allocated to partitions, analogous
+      to the used capacity of a Kubernetes StorageClass or cloud storage pool.
+    instrument: updowncounter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - mainframe.storage.group
+    attributes:
+      - ref: mainframe.storage.group.name
+        requirement_level: required
+      - ref: mainframe.storage.group.type
+        requirement_level: required
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that owns this
+          storage group.
+
+  # ---------------------------------------------------------------------------
+  # Storage Volume Metrics (storagevolume-resource object)
+  # ---------------------------------------------------------------------------
+
+  - name: mainframe.storage.group.volume.capacity
+    brief: "Size of the DPM storage volume."
+    note: >
+      Reported by the IBM Z HMC Web Services API storagevolume-resource object
+      property `size` (DPM mode only, HMC >= 2.14.1). Represents the raw
+      provisioned capacity of a single backing SAN volume (LUN, ECKD DASD
+      cylinder set, or NVMe namespace), analogous to the capacity of a
+      Kubernetes Persistent Volume or a cloud block storage volume.
+    instrument: updowncounter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: storage-volume
+            field: size
+            mode: dpm
+            min_hmc_version: "2.14.1"
+    entity_associations:
+      - mainframe.storage.group.volume
+    attributes:
+      - ref: mainframe.storage.group.name
+        requirement_level: required
+        note: >
+          The name of the storage group that contains this volume.
+      - ref: mainframe.storage.group.volume.name
+        requirement_level: required
+      - ref: mainframe.storage.fulfillment.state
+        requirement_level: recommended
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that owns the
+          storage group containing this volume.

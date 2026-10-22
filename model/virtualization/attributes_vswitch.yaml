@@ -1,0 +1,25 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.vswitch.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtual network switch."
+    examples: ["vswitch-001", "dvs-8c3f2a1b-4d56"]
+    note: >
+      A platform-specific opaque identifier that uniquely identifies this
+      virtual switch within its hypervisor domain. For VMware vSphere this
+      is the MoRef ID of the DistributedVirtualSwitch or VmwareDistributedVirtualSwitch
+      object. For IBM Z z/VM this corresponds to the VSWITCH name. For IBM
+      Z DPM mode this corresponds to the virtual switch object-id.
+
+  - key: virtualization.vswitch.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtual network switch."
+    examples: ["VSWITCHA", "dvSwitch-prod", "br-internal"]
+    note: >
+      The name as configured in the hypervisor management interface. For
+      IBM Z z/VM this is the VSWITCH name defined in the CP directory. For
+      IBM Z DPM mode this is the virtual switch name reported by the HMC
+      Web Services API. For VMware vSphere this is the switch name shown
+      in vCenter.
