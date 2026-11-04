@@ -1,0 +1,26 @@
+file_format: definition/2
+# Metric refinements for upstream system.* metrics in the mainframe domain.
+
+metric_refinements:
+  # -------------------------------------------------------------------------
+  # system.cpu.utilization — add mainframe.cpu.type and mainframe.cpu.sharing.mode
+  # -------------------------------------------------------------------------
+  - id: refinement.mainframe.system.cpu.utilization
+    ref: system.cpu.utilization
+    brief: "Per-logical-CPU utilization by mode, extended for IBM Z processor specialization."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+        note: >
+          IBM Z processor specialisation type (cp, ifl, iip, icf, sap, cbp, aap).
+          Maps to HMC CPC and logical partition usage fields.
+      - ref: mainframe.cpu.sharing.mode
+        requirement_level: opt_in
+        note: >
+          Indicates whether the utilization measurement represents shared or dedicated
+          processors.
+

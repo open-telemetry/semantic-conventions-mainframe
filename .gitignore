@@ -10,6 +10,8 @@ __pycache__/
 # Reference scenario live output and per-scenario uv cache
 reference/.cache/
 reference/scenarios/*/results/
+reference/demo-output.json
+
 
 # OS junk
 .DS_Store
@@ -18,3 +20,4 @@ Thumbs.db
 # Editor/IDE local state
 .idea/
 .vscode/
+.bob/artifacts/hmc-otel-semantic-conventions-mapping-documentation-proposal.html

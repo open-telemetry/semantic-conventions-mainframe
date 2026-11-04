@@ -1,0 +1,32 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Hypervisor Memory
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.hypervisor.memory.overcommit_ratio
+    brief: "The ratio of total virtual machine memory allocations to physical host memory on the hypervisor."
+    note: >
+      Calculated as the sum of all configured or granted virtual machine memory
+      limits divided by the total usable physical RAM of the hypervisor host. A
+      value greater than 1.0 indicates memory overcommitment (e.g., 1.5 indicates
+      150% committed). In VMware vCenter, this represents the Host Memory
+      Overcommit ratio. In KVM (libvirt), it corresponds to
+      `sum(domain_max_memory) / node_memory_total`. In OpenShift Virtualization
+      (KubeVirt), this maps to `kubevirt_node_memory_overcommit_ratio`.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+    entity_associations:
+      - virtualization.hypervisor
+    attributes:
+      - ref: virtualization.hypervisor.id
+        requirement_level: required
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this hypervisor.

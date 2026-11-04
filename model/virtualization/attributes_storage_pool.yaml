@@ -1,0 +1,24 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.storage_pool.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization storage pool."
+    examples: ["storagepool-001", "8c3f2a1b-4d56-4e78-9f01-2a3b4c5d6e7f"]
+    note: >
+      A platform-specific opaque identifier that uniquely identifies this
+      storage pool within its management domain. For VMware vSphere this
+      is the MoRef ID of the Datastore object. For IBM Z DPM mode this
+      corresponds to the storage-group object-id as reported by the HMC
+      Web Services API.
+
+  - key: virtualization.storage_pool.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization storage pool."
+    examples: ["datastore-ssd-01", "vsanDatastore", "FCP-POOL-A"]
+    note: >
+      The name as configured in the hypervisor or storage management
+      interface. For VMware vSphere this is the datastore name in vCenter.
+      For IBM Z DPM mode this corresponds to the storage-group name as
+      reported by the HMC Web Services API.

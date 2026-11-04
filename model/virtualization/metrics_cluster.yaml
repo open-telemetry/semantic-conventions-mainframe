@@ -1,0 +1,70 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Cluster Inventory Counts
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.cluster.host.count
+    brief: "The number of physical hosts or hypervisor nodes currently members of the virtualization cluster."
+    note: >
+      Reports the active node membership of the compute cluster. In VMware
+      vSphere, this corresponds to `cluster.numHosts` on the
+      ClusterComputeResource summary. In KVM management clusters (e.g., oVirt or
+      Proxmox VE), this represents the total active member nodes. In OpenShift
+      Virtualization (KubeVirt), this corresponds to the count of schedulable
+      worker nodes hosting VM workloads (`kubevirt_cluster_nodes`).
+    instrument: updowncounter
+    unit: "{host}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.cluster
+    attributes:
+      - ref: virtualization.cluster.name
+        requirement_level: required
+      - ref: virtualization.cluster.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the cluster.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this cluster.
+
+  - name: virtualization.cluster.vm.count
+    brief: "The total number of virtual machines managed across the virtualization cluster."
+    note: >
+      Reports aggregate VM inventory across all hypervisor nodes in the
+      cluster, optionally partitioned by power state (`running`, `stopped`,
+      `paused`, `all`). In VMware vSphere, this corresponds to `cluster.numVMs`
+      or `effectiveNumVMs`. In KVM management clusters, it represents total
+      domain count. In OpenShift Virtualization (KubeVirt), this corresponds to
+      `kubevirt_vmi_count` and `kubevirt_vmi_phase_count`.
+    instrument: updowncounter
+    unit: "{vm}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.cluster
+    attributes:
+      - ref: virtualization.cluster.name
+        requirement_level: required
+      - ref: virtualization.cluster.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the cluster.
+      - ref: virtualization.vm.state
+        requirement_level: recommended
+        note: >
+          When present, the count is filtered to VMs in the specified power
+          state. When absent or set to `all`, the count covers all VMs.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this cluster.
