@@ -2,32 +2,35 @@
 # and the split of responsibilities between Dependabot and Renovate.
 version: 2
 updates:
-  - package-ecosystem: "uv"
-    directories:
-      - "/reference"
-      - "/reference/scenarios/*"
-    schedule:
-      interval: "weekly"
-    cooldown: 
-      default-days: 7
-    open-pull-requests-limit: 0
-    groups:
-      python-security:
-        applies-to: security-updates
-        patterns:
-          - "*"
-
   - package-ecosystem: "github-actions"
     directories:
       - "/"
-      - "/.github/actions/*"
+      - "/.github/actions"
     schedule:
       interval: "weekly"
-    cooldown: 
+    cooldown:
       default-days: 7
     open-pull-requests-limit: 0
     groups:
       actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # Security updates for reference/pyproject.toml and reference/uv.lock.
+  # Renovate owns routine version bumps; Dependabot provides CVE-driven
+  # security updates for direct and transitive dependencies in the lockfile.
+  # open-pull-requests-limit: 0 suppresses routine version-update PRs so that
+  # Dependabot only opens PRs for the security-update group below.
+  - package-ecosystem: "uv"
+    directory: "/reference"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 0
+    groups:
+      reference-security:
         applies-to: security-updates
         patterns:
           - "*"

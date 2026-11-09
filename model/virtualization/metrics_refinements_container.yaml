@@ -1,0 +1,239 @@
+file_format: definition/2
+# Class B — metric_refinements for upstream container.* metrics.
+#
+# The upstream container.* metrics associate with the `container` entity.
+# No local virtualization entity refines `container`; a VM is not a container.
+# These refinements re-anchor each metric on virtualization.vm by overriding
+# entity_associations and adding virtualization.vm.id as a required attribute.
+#
+# The ref: field names the upstream metric being extended.
+# instrument, unit, and name are NOT redeclared — they are inherited from the
+# upstream definition via ref:.
+#
+# Reference: virtualization-metrics.md §container.* — Class B
+
+metric_refinements:
+  # -------------------------------------------------------------------------
+  # container.uptime → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.uptime
+    ref: container.uptime
+    brief: "Time the virtual machine has been running."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this uptime measurement
+          belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.cpu.time → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.cpu.time
+    ref: container.cpu.time
+    brief: "CPU time consumed by the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this CPU time
+          measurement belongs to.
+      - ref: cpu.mode
+        requirement_level:
+          conditionally_required: >
+            Required if mode is available.
+        note: >
+          Following modes SHOULD be used for VMs if available: `user`, `system`.
+
+  # -------------------------------------------------------------------------
+  # container.cpu.usage → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.cpu.usage
+    ref: container.cpu.usage
+    brief: "CPU usage of the virtual machine, measured in cpus."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this CPU usage
+          measurement belongs to.
+      - ref: cpu.mode
+        requirement_level:
+          conditionally_required: >
+            Required if mode is available.
+        note: >
+          Following modes SHOULD be used for VMs if available: `user`, `system`.
+
+  # -------------------------------------------------------------------------
+  # container.memory.usage → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.memory.usage
+    ref: container.memory.usage
+    brief: "Memory usage of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this memory usage
+          measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.memory.available → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.memory.available
+    ref: container.memory.available
+    brief: "Memory available to the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this available memory
+          measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.memory.rss → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.memory.rss
+    ref: container.memory.rss
+    brief: "RSS memory of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this RSS memory
+          measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.memory.working_set → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.memory.working_set
+    ref: container.memory.working_set
+    brief: "Working set memory of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this working set
+          memory measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.memory.paging.faults → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.memory.paging.faults
+    ref: container.memory.paging.faults
+    brief: "Memory paging faults of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this paging fault
+          count belongs to.
+      - ref: system.paging.fault.type
+
+  # -------------------------------------------------------------------------
+  # container.disk.io → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.disk.io
+    ref: container.disk.io
+    brief: "Disk bytes transferred to or from the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this disk I/O
+          measurement belongs to.
+      - ref: disk.io.direction
+      - ref: system.device
+
+  # -------------------------------------------------------------------------
+  # container.network.io → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.network.io
+    ref: container.network.io
+    brief: "Network bytes transferred by the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this network I/O
+          measurement belongs to.
+      - ref: network.io.direction
+      - ref: network.interface.name
+
+  # -------------------------------------------------------------------------
+  # container.filesystem.available → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.filesystem.available
+    ref: container.filesystem.available
+    brief: "Filesystem available bytes for the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this filesystem
+          available bytes measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.filesystem.capacity → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.filesystem.capacity
+    ref: container.filesystem.capacity
+    brief: "Filesystem capacity of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this filesystem
+          capacity measurement belongs to.
+
+  # -------------------------------------------------------------------------
+  # container.filesystem.usage → virtualization.vm
+  # -------------------------------------------------------------------------
+  - id: refinement.virtualization.container.filesystem.usage
+    ref: container.filesystem.usage
+    brief: "Filesystem usage of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required
+        note: >
+          The unique identifier of the virtual machine this filesystem
+          usage measurement belongs to.

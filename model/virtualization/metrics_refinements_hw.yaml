@@ -1,0 +1,293 @@
+file_format: definition/2
+# Class C — metric_refinements for upstream hw.* metrics.
+#
+# The upstream hw.* metrics carry no entity_associations (they use an
+# extends-based attribute group pattern). These refinements declare
+# entity_associations for the first time and add the platform or vswitch
+# identity attribute required to anchor each metric on a virtualization entity.
+#
+# The ref: field names the upstream metric being extended.
+# instrument, unit, and name are NOT redeclared — they are inherited from the
+# upstream definition via ref:.
+#
+# hw.host.* and generic hw.* metrics bind to virtualization.platform.
+# hw.network.* metrics bind to virtualization.vswitch.
+#
+# Reference: virtualization-metrics.md §hw.* — Class C
+
+metric_refinements:
+  # =========================================================================
+  # hw.host.* — physical host metrics → virtualization.platform
+  # =========================================================================
+
+  - id: refinement.virtualization.hw.host.energy
+    ref: hw.host.energy
+    brief: "Total energy consumed by the virtualization platform hardware, in joules."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) this energy
+          measurement belongs to. Identity attribute of the virtualization.platform
+          entity.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.host.power
+    ref: hw.host.power
+    brief: "Instantaneous power consumed by the virtualization platform hardware in Watts."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) this power
+          measurement belongs to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.host.ambient_temperature
+    ref: hw.host.ambient_temperature
+    brief: "Ambient temperature of the virtualization platform hardware."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) this ambient
+          temperature measurement belongs to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.temperature
+    ref: hw.temperature
+    brief: "Temperature reported by a named sensor of the virtualization platform hardware."
+    note: >
+      On IBM Z the source is the HMC Web Services API CPC metric group
+      `zcpc-environmentals-and-power`: field `temperature-celsius` for the
+      inlet sensor and `exhaust-temperature-celsius` for the exhaust sensor,
+      distinguished by `hw.sensor_location`. Host-level ambient temperature is
+      also available as `hw.host.ambient_temperature`.
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) this
+          temperature measurement belongs to.
+      - ref: hw.sensor_location
+        requirement_level: required
+        note: >
+          Sensor position within the enclosure, for example `INLET` or
+          `EXHAUST`.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.host.heating_margin
+    ref: hw.host.heating_margin
+    brief: "Heating margin of the virtualization platform hardware before a warning threshold is reached."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) this heating
+          margin measurement belongs to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  # =========================================================================
+  # Generic hw.* component metrics → virtualization.platform
+  # hw.type discriminates the hardware component category.
+  # =========================================================================
+
+  - id: refinement.virtualization.hw.energy
+    ref: hw.energy
+    brief: "Energy consumed by a hardware component of the virtualization platform."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) that contains
+          this hardware component.
+      - ref: hw.type
+        requirement_level: required
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.power
+    ref: hw.power
+    brief: "Instantaneous power consumed by a hardware component of the virtualization platform."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) that contains
+          this hardware component.
+      - ref: hw.type
+        requirement_level: required
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.errors
+    ref: hw.errors
+    brief: "Number of errors encountered by a hardware component of the virtualization platform."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) that contains
+          this hardware component.
+      - ref: hw.type
+        requirement_level: required
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+      - ref: error.type
+        requirement_level:
+          conditionally_required: if and only if an error has occurred
+
+  - id: refinement.virtualization.hw.status
+    ref: hw.status
+    brief: "Operational status of a hardware component of the virtualization platform."
+    stability: development
+    entity_associations:
+      - virtualization.platform
+    attributes:
+      - ref: host.name
+        requirement_level: required
+        note: >
+          The name of the virtualization platform (physical host) that contains
+          this hardware component.
+      - ref: hw.type
+        requirement_level: required
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+      - ref: hw.state
+        requirement_level: required
+
+  # =========================================================================
+  # hw.network.* — network adapter metrics → virtualization.vswitch
+  # =========================================================================
+
+  - id: refinement.virtualization.hw.network.io
+    ref: hw.network.io
+    brief: "Received and transmitted bytes on a network adapter of the virtual switch."
+    stability: development
+    entity_associations:
+      - virtualization.vswitch
+    attributes:
+      - ref: virtualization.vswitch.name
+        requirement_level: required
+        note: >
+          The name of the virtual switch this network adapter is attached to.
+          Identity attribute of the virtualization.vswitch entity.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+      - ref: network.io.direction
+        requirement_level: required
+
+  - id: refinement.virtualization.hw.network.packets
+    ref: hw.network.packets
+    brief: "Received and transmitted packets on a network adapter of the virtual switch."
+    stability: development
+    entity_associations:
+      - virtualization.vswitch
+    attributes:
+      - ref: virtualization.vswitch.name
+        requirement_level: required
+        note: >
+          The name of the virtual switch this network adapter is attached to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+      - ref: network.io.direction
+        requirement_level: required
+
+  - id: refinement.virtualization.hw.network.bandwidth.limit
+    ref: hw.network.bandwidth.limit
+    brief: "Link speed of a network adapter of the virtual switch."
+    stability: development
+    entity_associations:
+      - virtualization.vswitch
+    attributes:
+      - ref: virtualization.vswitch.name
+        requirement_level: required
+        note: >
+          The name of the virtual switch this network adapter is attached to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.network.bandwidth.utilization
+    ref: hw.network.bandwidth.utilization
+    brief: "Network bandwidth utilization fraction for a network adapter of the virtual switch."
+    stability: development
+    entity_associations:
+      - virtualization.vswitch
+    attributes:
+      - ref: virtualization.vswitch.name
+        requirement_level: required
+        note: >
+          The name of the virtual switch this network adapter is attached to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended
+
+  - id: refinement.virtualization.hw.network.up
+    ref: hw.network.up
+    brief: "Link status of a network adapter of the virtual switch."
+    stability: development
+    entity_associations:
+      - virtualization.vswitch
+    attributes:
+      - ref: virtualization.vswitch.name
+        requirement_level: required
+        note: >
+          The name of the virtual switch this network adapter is attached to.
+      - ref: hw.id
+        requirement_level: recommended
+      - ref: hw.name
+        requirement_level: recommended

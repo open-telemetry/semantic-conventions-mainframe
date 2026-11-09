@@ -1,0 +1,514 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # CPU virtual count (from partition object properties)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.virtual.count
+    brief: "The number of virtual processors of the specified type allocated to the logical partition (LPAR)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object properties
+      `processor-count-<type>` (all modes). Use the `mainframe.cpu.type`
+      attribute to select the processor type (cp, ifl, iip, icf). In
+      distributed systems terms, this is analogous to the vCPU count of a
+      virtual machine.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: number-general-purpose-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-ifl-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-icf-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-ziip-processors
+            mode: classic
+          - type: object_property
+            object: partition
+            field: cp-processors
+            mode: dpm
+          - type: object_property
+            object: partition
+            field: ifl-processors
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - name: mainframe.partition.cpu.reserved.count
+    brief: "The number of processors of the specified type reserved for the logical partition (LPAR)."
+    note: >
+      Reserved processors are allocated to the partition but not yet in active
+      use and are available for dynamic activation. Reported by the IBM Z HMC
+      Web Services API partition object properties `processor-count-<type>-reserved`
+      (all modes). In distributed systems terms, this is analogous to pre-allocated
+      but idle vCPUs.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-general-purpose-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-ifl-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-icf-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-ziip-processors
+            mode: classic
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - name: mainframe.partition.cpu.capped.count
+    brief: "The maximum number of processors of the specified type the logical partition (LPAR) may use when absolute capping is enabled, otherwise 0."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object properties
+      `processor-count-<type>-capped` (all modes). A value of 0 indicates that
+      absolute capping is not enabled for this processor type.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: absolute-general-purpose-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-ifl-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-icf-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-ziip-capping
+            mode: classic
+          - type: object_property
+            object: partition
+            field: absolute-processing-capping
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Partition CPU utilization (from logical-partition-usage / partition-usage)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.utilization
+    brief: "The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-usage metric
+      group (classic mode) fields `cp-processor-usage`, `ifl-processor-usage`,
+      `icf-processor-usage` and `iip-processor-usage` — select with the
+      `mainframe.cpu.type` attribute. In DPM mode the partition-usage metric
+      group (HMC >= 2.13.1) reports only an aggregate `processor-usage` field
+      with no per-type breakdown, so `mainframe.cpu.type` is not set there.
+      The HMC reports an integer percentage (0-100), which is divided by 100
+      to yield the 0-1 ratio this metric declares. In distributed systems
+      terms, this is analogous to the per-type CPU utilization of a virtual
+      machine.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: cp-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: ifl-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: icf-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: iip-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level:
+          conditionally_required: >
+            Required in classic mode, where logical-partition-usage reports one
+            field per processor type. Not set in DPM mode, where partition-usage
+            reports a single aggregate processor-usage field.
+
+  # ---------------------------------------------------------------------------
+  # z/VM paging rate (from logical-partition-usage, classic mode only)
+  # ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # Partition power usage (from logical-partition-usage, classic mode only)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.power.usage
+    brief: "The power consumption attributed to the logical partition (LPAR) in Watts."
+    note: >
+      Reported by the IBM Z HMC Web Services API `logical-partition-usage`
+      metric group field `power-consumption` (classic mode only; requires
+      the `environmental-metrics` SE feature). Values are reported in watts (W),
+      so no unit conversion is applied.
+    instrument: gauge
+    unit: "W"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: power-consumption
+            mode: classic
+    entity_associations:
+      - virtualization.partition
+
+  # ---------------------------------------------------------------------------
+  # Adapter utilization per partition (DPM mode, from partition-usage)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.adapter.utilization
+    brief: "The fraction of time adapters of the specified type attached to the logical partition (LPAR) were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition-usage metric group
+      (DPM mode only, HMC >= 2.13.1). Use the `mainframe.adapter.type`
+      attribute to select: network (`network-usage`), storage (`storage-usage`),
+      accelerator (`accelerator-usage`), or crypto (`crypto-usage`). The HMC
+      reports an integer percentage (0-100), which is divided by 100 to yield
+      the 0-1 ratio this metric declares. A value of
+      -1 indicates no adapters of the specified type are attached to the
+      partition. In distributed systems terms, this is analogous to the NIC or
+      HBA utilization attributed to a specific virtual machine.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: partition-usage
+            field: network-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: partition-usage
+            field: storage-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: partition-usage
+            field: accelerator-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: partition-usage
+            field: crypto-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.adapter.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Partition status metrics (from partition object properties)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.status.code
+    brief: "The operational status of the logical partition (LPAR) as a numeric code."
+    note: >
+      Classic mode values (logical-partition object): 0=operating,
+      1=not-operating, 2=not-activated, 10=exceptions, 99=unknown.
+      DPM mode values (partition object): 0=active, 1=degraded, 10=paused,
+      11=stopped, 12=starting, 13=stopping, 20=reservation-error,
+      21=terminated, 22=communications-not-active, 23=status-check, 99=unknown.
+      Reported by the IBM Z HMC Web Services API partition object field `status`
+      (all modes).
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: status
+            mode: all
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.partition.status
+        requirement_level: opt_in
+
+  - name: mainframe.partition.status.unacceptable
+    brief: "Indicates whether the logical partition (LPAR) is in an unacceptable status (1=true, 0=false)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object property
+      `has-unacceptable-status` (all modes). An unacceptable status means the
+      partition requires operator attention.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: has-unacceptable-status
+            mode: all
+    entity_associations:
+      - virtualization.partition
+
+  # ---------------------------------------------------------------------------
+  # Partition memory metrics (from logical-partition / partition object properties)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.memory.size
+    brief: "The size of the specified memory allocation for the logical partition (LPAR), in mebibytes."
+    note: >
+      Classic mode: reported by the IBM Z HMC Web Services API
+      `logical-partition` object properties `storage-central-allocation` and
+      `storage-expanded-allocation` (initial, current, maximum). DPM mode:
+      reported by the `partition` object properties `initial-memory`,
+      `reserved-memory`, and `maximum-memory`. Use
+      the `mainframe.partition.memory.type` attribute to select the memory
+      category. For IBM Virtual Flash Memory (VFM) allocations the values
+      are in gibibytes; use the `vfm-*` members of `mainframe.partition.memory.type`.
+    instrument: gauge
+    unit: "MiBy"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: storage-central-allocation
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: storage-expanded-allocation
+            mode: classic
+          - type: object_property
+            object: partition
+            field: initial-memory
+            mode: dpm
+          - type: object_property
+            object: partition
+            field: reserved-memory
+            mode: dpm
+          - type: object_property
+            object: partition
+            field: maximum-memory
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.partition.memory.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Partition defined capacity and WLM (classic mode only)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.capacity.defined
+    brief: "The defined capacity of the classic-mode logical partition (LPAR), in Millions of Service Units (MSU) per hour."
+    note: >
+      Reported by the IBM Z HMC Web Services API `logical-partition` object
+      property `defined-capacity` (classic mode only). The defined
+      capacity is used by z/OS Workload Manager (WLM) to manage workload goals.
+      A value of 0 means no defined capacity is set. In distributed systems
+      terms, this is analogous to a CPU quota specified in capacity units rather
+      than processor cores.
+    instrument: gauge
+    unit: "{MSU}/h"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: defined-capacity
+            mode: classic
+    entity_associations:
+      - virtualization.partition
+
+  - name: mainframe.partition.wlm.enabled
+    brief: "Indicates whether z/OS Workload Manager (WLM) is permitted to adjust the processor weight of the classic-mode logical partition (LPAR) (1=true, 0=false)."
+    note: >
+      Reported by the IBM Z HMC Web Services API `logical-partition` object
+      property `workload-manager-enabled` (classic mode only). When
+      enabled, z/OS WLM can dynamically adjust the partition's processing
+      weights to meet workload goals.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: workload-manager-enabled
+            mode: classic
+    entity_associations:
+      - virtualization.partition
+
+  # ---------------------------------------------------------------------------
+  # DPM-specific partition metrics
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.mode
+    brief: "The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated)."
+    note: >
+      Reported by the IBM Z HMC Web Services API `partition` object property
+      `processor-mode` (DPM mode only). In shared mode, processor
+      cycles are shared across partitions; in dedicated mode, processors are
+      exclusively assigned to the partition.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: processor-mode
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+
+  - name: mainframe.partition.cpu.threads_per_processor
+    brief: "The number of simultaneous multithreading (SMT) hardware threads per processor configured for the DPM partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API `partition` object property
+      `threads-per-processor` (DPM mode only). Typical values
+      are 1 (SMT disabled) or 2 (SMT enabled with two hardware threads per
+      physical processor).
+    instrument: gauge
+    unit: "{thread}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: threads-per-processor
+            mode: dpm
+    entity_associations:
+      - virtualization.partition

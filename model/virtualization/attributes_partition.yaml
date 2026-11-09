@@ -1,0 +1,126 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.partition.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the hardware or firmware partition."
+    examples: ["0abc1234-5678-90ab-cdef-1234567890ab", "partition-3"]
+    note: >
+      A platform-specific opaque identifier that uniquely identifies this
+      partition within its virtualization platform. On IBM Z in PR/SM (classic)
+      mode this is the partition object-id assigned by the HMC.
+
+  - key: virtualization.partition.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the partition."
+    examples: ["LPAR1", "PROD", "LINUX01"]
+    note: >
+      The name as configured in the hypervisor management interface, e.g.,
+      the HMC (Hardware Management Console) for IBM Z PR/SM partitions.
+      On IBM Z, partition names are 1–8 uppercase alphanumeric characters.
+
+  - key: virtualization.partition.number
+    type: int
+    stability: development
+    brief: "The partition number assigned by the virtualization platform."
+    examples: [1, 2, 15]
+    note: >
+      The numeric index identifying the partition within the platform.
+      On IBM Z PR/SM (classic) mode, this corresponds to the LPAR number
+      as reported by the HMC Web Services API.
+
+  - key: virtualization.partition.type
+    stability: development
+    brief: "The workload type or operational mode of the partition."
+    note: >
+      Classifies the partition by the category of workload it is configured
+      to run. On IBM Z, this maps to the partition type field on the HMC.
+    type:
+      members:
+        - id: general_purpose
+          value: "general_purpose"
+          brief: "General-purpose partition supporting any workload type."
+          stability: development
+        - id: linux_only
+          value: "linux_only"
+          brief: "Linux-only partition restricted to Linux operating system workloads."
+          stability: development
+        - id: ssc
+          value: "ssc"
+          brief: "Secure Service Container (SSC) partition for IBM Z security appliances."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Partition type is not known."
+          stability: development
+
+  - key: virtualization.partition.state
+    stability: development
+    brief: "The operational state of the partition."
+    note: >
+      Reflects the current activation or execution state of the partition
+      as reported by the virtualization platform management interface.
+    type:
+      members:
+        - id: active
+          value: "active"
+          brief: "Partition is active and processing workloads."
+          stability: development
+        - id: not_activated
+          value: "not_activated"
+          brief: "Partition is defined but not yet activated."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "Partition has been deactivated."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Partition state is not known."
+          stability: development
+
+  - key: virtualization.partition.cpu.type
+    stability: development
+    brief: "The category of processor type allocated to the firmware partition."
+    note: >
+      On IBM Z PR/SM (Processor Resource/Systems Manager) partitions,
+      processor resources are differentiated by specialisation purpose.
+      A partition may receive allocations of different processor types
+      simultaneously. Use `all` to report aggregate utilization or count
+      across all types. On hypervisors that do not differentiate processor
+      types, omit this attribute or use `unknown`.
+    type:
+      members:
+        - id: cp
+          value: "cp"
+          brief: "Central Processor (CP) — the general-purpose IBM Z processor type."
+          stability: development
+        - id: ifl
+          value: "ifl"
+          brief: "Integrated Facility for Linux (IFL) — a processor type optimised for Linux workloads on IBM Z."
+          stability: development
+        - id: icf
+          value: "icf"
+          brief: "Internal Coupling Facility (ICF) — a processor type used for sysplex coupling on IBM Z."
+          stability: development
+        - id: iip
+          value: "iip"
+          brief: "z Integrated Information Processor (zIIP) — a specialty engine for eligible Java and DB2 workloads on IBM Z."
+          stability: development
+        - id: cbp
+          value: "cbp"
+          brief: "Coupling Bus Processor (CBP) — a processor type dedicated to HiperSockets network coupling on IBM Z."
+          stability: development
+        - id: aap
+          value: "aap"
+          brief: "Application Assist Processor (zAAP) — a specialty IBM Z processor for Java workloads, deprecated in z13 and later models."
+          stability: development
+        - id: all
+          value: "all"
+          brief: "Aggregate across all processor types allocated to this partition."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Processor type is not known or the platform does not differentiate by processor type."
+          stability: development

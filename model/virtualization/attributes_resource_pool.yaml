@@ -1,0 +1,24 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.resource_pool.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization resource pool."
+    examples: ["respool-001", "8c3f2a1b-4d56-4e78-9f01-2a3b4c5d6e7f"]
+    note: >
+      A platform-specific opaque identifier that uniquely identifies this
+      resource pool within its management domain. For VMware vSphere this
+      is the MoRef ID of the ResourcePool object. For IBM Z PR/SM shared
+      processor pools this corresponds to the pool object-id as reported
+      by the HMC Web Services API.
+
+  - key: virtualization.resource_pool.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization resource pool."
+    examples: ["high-priority-pool", "linux-pool", "Default Shared Pool"]
+    note: >
+      The name as configured in the hypervisor management interface. For
+      VMware vSphere this is the resource pool name in vCenter. For IBM Z
+      PR/SM this corresponds to the shared processor pool name as reported
+      by the HMC Web Services API.
