@@ -7,5 +7,7 @@
 
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
-| <a id="mainframe-lpar-name" href="#mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
+| <a id="mainframe-partition-name" href="#mainframe-partition-name">`mainframe.partition.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) running on the mainframe. [1] | `LPAR01`; `PRODZ`; `TEST1` |
 
+
+**[1] `mainframe.partition.name`:** A logical partition (LPAR) is the mainframe equivalent of a virtual machine (VM) in distributed cloud environments. Each LPAR can run an independent operating system such as z/OS, Linux, or z/VM. The name is unique within its Central Processing Complex (CPC) and is the same value every observer reports: the HMC Web Services API partition object field `name`, z/OS RMF (SMF type 70 field `SMF70LPM`) and Linux on IBM Z (`LPAR Name` in `/proc/sysinfo`).
