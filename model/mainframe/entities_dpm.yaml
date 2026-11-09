@@ -1,0 +1,45 @@
+file_format: definition/2
+entities:
+  - type: mainframe.storage.group
+    brief: >
+      A DPM storage group — a named collection of block storage volumes
+      of a single connectivity type (FCP, FC, or NVMe) that can be attached
+      to one or more DPM partitions. Analogous to a Kubernetes StorageClass
+      or a cloud storage pool.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the storage group belongs to.
+      - ref: mainframe.storage.group.name
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that owns this
+          storage group.
+      - ref: mainframe.storage.group.type
+        requirement_level: required
+
+  - type: mainframe.storage.group.volume
+    brief: >
+      A DPM storage volume — a single unit of block storage (LUN, ECKD DASD
+      cylinder set, or NVMe namespace) within a storage group. Analogous to
+      a Kubernetes Persistent Volume or a cloud block storage volume.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the storage group belongs to.
+      - ref: mainframe.storage.group.name
+        note: >
+          The name of the storage group that contains this volume.
+      - ref: mainframe.storage.group.volume.name
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) that owns the
+          storage group containing this volume.
