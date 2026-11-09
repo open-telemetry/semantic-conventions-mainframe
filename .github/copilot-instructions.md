@@ -3,23 +3,22 @@
 These instructions guide both human contributors and AI assistants
 (including GitHub's Copilot code reviewer) working in this repository.
 
-Path-specific guidance lives under `.github/instructions/` and applies
-automatically based on the files touched.
-
 ## Repository overview
 
-This repo defines the OpenTelemetry GenAI semantic conventions. Changes flow
-through several coupled surfaces:
+This repo defines the OpenTelemetry semantic conventions for mainframes
+(IBM Z and LinuxONE) and the cross-platform virtualization conventions they
+build on. Changes flow through several coupled surfaces:
 
-- `model/<namespace>/*.yaml` — source of truth for attributes, spans, metrics,
-  and events. All attributes must be defined in `registry.yaml`.
-- `docs/gen-ai/` and `docs/registry/` — generated from the model via Weaver
-  (`make generate-all`). Generated tables and registry pages should not be
-  hand-edited.
-- `reference/scenarios/<library>/` — runnable Python reference scenarios
-  (`scenario.py`) that prove proposed conventions are capturable.
-- `reference/README.md` and `reference/reports/` — telemetry compliance
-  reports, refreshed by `make generate-all`.
+- `model/<namespace>/*.yaml` — source of truth for attributes, entities,
+  metrics, spans and events, in Weaver's `definition/2` format. Namespaces
+  are `mainframe`, `virtualization` and `zos`. Upstream OpenTelemetry
+  conventions are reused or refined (`entity_refinements`,
+  `metric_refinements`) rather than duplicated.
+- `docs/registry/` — generated from the model via Weaver
+  (`make generate-all`). Generated registry pages should not be hand-edited.
+- `docs/*.md` — hand-written background and mapping documents.
+- `reference/` — reference implementations that generate representative
+  synthetic telemetry for the conventions.
 
 ## PR scope
 
@@ -27,8 +26,8 @@ through several coupled surfaces:
   the "Keep PRs small" guidance in `CONTRIBUTING.md`.
 - Non-editorial convention changes need a Towncrier fragment under `changelog.d/`.
   Editorial-only changes (typos, rewording, tooling) do not need one.
-- Convention changes under `model/` or `docs/` need a corresponding update
-  under `reference/scenarios/` to demonstrate capturability.
+- Convention changes under `model/` need regenerated `docs/registry/` pages
+  (`make generate-all`) and must pass `make check-policies`.
 
 ## Code style
 
@@ -41,5 +40,3 @@ through several coupled surfaces:
 
 - Generated files under `docs/registry/`
   — review the model changes that produced them instead.
-- Generated tables inside `docs/gen-ai/*.md` — review the model changes
-  that produced them instead.
