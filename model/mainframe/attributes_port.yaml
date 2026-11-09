@@ -1,0 +1,37 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.adapter.port.id
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: network-physical-adapter-port
+            field: network-port-id
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    brief: "The identifier of the physical port on a mainframe network adapter."
+    examples: ["0", "1"]
+    note: >
+      Reported by the HMC Web Services API network-physical-adapter-port metric
+      group field `network-port-id`. In distributed systems terms, this is
+      analogous to the port number on a multi-port NIC.
+
+  - key: mainframe.partition.nic.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition-attached-network-interface
+            field: nic-id
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    brief: "The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode."
+    examples: ["nic-0", "nic-mgmt", "nic-prod"]
+    note: >
+      Reported by the HMC Web Services API partition-attached-network-interface
+      metric group. In distributed systems terms, this is analogous to a virtual
+      NIC (vNIC) attached to a virtual machine.
