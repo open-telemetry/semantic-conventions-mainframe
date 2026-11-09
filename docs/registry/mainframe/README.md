@@ -5,6 +5,7 @@
 
 - [Entities](#entities)
 - [Entity refinements](#entity-refinements)
+- [Metrics](#metrics)
 - [Attributes](#attributes)
 
 ## Entities
@@ -18,6 +19,17 @@
 | Id | Stability | Description |
 | --- | --- | --- |
 | [`refinement.mainframe.host`](/docs/registry/mainframe/entity-refinements.md#refinementmainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
+
+## Metrics
+
+| Name | Stability | Description |
+| --- | --- | --- |
+| [`mainframe.partition.cpu.capped.count`](/docs/registry/mainframe/metrics.md#mainframepartitioncpucappedcount) | ![Development](https://img.shields.io/badge/-development-blue) | The absolute capping limit of the logical partition (LPAR) for the specified processor type, in processors; 0 when absolute capping is not enabled. |
+| [`mainframe.partition.cpu.mode`](/docs/registry/mainframe/metrics.md#mainframepartitioncpumode) | ![Development](https://img.shields.io/badge/-development-blue) | The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated). |
+| [`mainframe.partition.cpu.reserved.count`](/docs/registry/mainframe/metrics.md#mainframepartitioncpureservedcount) | ![Development](https://img.shields.io/badge/-development-blue) | The number of processors of the specified type reserved for the logical partition (LPAR). |
+| [`mainframe.partition.cpu.threads_per_processor`](/docs/registry/mainframe/metrics.md#mainframepartitioncputhreads_per_processor) | ![Development](https://img.shields.io/badge/-development-blue) | The number of simultaneous multithreading (SMT) hardware threads per processor configured for the DPM partition. |
+| [`mainframe.partition.cpu.utilization`](/docs/registry/mainframe/metrics.md#mainframepartitioncpuutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.partition.cpu.virtual.count`](/docs/registry/mainframe/metrics.md#mainframepartitioncpuvirtualcount) | ![Development](https://img.shields.io/badge/-development-blue) | The number of virtual processors of the specified type allocated to the logical partition (LPAR). |
 
 ## Attributes
 
