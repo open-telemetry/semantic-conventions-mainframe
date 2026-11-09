@@ -26,6 +26,7 @@ All registered attributes are listed by namespace in this registry.
 Currently, the following namespaces exist:
 
 - [Mainframe](mainframe.md)
+- [Virtualization](virtualization.md)
 - [Zos](zos.md)
 
 [developers recommendations]: https://github.com/open-telemetry/semantic-conventions/blob/v1.42.0/docs/general/naming.md#recommendations-for-application-developers
