@@ -9,7 +9,8 @@ on the core semantic conventions.
 
 ## Schema URL
 
-TODO
+Releases are published under `https://opentelemetry.io/schemas/mainframe-dev/<version>`.
+The current version is the `schema_url` in [model/manifest.yaml](model/manifest.yaml).
 
 ## Read the docs
 
@@ -27,6 +28,7 @@ For contribution guidance specific to the reference implementation, see
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ### Emeritus
 
 - [Greg Shriver](https://github.com/gshriver), Maintainer
