@@ -1,0 +1,117 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.vm.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtual machine instance."
+    examples: ["SSIPLEX1/LINUX01", "502e7c9a-1b2d-4f3e-8a6b-7c8d9e0f1a2b"]
+    note: >
+      Uniquely identifies the virtual machine across its live-migration domain,
+      so the identity survives vMotion, KVM live migration and z/VM Live Guest
+      Relocation. It never includes the host or hypervisor the VM runs on.
+
+      - IBM z/VM: the SSI cluster name (or the z/VM system name outside an SSI
+        cluster) and the guest user ID, e.g. `SSIPLEX1/LINUX01`.
+      - VMware vSphere: the VM `instanceUuid`.
+      - KVM / libvirt: the domain UUID.
+
+  - key: virtualization.vm.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtual machine."
+    examples: ["my-web-server", "prod-db-01", "test-vm"]
+    note: >
+      The name as configured in the hypervisor management interface.
+      Names are not guaranteed to be unique across hypervisors; use
+      `virtualization.vm.id` for unambiguous identification.
+
+  - key: virtualization.vm.instance_id
+    type: string
+    stability: development
+    brief: "The cloud or platform provider's instance identifier for the virtual machine."
+    examples: ["i-0abc123def456789", "1234567890abcdef0"]
+    note: >
+      A provider-assigned instance identifier, distinct from the hypervisor's
+      own identifier (`virtualization.vm.id`). For example, on AWS this would
+      be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition
+      object-id.
+
+  - key: virtualization.vm.state
+    stability: development
+    brief: "The operational state of the virtual machine."
+    type:
+      members:
+        - id: running
+          value: "running"
+          brief: "Virtual machine is running and processing workloads."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "Virtual machine is stopped and not consuming CPU resources."
+          stability: development
+        - id: paused
+          value: "paused"
+          brief: "Virtual machine is suspended with state preserved in memory."
+          stability: development
+        - id: migrating
+          value: "migrating"
+          brief: "Virtual machine is being live-migrated to another host without interruption."
+          stability: development
+        - id: scheduling
+          value: "scheduling"
+          brief: "Virtual machine has been requested but is waiting for the scheduler to assign it to a host node."
+          stability: development
+        - id: scheduled
+          value: "scheduled"
+          brief: "Virtual machine has been assigned to a host node and is being prepared to start."
+          stability: development
+        - id: failed
+          value: "failed"
+          brief: "Virtual machine has encountered a fatal error and cannot recover without operator intervention."
+          stability: development
+        - id: succeeded
+          value: "succeeded"
+          brief: "Virtual machine completed its workload and terminated cleanly (applicable to batch or ephemeral VMs)."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Virtual machine state is not known or cannot be determined."
+          stability: development
+
+  - key: virtualization.vm.cpu.count
+    type: int
+    stability: development
+    brief: "The number of virtual CPUs (vCPUs) allocated to the virtual machine."
+    examples: [1, 2, 4, 8]
+    note: >
+      The number of virtual CPUs visible to the guest operating system.
+      This may differ from the number of physical CPUs on the underlying host.
+
+  - key: virtualization.vm.memory.size
+    type: int
+    stability: development
+    brief: "The amount of memory allocated to the virtual machine, in mebibytes (MiB)."
+    examples: [1024, 4096, 16384]
+    note: >
+      The total memory allocation visible to the guest operating system,
+      expressed in mebibytes (MiB). This is the configured allocation, not
+      necessarily the currently consumed amount.
+
+  - key: virtualization.vm.machine_type
+    type: string
+    stability: development
+    brief: "The machine type or hardware profile assigned to the virtual machine."
+    examples: ["n1-standard-2", "t3.medium", "9175-ME1"]
+    note: >
+      A string identifying the virtual machine's hardware configuration class
+      as defined by the hypervisor or cloud provider. For IBM Z DPM partitions
+      this corresponds to the partition type profile.
+
+  - key: virtualization.vm.nested_virtualization.enabled
+    type: boolean
+    stability: development
+    brief: "Indicates whether nested virtualization is enabled on this virtual machine."
+    note: >
+      When `true`, the virtual machine is configured to expose virtualization
+      extensions to its guest operating system, allowing a hypervisor to run
+      inside the VM. Not all hypervisors or platforms support this capability.
