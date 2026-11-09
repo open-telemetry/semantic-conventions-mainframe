@@ -1,0 +1,25 @@
+# Weaver project configuration.
+# Applies to every template package this project uses (docs generation, snippets).
+# See: https://github.com/open-telemetry/opentelemetry-weaver-packages/blob/main/templates/docs/markdown/README.md
+
+[template]
+# Acronyms are upper-cased in namespace headings and signal titles.
+acronyms = ["CPU", "CPC", "LPAR", "HMC", "DPM", "VFM", "SMF", "I/O", "NIC", "HBA"]
+
+# Human-readable namespace titles used when the id is not a simple capitalization.
+# Any namespace id not listed here is title-cased (e.g. "mainframe" -> "Mainframe").
+[template.text_maps.namespace_mapping]
+zos = "z/OS"
+
+# Root namespaces defined in this repository. Attributes in these namespaces
+# link to the local registry pages; all others link to the upstream attribute
+# pages of the pinned semantic-conventions release (URL derived from
+# SEMCONV_VERSION in the Makefile, so it never needs editing here).
+[template.text_maps.local_namespaces]
+mainframe = "local"
+virtualization = "local"
+zos = "local"
+
+# Upstream attribute pages whose file name differs from the namespace.
+[template.text_maps.upstream_attribute_pages]
+hw = "hardware"

@@ -12,7 +12,7 @@ uses tags of the form `vX.Y.Z-dev`; the schema URL lives under
      [changelog.d/](changelog.d/) and removes the rendered fragments:
      ```bash
      VERSION=$(awk '/^schema_url:/ { n = split($2, parts, "/"); print parts[n]; exit }' model/manifest.yaml)
-     PYTHONUTF8=1 uv run --project changelog.d --locked towncrier build --config changelog.d/towncrier.toml --yes --version "$VERSION"
+     PYTHONUTF8=1 uv run --project changelog.d towncrier build --config changelog.d/towncrier.toml --dir . --yes --version "$VERSION"
      ```
 2. Get the PR reviewed and merged to `main`.
 3. Prepare a [draft release](https://github.com/open-telemetry/semantic-conventions-mainframe/releases/new):
