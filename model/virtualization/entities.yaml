@@ -113,6 +113,54 @@ entities:
       - ref: virtualization.hypervisor.state
         requirement_level: recommended
 
+  - type: virtualization.vm
+    brief: >
+      A virtual machine managed by a hypervisor. Analogous to an EC2 instance,
+      a Google Compute Engine VM, or any cloud instance in distributed systems
+      observability.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.vm.id
+    description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this VM. Use this
+          attribute to discriminate VM metrics by platform — e.g. filter on
+          "ibm.zvm" to isolate z/VM guest metrics.
+      - ref: virtualization.vm.name
+        requirement_level: recommended
+      - ref: virtualization.vm.instance_id
+        requirement_level: recommended
+      - ref: virtualization.vm.state
+        requirement_level: recommended
+      - ref: virtualization.vm.cpu.count
+        requirement_level: recommended
+      - ref: virtualization.vm.memory.size
+        requirement_level: recommended
+      - ref: virtualization.vm.machine_type
+        requirement_level: recommended
+      - ref: virtualization.vm.nested_virtualization.enabled
+        requirement_level: recommended
+
+  - type: virtualization.cluster
+    brief: >
+      A logical aggregation of physical platforms and hypervisors managed as a
+      single compute pool for scheduling, high availability, and failover.
+      Analogous to a VMware vSphere DRS/HA Cluster or a Kubernetes cluster in
+      distributed cloud environments.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.cluster.id
+        note: >
+          Cluster names are not unique across management domains;
+          see the attribute definition for how each platform fills the identifier.
+    description:
+      - ref: virtualization.cluster.name
+        requirement_level: recommended
+
   - type: virtualization.resource_pool
     brief: >
       A hierarchical boundary that controls CPU shares, memory reservations, and
@@ -134,6 +182,49 @@ entities:
           Filter on "ibm.prsm" to isolate IBM Z shared processor pool metrics.
       - ref: virtualization.resource_pool.name
         requirement_level: recommended
+
+  - type: virtualization.vswitch
+    brief: >
+      A virtual network switch or bridge that provides network connectivity
+      between virtual machines, partitions, and physical networks. Analogous to
+      a VMware vSwitch or dvSwitch, a Linux OVS bridge, or an IBM z/VM VSWITCH.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.vswitch.id
+        note: >
+          Switch names repeat across hosts and management domains;
+          see the attribute definition for how each platform fills the identifier.
+    description:
+      - ref: virtualization.vswitch.name
+        requirement_level: recommended
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this virtual switch.
+          Filter on "ibm.zvm" to isolate IBM z/VM VSWITCH metrics.
+
+  - type: virtualization.storage_pool
+    brief: >
+      A storage abstraction that aggregates physical or logical volumes for
+      backing virtual machine disks and partition storage. Analogous to a
+      VMware Datastore, a Kubernetes StorageClass/PVC pool, or an IBM Z
+      DPM Storage Group.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.storage_pool.id
+        note: >
+          Storage pool names are not unique across management domains;
+          see the attribute definition for how each platform fills the identifier.
+    description:
+      - ref: virtualization.storage_pool.name
+        requirement_level: recommended
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this storage pool.
+          Filter on "ibm.prsm" to isolate IBM Z DPM storage group metrics.
 
 entity_refinements:
   # virtualization.platform refines the generic 'host' entity.
@@ -194,3 +285,26 @@ entity_refinements:
         note: >
           The workload type or mode of the partition. Not available in the
           base host entity.
+
+  # virtualization.vm refines the generic 'host' entity.
+  # A VM is a software-emulated guest machine; its guest OS treats it as a host.
+  - id: refinement.virtualization.vm.host
+    ref: host
+    brief: >
+      Refinement of the generic host entity for a virtual machine managed by
+      a software hypervisor. A virtualization VM is a software-emulated or
+      paravirtualized guest machine — the distributed equivalent of any cloud
+      compute instance. This refinement ensures that cross-platform consumers
+      that understand the base host entity can navigate VM data using standard
+      host attributes while the VM-specific attributes provide additional context.
+    stability: development
+    description:
+      - ref: virtualization.vm.name
+        requirement_level: recommended
+        note: >
+          The VM name as configured in the hypervisor management interface.
+          Not available in the base host entity.
+      - ref: virtualization.vm.state
+        requirement_level: opt_in
+        note: >
+          The operational state of the VM. Not available in the base host entity.
