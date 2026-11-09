@@ -1,0 +1,196 @@
+file_format: definition/2
+
+entities:
+  - type: virtualization.platform
+    brief: >
+      A physical computing platform capable of hosting partitions,
+      hypervisors, or virtual machines. Analogous to a bare-metal host
+      server in cloud-native terms — a virtualization platform IS a host.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          Stable and identical for every observer of the platform; see the
+          attribute definition for how each platform fills it (IBM Z:
+          `<machine type>-<serial number>` of the CPC).
+    description:
+      - ref: host.id
+        requirement_level: recommended
+        note: >
+          SHOULD be equal to `virtualization.platform.id`, so consumers that
+          use only the generic host entity identify the same platform.
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the physical computing platform as configured in the
+          platform management interface. For IBM Z systems this is the CPC
+          name as configured on the Hardware Management Console (HMC).
+          Descriptive only: a platform can be renamed without becoming a
+          different platform.
+      - ref: host.type
+        requirement_level: recommended
+        note: >
+          The hardware model of the physical platform. For IBM Z systems
+          this is the machine type and model concatenated with a hyphen,
+          e.g., "9175-ME1" for the IBM z16 Model ME1. Consumers that use
+          only the generic host entity should prefer host.type over
+          virtualization.platform.model.
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          The CPU architecture of the platform. SHOULD be set to "s390x"
+          for IBM Z and LinuxONE systems.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the specific hypervisor or partitioning technology
+          managing this platform (e.g. ibm.prsm, ibm.zvm, vmware.esxi).
+      - ref: virtualization.platform.name
+        requirement_level: opt_in
+        note: >
+          The human-readable name as configured in the platform management
+          interface. Consumers should prefer host.name as the name attribute;
+          this attribute is retained for compatibility with implementations
+          that populate both.
+      - ref: virtualization.platform.model
+        requirement_level: opt_in
+        note: >
+          The model identifier of the platform hardware. Consumers should
+          prefer host.type; this attribute is retained for implementations
+          that need the platform-specific model string separately.
+      - ref: virtualization.platform.serial_number
+        requirement_level: recommended
+        note: >
+          The hardware serial number as reported by the platform management
+          interface.
+      - ref: virtualization.platform.firmware.version
+        requirement_level: recommended
+
+  - type: virtualization.partition
+    brief: >
+      A hardware or firmware enforced partition of a virtualization platform.
+      Analogous to a virtual machine or cloud instance, but enforced at the
+      firmware level rather than by a software hypervisor.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.partition.id
+      - ref: virtualization.platform.id
+    description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology managing this partition.
+          Use this attribute to discriminate partition metrics by platform —
+          e.g. filter on "ibm.prsm" to isolate IBM Z LPAR metrics from
+          generic virtualization partition metrics.
+      - ref: virtualization.partition.name
+        requirement_level: recommended
+      - ref: virtualization.partition.number
+        requirement_level: recommended
+      - ref: virtualization.partition.type
+        requirement_level: recommended
+      - ref: virtualization.partition.state
+        requirement_level: recommended
+
+  - type: virtualization.hypervisor
+    brief: >
+      A virtualization layer that manages one or more virtual machines.
+      Analogous to a hypervisor in any cloud or on-premises virtualization
+      environment.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.hypervisor.id
+    description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+      - ref: virtualization.hypervisor.version
+        requirement_level: recommended
+      - ref: virtualization.hypervisor.type
+        requirement_level: recommended
+      - ref: virtualization.hypervisor.state
+        requirement_level: recommended
+
+  - type: virtualization.resource_pool
+    brief: >
+      A hierarchical boundary that controls CPU shares, memory reservations, and
+      capacity limits for the virtual machines or partitions it contains.
+      Analogous to a VMware vSphere Resource Pool, a Kubernetes Namespace
+      ResourceQuota, or an IBM Z PR/SM Shared Processor Pool.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.resource_pool.id
+        note: >
+          Resource pool names are not unique across management domains; see the
+          attribute definition for how each platform fills the identifier.
+    description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this resource pool.
+          Filter on "ibm.prsm" to isolate IBM Z shared processor pool metrics.
+      - ref: virtualization.resource_pool.name
+        requirement_level: recommended
+
+entity_refinements:
+  # virtualization.platform refines the generic 'host' entity.
+  # A virtualization platform is a physical bare-metal host — the two concepts
+  # are identical from the OTel host entity perspective. This refinement ensures
+  # cross-platform consumers that understand the base host entity can also
+  # navigate virtualization platform data. The virtualization.platform entity
+  # describes itself with host.id (equal to virtualization.platform.id),
+  # host.name, host.type and host.arch, so it stays aligned with the host entity.
+  - id: refinement.virtualization.platform.host
+    ref: host
+    brief: >
+      Refinement of the generic host entity for a physical virtualization
+      platform. A virtualization platform is a bare-metal host server that
+      runs a hypervisor or firmware partitioning technology. The
+      virtualization-specific attributes (system name, firmware version,
+      serial number) extend the generic host description while preserving
+      full compatibility with consumers that understand the base host entity.
+    stability: development
+    description:
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the specific hypervisor or partitioning technology
+          managing this platform (e.g. ibm.prsm, ibm.zvm, vmware.esxi,
+          kvm). Not available in the base host entity.
+      - ref: virtualization.platform.serial_number
+        requirement_level: recommended
+        note: >
+          The hardware serial number as reported by the platform management
+          interface.
+      - ref: virtualization.platform.firmware.version
+        requirement_level: recommended
+        note: >
+          The firmware or microcode version as reported by the platform
+          management interface. Not available in the base host entity.
+
+  # virtualization.partition refines the generic 'host' entity.
+  # A firmware partition is a hardware-isolated execution environment.
+  # Workloads running inside the partition observe it as a host.
+  - id: refinement.virtualization.partition.host
+    ref: host
+    brief: >
+      Refinement of the generic host entity for a firmware-enforced partition.
+      A virtualization partition is a hardware-isolated execution environment
+      — the mainframe equivalent of a virtual machine, but enforced at the
+      firmware level. The partition behaves as an independent host from the
+      perspective of workloads running inside it.
+    stability: development
+    description:
+      - ref: virtualization.partition.name
+        requirement_level: recommended
+        note: >
+          The partition name as configured in the hypervisor management
+          interface. Not available in the base host entity.
+      - ref: virtualization.partition.type
+        requirement_level: opt_in
+        note: >
+          The workload type or mode of the partition. Not available in the
+          base host entity.
