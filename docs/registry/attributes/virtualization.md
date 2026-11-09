@@ -104,7 +104,7 @@ Equal to `host.id` of the same platform.
 | --- | --- | --- |
 | `aap` | Application Assist Processor (zAAP) — a specialty IBM Z processor for Java workloads, deprecated in z13 and later models. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `all` | Aggregate across all processor types allocated to this partition. | ![Development](https://img.shields.io/badge/-development-blue) |
-| `cbp` | Coupling Bus Processor (CBP) — a processor type dedicated to HiperSockets network coupling on IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cbp` | Container Based Processor (CBP) — a processor type for container-based workloads on IBM Z, available with SE versions 2.14.0 through 2.15.0. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `cp` | Central Processor (CP) — the general-purpose IBM Z processor type. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `icf` | Internal Coupling Facility (ICF) — a processor type used for sysplex coupling on IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `ifl` | Integrated Facility for Linux (IFL) — a processor type optimised for Linux workloads on IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |

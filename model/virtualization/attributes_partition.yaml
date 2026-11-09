@@ -113,7 +113,7 @@ attributes:
           stability: development
         - id: cbp
           value: "cbp"
-          brief: "Coupling Bus Processor (CBP) — a processor type dedicated to HiperSockets network coupling on IBM Z."
+          brief: "Container Based Processor (CBP) — a processor type for container-based workloads on IBM Z, available with SE versions 2.14.0 through 2.15.0."
           stability: development
         - id: aap
           value: "aap"
