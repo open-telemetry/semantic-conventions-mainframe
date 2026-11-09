@@ -5,6 +5,7 @@
 
 - [Entities](#entities)
 - [Entity refinements](#entity-refinements)
+- [Metrics](#metrics)
 - [Attributes](#attributes)
 
 ## Entities
@@ -23,6 +24,19 @@
 | --- | --- | --- |
 | [`refinement.mainframe.host`](/docs/registry/mainframe/entity-refinements.md#refinementmainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
 
+## Metrics
+
+| Name | Stability | Description |
+| --- | --- | --- |
+| [`mainframe.adapter.physical_channel.status.code`](/docs/registry/mainframe/metrics.md#mainframeadapterphysical_channelstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The physical channel status of the mainframe I/O adapter as a numeric code. |
+| [`mainframe.adapter.status.code`](/docs/registry/mainframe/metrics.md#mainframeadapterstatuscode) | ![Development](https://img.shields.io/badge/-development-blue) | The operational status of the mainframe I/O adapter as a numeric code. |
+| [`mainframe.adapter.utilization`](/docs/registry/mainframe/metrics.md#mainframeadapterutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the mainframe I/O adapter was busy processing I/O or requests, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.channel.utilization`](/docs/registry/mainframe/metrics.md#mainframechannelutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the I/O channel path was busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.cpu.smt_mode.utilization`](/docs/registry/mainframe/metrics.md#mainframecpusmt_modeutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1. |
+| [`mainframe.cpu.thread0.utilization`](/docs/registry/mainframe/metrics.md#mainframecputhread0utilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time hardware thread 0 was busy when the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1. |
+| [`mainframe.cpu.thread1.utilization`](/docs/registry/mainframe/metrics.md#mainframecputhread1utilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time hardware thread 1 was busy when the processor was running in simultaneous multithreading (SMT) mode, as a ratio from 0 to 1. |
+| [`mainframe.cpu.utilization`](/docs/registry/mainframe/metrics.md#mainframecpuutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time the mainframe physical processor was busy executing work, as a ratio from 0 (idle) to 1 (fully utilised). |
+
 ## Attributes
 
 Attributes defined in the `mainframe` namespace. Application developers are encouraged to reuse existing attributes; see these [naming recommendations](https://opentelemetry.io/docs/specs/semconv/general/naming/#recommendations-for-application-developers) regarding attribute selection and naming for custom use cases.
@@ -33,20 +47,21 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | <a id="mainframe-adapter-name">`mainframe.adapter.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O adapter as configured on the Hardware Management Console (HMC). [2] | `Cloud Network 0014 A10B-06`; `OSD 0114` |
 | <a id="mainframe-adapter-owning-partition">`mainframe.adapter.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions. [3] | `LPAR01`; `shared` |
 | <a id="mainframe-adapter-port-id">`mainframe.adapter.port.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The identifier of the physical port on a mainframe network adapter. [4] | `0`; `1` |
-| <a id="mainframe-adapter-type">`mainframe.adapter.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of the mainframe I/O adapter card. [5] | `crypto`; `flash`; `roce` |
-| <a id="mainframe-channel-id">`mainframe.channel.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The channel path identifier (CHPID) in hexadecimal format. [6] | `00`; `2D`; `E3` |
+| <a id="mainframe-adapter-status">`mainframe.adapter.status`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational status of the mainframe I/O adapter. [5] | `active`; `not-active`; `not-detected` |
+| <a id="mainframe-adapter-type">`mainframe.adapter.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of the mainframe I/O adapter card. [6] | `crypto`; `flash`; `roce` |
+| <a id="mainframe-channel-id">`mainframe.channel.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The channel path identifier (CHPID) in hexadecimal format. [7] | `00`; `2D`; `E3` |
 | <a id="mainframe-channel-mode">`mainframe.channel.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions. | `dedicated`; `shared` |
-| <a id="mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. [7] | `0.00`; `0.2D`; `1.E3` |
-| <a id="mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [8] | `LPAR01`; `shared` |
-| <a id="mainframe-channel-type">`mainframe.channel.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The protocol and connectivity type of the I/O channel path. [9] | `ficon`; `zhyperlink`; `osa` |
-| <a id="mainframe-cpu-name">`mainframe.cpu.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number. [10] | `IFL01`; `CP02`; `zIIP03` |
+| <a id="mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. [8] | `0.00`; `0.2D`; `1.E3` |
+| <a id="mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [9] | `LPAR01`; `shared` |
+| <a id="mainframe-channel-type">`mainframe.channel.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The protocol and connectivity type of the I/O channel path. [10] | `ficon`; `zhyperlink`; `osa` |
+| <a id="mainframe-cpu-name">`mainframe.cpu.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number. [11] | `IFL01`; `CP02`; `zIIP03` |
 | <a id="mainframe-cpu-sharing-mode">`mainframe.cpu.sharing.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The sharing mode of the mainframe processor — whether it is dedicated to one partition or shared across multiple partitions. | `all`; `dedicated`; `shared` |
 | <a id="mainframe-cpu-type">`mainframe.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of mainframe processor within the Central Processing Complex (CPC). | `all`; `cp`; `icf` |
-| <a id="mainframe-host-machine-model">`mainframe.host.machine_model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [11] | `ME1`; `ML1`; `A01`; `LA1` |
-| <a id="mainframe-host-machine-type">`mainframe.host.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [12] | `9175`; `3931` |
-| <a id="mainframe-host-serial-number">`mainframe.host.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the Central Processing Complex (CPC). [13] | `0000000ABCDE` |
+| <a id="mainframe-host-machine-model">`mainframe.host.machine_model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [12] | `ME1`; `ML1`; `A01`; `LA1` |
+| <a id="mainframe-host-machine-type">`mainframe.host.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [13] | `9175`; `3931` |
+| <a id="mainframe-host-serial-number">`mainframe.host.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the Central Processing Complex (CPC). [14] | `0000000ABCDE` |
 | <a id="mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
-| <a id="mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [14] | `nic-0`; `nic-mgmt`; `nic-prod` |
+| <a id="mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [15] | `nic-0`; `nic-mgmt`; `nic-prod` |
 
 **[1] `mainframe.adapter.id`:** The PCHID is the hexadecimal location of the adapter in the Central Processing Complex (CPC) and is unique within one CPC. Reported by the HMC Web Services API adapter object field `adapter-id`.
 
@@ -56,25 +71,39 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 
 **[4] `mainframe.adapter.port.id`:** Reported by the HMC Web Services API network-physical-adapter-port metric group field `network-port-id`. In distributed systems terms, this is analogous to the port number on a multi-port NIC.
 
-**[5] `mainframe.adapter.type`:** Reported by the HMC Web Services API adapter object field `type`. Used to distinguish network, storage, cryptographic, and accelerator adapters when aggregating per-type utilization metrics.
+**[5] `mainframe.adapter.status`:** Reported by the HMC Web Services API adapter object field `status` (DPM mode).
 
-**[6] `mainframe.channel.id`:** Reported by the HMC Web Services API channel-path object. In distributed systems terms, this is analogous to a storage HBA port or channel identifier.
+**[6] `mainframe.adapter.type`:** Reported by the HMC Web Services API adapter object field `type`. Used to distinguish network, storage, cryptographic, and accelerator adapters when aggregating per-type utilization metrics.
 
-**[7] `mainframe.channel.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API channel-path object.
+**[7] `mainframe.channel.id`:** Reported by the HMC Web Services API channel-path object. In distributed systems terms, this is analogous to a storage HBA port or channel identifier.
 
-**[8] `mainframe.channel.owning.partition`:** Reported by the IBM Z HMC Web Services API `channel-usage` metric group field `logical-partition-name`. The field is 'shared' when the channel is shared across partitions, and an empty string for channel types that do not expose an owning partition (for example coupling channels).
+**[8] `mainframe.channel.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API channel-path object.
 
-**[9] `mainframe.channel.type`:** Reported by the IBM Z HMC Web Services API adapter object property `type`, whose values include `ficon`, `osa`, `hipersockets` and `network-express`.
+**[9] `mainframe.channel.owning.partition`:** Reported by the IBM Z HMC Web Services API `channel-usage` metric group field `logical-partition-name`. The field is 'shared' when the channel is shared across partitions, and an empty string for channel types that do not expose an owning partition (for example coupling channels).
 
-**[10] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
+**[10] `mainframe.channel.type`:** Reported by the IBM Z HMC Web Services API adapter object property `type`, whose values include `ficon`, `osa`, `hipersockets` and `network-express`.
 
-**[11] `mainframe.host.machine_model`:** Reported by the HMC Web Services API CPC object field `machine-model`. Combined with `mainframe.host.machine_type`, forms the full IBM machine type-model identifier (e.g., "9175-ME1").
+**[11] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
 
-**[12] `mainframe.host.machine_type`:** Reported by the HMC Web Services API CPC object field `machine-type`. In distributed systems terms, this is analogous to the CPU family or server product line identifier.
+**[12] `mainframe.host.machine_model`:** Reported by the HMC Web Services API CPC object field `machine-model`. Combined with `mainframe.host.machine_type`, forms the full IBM machine type-model identifier (e.g., "9175-ME1").
 
-**[13] `mainframe.host.serial_number`:** Reported by the HMC Web Services API CPC object field `serial-number`. The serial number uniquely identifies a physical mainframe machine.
+**[13] `mainframe.host.machine_type`:** Reported by the HMC Web Services API CPC object field `machine-type`. In distributed systems terms, this is analogous to the CPU family or server product line identifier.
 
-**[14] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
+**[14] `mainframe.host.serial_number`:** Reported by the HMC Web Services API CPC object field `serial-number`. The serial number uniquely identifies a physical mainframe machine.
+
+**[15] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
+
+---
+
+`mainframe.adapter.status` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `active` | The adapter is active and operating normally. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `exceptions` | The adapter has exceptions that require operator attention. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `not-active` | The adapter is not active. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `not-detected` | The adapter is not detected by the system. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `service` | The adapter is in service mode. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
 
