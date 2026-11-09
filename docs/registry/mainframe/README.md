@@ -3,7 +3,21 @@
 
 # Mainframe
 
+- [Entities](#entities)
+- [Entity refinements](#entity-refinements)
 - [Attributes](#attributes)
+
+## Entities
+
+| Type | Stability | Description |
+| --- | --- | --- |
+| [`mainframe.cpu`](/docs/registry/mainframe/entities.md#mainframecpu) | ![Development](https://img.shields.io/badge/-development-blue) | A physical mainframe processor within the Central Processing Complex (CPC) — the mainframe equivalent of a CPU core in a distributed server. |
+
+## Entity refinements
+
+| Id | Stability | Description |
+| --- | --- | --- |
+| [`refinement.mainframe.host`](/docs/registry/mainframe/entity-refinements.md#refinementmainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
 
 ## Attributes
 
@@ -11,4 +25,43 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
+| <a id="mainframe-cpu-name">`mainframe.cpu.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the mainframe processor, formed as the processor type abbreviation followed by the processor index number. [1] | `IFL01`; `CP02`; `zIIP03` |
+| <a id="mainframe-cpu-sharing-mode">`mainframe.cpu.sharing.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The sharing mode of the mainframe processor — whether it is dedicated to one partition or shared across multiple partitions. | `all`; `dedicated`; `shared` |
+| <a id="mainframe-cpu-type">`mainframe.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of mainframe processor within the Central Processing Complex (CPC). | `all`; `cp`; `icf` |
+| <a id="mainframe-host-machine-model">`mainframe.host.machine_model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [2] | `ME1`; `ML1`; `A01`; `LA1` |
+| <a id="mainframe-host-machine-type">`mainframe.host.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [3] | `9175`; `3931` |
+| <a id="mainframe-host-serial-number">`mainframe.host.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the Central Processing Complex (CPC). [4] | `0000000ABCDE` |
 | <a id="mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
+
+**[1] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
+
+**[2] `mainframe.host.machine_model`:** Reported by the HMC Web Services API CPC object field `machine-model`. Combined with `mainframe.host.machine_type`, forms the full IBM machine type-model identifier (e.g., "9175-ME1").
+
+**[3] `mainframe.host.machine_type`:** Reported by the HMC Web Services API CPC object field `machine-type`. In distributed systems terms, this is analogous to the CPU family or server product line identifier.
+
+**[4] `mainframe.host.serial_number`:** Reported by the HMC Web Services API CPC object field `serial-number`. The serial number uniquely identifies a physical mainframe machine.
+
+---
+
+`mainframe.cpu.sharing.mode` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `all` | All mainframe processors, both shared and dedicated. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `dedicated` | The processor is dedicated to a specific partition and cannot be shared with other partitions. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `shared` | The processor can be shared among multiple partitions and is not dedicated to a specific partition. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.cpu.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `aap` | Application Assist Processor (AAP), a processor dedicated to accelerating Java and XML processing for database workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `all` | All types of mainframe processors combined. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cbp` | Container Based Processor (CBP), a processor type for container-based workloads. Present only in HMC/SE versions 2.14.0 through 2.15.0. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cp` | Central Processor (CP), the general-purpose processor that hosts a mainframe operating system such as z/OS. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `icf` | Integrated Coupling Facility (ICF), a processor dedicated to running coupling facility workloads for high-speed communication between systems in a sysplex. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ifl` | Integrated Facility for Linux (IFL), a processor dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `iip` | z Integrated Information Processor (zIIP), a processor dedicated to offloading eligible workloads such as Java applications from general-purpose processors. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `sap` | System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
