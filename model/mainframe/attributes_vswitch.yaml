@@ -1,0 +1,26 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.vswitch.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: virtual-switch
+            field: name
+            mode: all
+    brief: "The name of the mainframe virtual switch (VSWITCH or DPM virtual switch)."
+    examples: ["VSWITCHA", "VSWITCH1", "EXTLAN"]
+    note: >
+      On IBM z/VM, a virtual switch (VSWITCH) is a software-defined Ethernet
+      switch managed by the z/VM Control Program (CP). It connects z/VM guest
+      virtual machines to each other and to physical network adapters
+      (OSA-Express, RoCE). The VSWITCH name is 1–8 uppercase alphanumeric
+      characters defined in the z/VM CP directory.
+      In IBM Z Dynamic Partition Manager (DPM) mode, virtual switches are
+      exposed as `virtual-switch` objects in the HMC Web Services API.
+      In distributed systems terms, a mainframe virtual switch is analogous
+      to an OVS bridge or a VMware vSwitch.
+      Reported by the HMC Web Services API as the `name` field of the
+      virtual-switch object.
