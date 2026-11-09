@@ -8,4 +8,41 @@
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
 | <a id="mainframe-lpar-name" href="#mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
+| <a id="mainframe-storage-fulfillment-state" href="#mainframe-storage-fulfillment-state">`mainframe.storage.fulfillment.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The fulfillment state of the DPM storage group or storage volume. [1] | `complete`; `pending`; `pending-with-mismatches` |
+| <a id="mainframe-storage-group-name" href="#mainframe-storage-group-name">`mainframe.storage.group.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the DPM storage group attached to the Central Processing Complex (CPC). [2] | `sg-fcp-prod`; `sg-nvme-test` |
+| <a id="mainframe-storage-group-type" href="#mainframe-storage-group-type">`mainframe.storage.group.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The connectivity type of the DPM storage group. [3] | `fcp`; `fc`; `nvme` |
+| <a id="mainframe-storage-group-volume-name" href="#mainframe-storage-group-volume-name">`mainframe.storage.group.volume.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the DPM storage volume within a storage group. [4] | `vol-boot-0`; `vol-data-1` |
 
+
+**[1] `mainframe.storage.fulfillment.state`:** Reported by the HMC Web Services API storage-group or storage-volume object field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1). In distributed systems terms, this is analogous to the binding phase of a Kubernetes Persistent Volume Claim.
+
+**[2] `mainframe.storage.group.name`:** Reported by the HMC Web Services API storage-group resource object field `name` (DPM mode only, HMC ≥ 2.14.1). A storage group aggregates storage volumes of the same connectivity type (FCP, FC, NVMe) that are managed together and can be attached to partitions.
+
+**[3] `mainframe.storage.group.type`:** Reported by the HMC Web Services API storage-group object field `type` (DPM mode only, HMC ≥ 2.14.1).
+
+**[4] `mainframe.storage.group.volume.name`:** Reported by the HMC Web Services API storage-volume resource object field `name` (DPM mode only, HMC ≥ 2.14.1). A storage volume is a single logical unit of block storage (LUN / ECKD DASD cylinder set / NVMe namespace) within a storage group.
+
+---
+
+`mainframe.storage.fulfillment.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `checking-migration` | The storage resource is being checked for migration eligibility. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `complete` | The storage resource is fully configured and available. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `configuration-error` | The storage volume has a configuration error. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `deleting` | The storage volume is being deleted. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `incomplete` | The storage resource is incompletely configured and not fully available. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `overprovisioned` | The storage volume is overprovisioned. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `pending` | The storage resource is pending configuration by the storage administrator. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `pending-with-mismatches` | The storage resource is pending but has configuration mismatches that must be resolved. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.storage.group.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `fc` | FC (native Fibre Channel / ECKD) storage group — IBM ECKD disk format. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `fcp` | FCP (Fibre Channel Protocol) storage group — SCSI over Fibre Channel. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `nvme` | NVMe storage group — NVMe over Fabrics. | ![Development](https://img.shields.io/badge/-development-blue) |
