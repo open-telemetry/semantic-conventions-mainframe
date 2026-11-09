@@ -649,7 +649,7 @@ Small, focused PRs are much easier to review and land quickly:
 ### Maintainers
 
 - [Antoine Toulme](https://github.com/atoulme), Splunk
-- [Greg Shriver](https://github.com/gshriver), Broadcom
+- [Matt Hogstrom](https://github.com/hogstrom), Broadcom
 - [Ruediger Schulze](https://github.com/rrschulze), IBM
 
 For more information about the maintainer role, see the [Community Membership Guide](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#maintainer).
@@ -657,7 +657,7 @@ For more information about the maintainer role, see the [Community Membership Gu
 ### Approvers
 
 - [Antoine Toulme](https://github.com/atoulme), Splunk
-- [Greg Shriver](https://github.com/gshriver), Broadcom
+- [Matt Hogstrom](https://github.com/hogstrom), Broadcom
 - [Ruediger Schulze](https://github.com/rrschulze), IBM
 
 For more information about the approver role, see the [Community Membership Guide](https://github.com/open-telemetry/community/blob/main/guides/contributor/membership.md#approver).
