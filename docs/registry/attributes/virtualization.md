@@ -22,9 +22,10 @@
 | <a id="virtualization-platform-model" href="#virtualization-platform-model">`virtualization.platform.model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The model identifier of the virtualization platform hardware. [12] | `9175-ME1`; `9175-728`; `IBM z15` |
 | <a id="virtualization-platform-name" href="#virtualization-platform-name">`virtualization.platform.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization platform. [13] | `MyCPC`; `PROD-Z15`; `TESTLPAR` |
 | <a id="virtualization-platform-serial-number" href="#virtualization-platform-serial-number">`virtualization.platform.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the virtualization platform hardware. [14] | `12ABC34`; `0000000ABCDE` |
-| <a id="virtualization-resource-pool-id" href="#virtualization-resource-pool-id">`virtualization.resource_pool.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization resource pool. [15] | `3931-45A01/IFLPOOL`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/resgroup-21` |
-| <a id="virtualization-resource-pool-name" href="#virtualization-resource-pool-name">`virtualization.resource_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization resource pool. [16] | `high-priority-pool`; `linux-pool`; `Default Shared Pool` |
-| <a id="virtualization-system-name" href="#virtualization-system-name">`virtualization.system.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtualization system (hypervisor technology) managing this platform. [17] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| <a id="virtualization-platform-vm-state" href="#virtualization-platform-vm-state">`virtualization.platform.vm.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The power state of virtual machines used as a dimension to break down platform-level VM count metrics. [15] | `running`; `stopped`; `paused` |
+| <a id="virtualization-resource-pool-id" href="#virtualization-resource-pool-id">`virtualization.resource_pool.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization resource pool. [16] | `3931-45A01/IFLPOOL`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/resgroup-21` |
+| <a id="virtualization-resource-pool-name" href="#virtualization-resource-pool-name">`virtualization.resource_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization resource pool. [17] | `high-priority-pool`; `linux-pool`; `Default Shared Pool` |
+| <a id="virtualization-system-name" href="#virtualization-system-name">`virtualization.system.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtualization system (hypervisor technology) managing this platform. [18] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
 
 
 **[1] `virtualization.hypervisor.id`:** Uniquely identifies the hypervisor instance across the management domains in which it is observed.
@@ -66,15 +67,17 @@ Equal to `host.id` of the same platform.
 
 **[14] `virtualization.platform.serial_number`:** The hardware serial number as reported by the platform management interface. Used to uniquely identify a physical system when multiple systems share the same model or name. Alignment with OTel base registry: the base registry does not have a dedicated serial-number attribute. For IBM Z, the CPC serial number is part of `virtualization.platform.id` and `host.id` (`<machine type>-<serial number>`).
 
-**[15] `virtualization.resource_pool.id`:** Uniquely identifies the resource pool across management domains.
+**[15] `virtualization.platform.vm.state`:** Used as a discriminating dimension on the `virtualization.platform.vm.count` metric to report counts broken down by VM power state. Use `all` to report the total count across all states. Implementations may omit this attribute and report only the total count when per-state breakdown is not available.
+
+**[16] `virtualization.resource_pool.id`:** Uniquely identifies the resource pool across management domains.
 - IBM Z PR/SM shared processor pools: the processor pool name qualified
   by the CPC (`virtualization.platform.id`), e.g. `3931-45A01/IFLPOOL`.
 - VMware vSphere: the vCenter instance UUID and the ResourcePool MoRef
   ID, e.g. `<vCenter UUID>/resgroup-21`.
 
-**[16] `virtualization.resource_pool.name`:** The name as configured in the hypervisor management interface. For VMware vSphere this is the resource pool name in vCenter. For IBM Z PR/SM this corresponds to the shared processor pool name as reported by the HMC Web Services API.
+**[17] `virtualization.resource_pool.name`:** The name as configured in the hypervisor management interface. For VMware vSphere this is the resource pool name in vCenter. For IBM Z PR/SM this corresponds to the shared processor pool name as reported by the HMC Web Services API.
 
-**[17] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology in use. This attribute allows consumers to correlate platform-specific behaviour and capabilities when multiple virtualization technologies are observed in a mixed environment. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+**[18] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology in use. This attribute allows consumers to correlate platform-specific behaviour and capabilities when multiple virtualization technologies are observed in a mixed environment. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
 
 ---
 
@@ -132,6 +135,17 @@ Equal to `host.id` of the same platform.
 | `linux_only` | Linux-only partition restricted to Linux operating system workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `ssc` | Secure Service Container (SSC) partition for IBM Z security appliances. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `unknown` | Partition type is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.platform.vm.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `all` | All virtual machines on the platform regardless of their power state. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `paused` | Virtual machines that are paused with their state preserved in memory. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `running` | Virtual machines that are actively running and processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopped` | Virtual machines that are stopped and not consuming CPU or memory resources. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
 
