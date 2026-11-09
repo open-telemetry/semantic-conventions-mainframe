@@ -5,6 +5,7 @@
 
 - [Entities](#entities)
 - [Entity refinements](#entity-refinements)
+- [Metrics](#metrics)
 - [Attributes](#attributes)
 
 ## Entities
@@ -19,6 +20,19 @@
 | --- | --- | --- |
 | [`refinement.mainframe.host`](/docs/registry/mainframe/entity-refinements.md#refinementmainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
 
+## Metrics
+
+| Name | Stability | Description |
+| --- | --- | --- |
+| [`mainframe.host.channel.utilization`](/docs/registry/mainframe/metrics.md#mainframehostchannelutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The average fraction of time all channel paths in the Central Processing Complex (CPC) were busy processing I/O, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.host.cpu.active.count`](/docs/registry/mainframe/metrics.md#mainframehostcpuactivecount) | ![Development](https://img.shields.io/badge/-development-blue) | The number of active processors of the specified type installed in the Central Processing Complex (CPC). |
+| [`mainframe.host.cpu.defective.count`](/docs/registry/mainframe/metrics.md#mainframehostcpudefectivecount) | ![Development](https://img.shields.io/badge/-development-blue) | The number of defective processors in the Central Processing Complex (CPC). |
+| [`mainframe.host.cpu.spare.count`](/docs/registry/mainframe/metrics.md#mainframehostcpusparecount) | ![Development](https://img.shields.io/badge/-development-blue) | The number of spare processors available in the Central Processing Complex (CPC). |
+| [`mainframe.host.cpu.utilization`](/docs/registry/mainframe/metrics.md#mainframehostcpuutilization) | ![Development](https://img.shields.io/badge/-development-blue) | The fraction of time processors of the specified type in the Central Processing Complex (CPC) were busy, as a ratio from 0 (idle) to 1 (fully utilised). |
+| [`mainframe.host.memory.size`](/docs/registry/mainframe/metrics.md#mainframehostmemorysize) | ![Development](https://img.shields.io/badge/-development-blue) | The size of memory of the specified category in the Central Processing Complex (CPC), in bytes. |
+| [`mainframe.host.memory.vfm.increment.size`](/docs/registry/mainframe/metrics.md#mainframehostmemoryvfmincrementsize) | ![Development](https://img.shields.io/badge/-development-blue) | The size of one IBM Virtual Flash Memory (VFM) increment in the Central Processing Complex (CPC), in bytes. |
+| [`mainframe.host.memory.vfm.size`](/docs/registry/mainframe/metrics.md#mainframehostmemoryvfmsize) | ![Development](https://img.shields.io/badge/-development-blue) | The total size of installed IBM Virtual Flash Memory (VFM) in the Central Processing Complex (CPC), in bytes. |
+
 ## Attributes
 
 Attributes defined in the `mainframe` namespace. Application developers are encouraged to reuse existing attributes; see these [naming recommendations](https://opentelemetry.io/docs/specs/semconv/general/naming/#recommendations-for-application-developers) regarding attribute selection and naming for custom use cases.
@@ -32,6 +46,7 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | <a id="mainframe-host-machine-type">`mainframe.host.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [3] | `9175`; `3931` |
 | <a id="mainframe-host-serial-number">`mainframe.host.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the Central Processing Complex (CPC). [4] | `0000000ABCDE` |
 | <a id="mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
+| <a id="mainframe-memory-type">`mainframe.memory.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The category of mainframe memory being measured within the Central Processing Complex (CPC). | `total`; `HSA`; `partitions` |
 
 **[1] `mainframe.cpu.name`:** Reported by the HMC Web Services API processor object. In distributed systems terms, a mainframe processor is analogous to a physical CPU core.
 
@@ -65,3 +80,16 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | `ifl` | Integrated Facility for Linux (IFL), a processor dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `iip` | z Integrated Information Processor (zIIP), a processor dedicated to offloading eligible workloads such as Java applications from general-purpose processors. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `sap` | System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.memory.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `available` | Memory not yet allocated to any active logical partition (LPAR) and available for assignment. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `central` | Memory allocated as central storage across all active logical partitions (LPARs) in the CPC. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `expanded` | Memory allocated as expanded storage across all active logical partitions (LPARs) in the CPC. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `HSA` | Memory reserved for the Hardware System Area (HSA), used for system management and I/O processing by the machine firmware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `partitions` | Memory available for use by logical partitions (LPARs) running on the CPC. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `total` | Total amount of installed physical memory in the CPC. | ![Development](https://img.shields.io/badge/-development-blue) |
