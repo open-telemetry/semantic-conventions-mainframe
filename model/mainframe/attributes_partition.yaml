@@ -1,0 +1,23 @@
+file_format: definition/2
+
+attributes:
+  - key: mainframe.partition.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: name
+            mode: all
+    brief: "The name of the logical partition (LPAR) running on the mainframe."
+    examples: ["LPAR01", "PRODZ", "TEST1"]
+    note: >
+      A logical partition (LPAR) is the mainframe equivalent of a virtual machine
+      (VM) in distributed cloud environments. Each LPAR can run an independent
+      operating system such as z/OS, Linux, or z/VM.
+      The name is unique within its Central Processing Complex (CPC) and is the
+      same value every observer reports: the HMC Web Services API partition
+      object field `name`, z/OS RMF (SMF type 70 field `SMF70LPM`) and Linux on
+      IBM Z (`LPAR Name` in `/proc/sysinfo`).

@@ -7,6 +7,10 @@
 
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
-| <a id="zos-smf-id" href="#zos-smf-id">`zos.smf.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The System Management Facility (SMF) Identifier uniquely identified a z/OS system within a SYSPLEX or mainframe environment and is used for system and performance analysis. | `SYS1` |
-| <a id="zos-sysplex-name" href="#zos-sysplex-name">`zos.sysplex.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the SYSPLEX to which the z/OS system belongs too. | `SYSPLEX1` |
+| <a id="zos-smf-id" href="#zos-smf-id">`zos.smf.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The System Management Facilities (SMF) identifier that uniquely identifies a z/OS system within a sysplex or standalone mainframe environment. [1] | `SYS1`; `PROD1`; `TEST2` |
+| <a id="zos-sysplex-name" href="#zos-sysplex-name">`zos.sysplex.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the z/OS systems complex (SYSPLEX) to which this z/OS system belongs. [2] | `SYSPLEX1`; `PRODPLEX` |
 
+
+**[1] `zos.smf.id`:** The SMF system identifier (SMFID) is a 1-4 character alphanumeric name set at IPL time via the SMFPRMxx parmlib member. It is used throughout z/OS for system identification in SMF records, RMF reports, and sysplex routing.
+
+**[2] `zos.sysplex.name`:** A sysplex is a cluster of z/OS systems that cooperate using the coupling facility (CF) for shared data and workload management. The sysplex name is defined in the COUPLExx parmlib member. In distributed systems terms, a sysplex is analogous to a high-availability cluster.
