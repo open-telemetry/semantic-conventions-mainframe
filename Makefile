@@ -181,3 +181,37 @@ clean:
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +
 	find . -type d -name '*.egg-info' -prune -exec rm -rf {} +
 	find . -type d -name .ruff_cache -prune -exec rm -rf {} +
+
+# --- Reference observability stack (reference/stack) -------------------------
+
+# Compose binary: podman-compose, `docker compose`, or docker-compose.
+COMPOSE ?= $(shell \
+             command -v podman-compose 2>/dev/null || \
+             (command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1 && echo "docker compose") || \
+             command -v docker-compose 2>/dev/null)
+STACK_COMPOSE_FILE := $(CURDIR)/reference/stack/docker-compose.yaml
+
+# Image versions pinned in versions.env, for variable expansion in the compose file.
+export OTELCOL_VERSION PROMETHEUS_VERSION GRAFANA_VERSION
+
+.PHONY: stack-up stack-down stack-emit
+
+# Start OTel Collector, Prometheus and Grafana in the background.
+stack-up:
+	$(COMPOSE) -f $(STACK_COMPOSE_FILE) up -d
+	@echo "Prometheus: http://localhost:9090   Grafana: http://localhost:3000"
+
+# Stop and remove the stack containers.
+stack-down:
+	$(COMPOSE) -f $(STACK_COMPOSE_FILE) down
+
+# Emit one synthetic data point per signal in the registry into the running
+# stack. Weaver runs in a container, so it reaches the collector on the host
+# through the runtime's host-gateway alias.
+STACK_OTLP_HOST := $(if $(findstring podman,$(WEAVER)),host.containers.internal,host.docker.internal)
+stack-emit: $(SC_UPSTREAM_STAMP)
+	$(WEAVER) registry emit \
+		-r ./model \
+		--v2 \
+		--skip-policies \
+		--endpoint http://$(STACK_OTLP_HOST):4317

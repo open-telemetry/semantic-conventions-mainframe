@@ -1,0 +1,46 @@
+# Reference observability stack: OTel Collector -> Prometheus -> Grafana.
+# Start it with `make stack-up`, which exports the image versions pinned in
+# versions.env. Running compose directly requires the same variables.
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:${OTELCOL_VERSION:?set OTELCOL_VERSION (see versions.env) or use make stack-up}
+    command: ["--config=/etc/otelcol-config.yaml"]
+    volumes:
+      - ./otelcol-config.yaml:/etc/otelcol-config.yaml:ro
+    ports:
+      - "127.0.0.1:4317:4317" # OTLP gRPC — loopback-only: unauthenticated ingestion
+      - "127.0.0.1:4318:4318" # OTLP HTTP — loopback-only: unauthenticated ingestion
+      - "127.0.0.1:8889:8889" # Prometheus scrape endpoint — loopback-only
+    networks:
+      - semconv-net
+
+  prometheus:
+    image: prom/prometheus:${PROMETHEUS_VERSION:?set PROMETHEUS_VERSION (see versions.env) or use make stack-up}
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "127.0.0.1:9090:9090" # loopback-only: unauthenticated administrative endpoint
+    networks:
+      - semconv-net
+
+  grafana:
+    image: grafana/grafana:${GRAFANA_VERSION:?set GRAFANA_VERSION (see versions.env) or use make stack-up}
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    volumes:
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+    ports:
+      - "127.0.0.1:3000:3000" # loopback-only: anonymous Admin is enabled for dev convenience
+    depends_on:
+      - prometheus
+    networks:
+      - semconv-net
+
+networks:
+  semconv-net:
+    driver: bridge

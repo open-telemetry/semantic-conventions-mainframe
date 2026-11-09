@@ -1,0 +1,62 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 75
+    spike_limit_percentage: 20
+
+  batch:
+    send_batch_size: 256
+    timeout: 2s
+
+exporters:
+  # Prometheus exporter endpoint for Prometheus to scrape.
+  # NoTranslation keeps the semantic convention names verbatim (e.g.
+  # hw.host.ambient_temperature, mainframe.cpu.utilization) instead of
+  # rewriting them to hw_host_ambient_temperature_celsius. No namespace prefix
+  # is set, so every metric shows the registry namespace it was defined in.
+  # Requires collector-contrib >= 0.132.0 and a UTF-8 capable scraper:
+  # Prometheus >= 3.0, or 2.55 with --enable-feature=utf8-names.
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    translation_strategy: NoTranslation
+    send_timestamps: true
+
+  # Optional OTLP fan-out to an external backend. Defined but intentionally NOT
+  # part of the pipelines below: with the default endpoint (this collector) it
+  # would loop. To enable it, set TARGET_OTLP_ENDPOINT (and TARGET_OTLP_KEY if
+  # the backend needs one) and add otlp/backend to the pipelines.
+  #
+  # TLS with certificate verification is on by default, so the x-api-key header
+  # is never sent in plaintext. For a local plaintext receiver only, set
+  # TARGET_OTLP_INSECURE=true.
+  otlp/backend:
+    endpoint: ${env:TARGET_OTLP_ENDPOINT:-127.0.0.1:4317}
+    tls:
+      insecure: ${env:TARGET_OTLP_INSECURE:-false}
+    headers:
+      "x-api-key": ${env:TARGET_OTLP_KEY:-""}
+
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [prometheus, debug]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [debug]
+  telemetry:
+    logs:
+      level: info
