@@ -210,10 +210,16 @@ package-dev: $(SC_UPSTREAM_STAMP)
 	@echo "Packaged version $(VERSION) -> $(PACKAGE_OUTPUT)"
 
 # Remove generated docs, the local .build/ tree (Weaver-fetched templates/policies
-# plus any hand-created weaver-min-repro* dirs), and Python bytecode trees.
+# plus any hand-created weaver-min-repro* dirs), reference-project caches, and
+# Python bytecode trees under the entire repo.
+#
+# `clean` does NOT touch `reference/.venv`; rebuilding it requires a fresh
+# `uv sync` which re-downloads every tooling dependency. Remove it manually
+# (`rm -rf reference/.venv`) for a full reset.
 clean:
 	rm -rf docs/registry
 	rm -rf .build
+	rm -rf reference/.cache
 	find . -type d -name __pycache__ -prune -exec rm -rf {} +
 	find . -type d -name '*.egg-info' -prune -exec rm -rf {} +
 	find . -type d -name .ruff_cache -prune -exec rm -rf {} +
