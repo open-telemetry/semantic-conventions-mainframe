@@ -1,0 +1,1 @@
+Associate the `system.*` metrics that a virtual machine's guest operating system reports (uptime, memory usage and utilization, paging faults, file system usage and utilization) with `virtualization.vm`.

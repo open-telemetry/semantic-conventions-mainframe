@@ -1,0 +1,53 @@
+file_format: definition/2
+# system.* refinements for virtual machines.
+#
+# A virtual machine refines the generic host entity
+# (refinement.virtualization.vm.host), so the system.* metrics its guest
+# operating system reports describe the VM from the inside. These refinements
+# associate the system.* metrics that have no virtualization.vm.* counterpart
+# with virtualization.vm; the upstream definitions (instrument, unit,
+# attributes) are unchanged. Hypervisor-side measurements of CPU, memory, disk
+# and network are the virtualization.vm.* metrics.
+
+metric_refinements:
+  - id: refinement.virtualization.vm.system.uptime
+    ref: system.uptime
+    brief: "Time the guest operating system of the virtual machine has been running."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+
+  - id: refinement.virtualization.vm.system.memory.usage
+    ref: system.memory.usage
+    brief: "Memory in use by the guest operating system of the virtual machine, by memory state."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+
+  - id: refinement.virtualization.vm.system.memory.utilization
+    ref: system.memory.utilization
+    brief: "Fraction of the guest operating system's memory in each memory state."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+
+  - id: refinement.virtualization.vm.system.paging.faults
+    ref: system.paging.faults
+    brief: "Page faults in the guest operating system of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+
+  - id: refinement.virtualization.vm.system.filesystem.usage
+    ref: system.filesystem.usage
+    brief: "File system space used and available in the guest operating system of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
+
+  - id: refinement.virtualization.vm.system.filesystem.utilization
+    ref: system.filesystem.utilization
+    brief: "Fraction of file system space used in the guest operating system of the virtual machine."
+    stability: development
+    entity_associations:
+      - virtualization.vm
