@@ -1,0 +1,46 @@
+file_format: definition/2
+entities:
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the channel belongs to.
+      - ref: mainframe.channel.name
+        note: >
+          `CSS.CHPID` is unique within one CPC; the bare CHPID is not, because
+          it repeats across channel subsystems.
+    description:
+      - ref: mainframe.channel.mode
+        requirement_level: required
+      - ref: mainframe.channel.id
+        requirement_level: recommended
+      - ref: mainframe.channel.type
+        requirement_level: recommended
+      - ref: mainframe.channel.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the adapter is installed in.
+      - ref: mainframe.adapter.id
+    description:
+      - ref: mainframe.adapter.name
+        requirement_level: recommended
+      - ref: mainframe.adapter.type
+        requirement_level: required
+      - ref: mainframe.adapter.owning.partition
+        requirement_level: recommended
