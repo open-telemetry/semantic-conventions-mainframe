@@ -1,0 +1,51 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.host.serial_number
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: cpc
+            field: serial-number
+            mode: all
+    brief: "The serial number of the Central Processing Complex (CPC)."
+    examples: ["0000000ABCDE"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `serial-number`.
+      The serial number uniquely identifies a physical mainframe machine.
+
+  - key: mainframe.host.machine_type
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: cpc
+            field: machine-type
+            mode: all
+    brief: "The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation."
+    examples: ["9175", "3931"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `machine-type`.
+      In distributed systems terms, this is analogous to the CPU family or
+      server product line identifier.
+
+  - key: mainframe.host.machine_model
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: cpc
+            field: machine-model
+            mode: all
+    brief: "The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type."
+    examples: ["ME1", "ML1", "A01", "LA1"]
+    note: >
+      Reported by the HMC Web Services API CPC object field `machine-model`.
+      Combined with `mainframe.host.machine_type`, forms the full IBM machine
+      type-model identifier (e.g., "9175-ME1").
