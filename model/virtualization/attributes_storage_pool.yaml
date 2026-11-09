@@ -1,0 +1,25 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.storage_pool.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization storage pool."
+    examples: ["3931-45A01/SG-PROD", "5f1e9b2c-7d3a-4e6b-8c9d-0a1b2c3d4e5f"]
+    note: >
+      Uniquely identifies the storage pool across management domains.
+
+      - IBM Z DPM: the CPC (`virtualization.platform.id`) and the storage group
+        name, e.g. `3931-45A01/SG-PROD`.
+      - VMware vSphere: the datastore UUID.
+      - KVM / libvirt: the storage pool UUID.
+
+  - key: virtualization.storage_pool.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization storage pool."
+    examples: ["datastore-ssd-01", "vsanDatastore", "FCP-POOL-A"]
+    note: >
+      The name as configured in the hypervisor or storage management
+      interface. For VMware vSphere this is the datastore name in vCenter.
+      For IBM Z DPM mode this corresponds to the storage-group name as
+      reported by the HMC Web Services API.
