@@ -115,3 +115,57 @@ attributes:
       When `true`, the virtual machine is configured to expose virtualization
       extensions to its guest operating system, allowing a hypervisor to run
       inside the VM. Not all hypervisors or platforms support this capability.
+
+  - key: virtualization.vm.disk.name
+    type: string
+    stability: development
+    brief: "The name or identifier of the virtual disk attached to the virtual machine."
+    examples: ["Hard Disk 1", "sda", "vhd-0001.vmdk"]
+    note: >
+      The disk name as reported by the hypervisor management API. Used to
+      attribute per-disk I/O metrics to a specific virtual disk when a VM
+      has multiple disks attached. For IBM Z DPM partitions this corresponds
+      to the storage volume name; for VMware ESXi it is the datastore path;
+      for Microsoft Hyper-V it is the virtual hard disk file name.
+
+  - key: virtualization.vm.disk.direction
+    stability: development
+    brief: "The direction of disk I/O operations on the virtual machine's storage device."
+    type:
+      members:
+        - id: read
+          value: "read"
+          brief: "Data is being read from the virtual disk into the virtual machine."
+          stability: development
+        - id: write
+          value: "write"
+          brief: "Data is being written from the virtual machine to the virtual disk."
+          stability: development
+
+  - key: virtualization.vm.network.interface.name
+    type: string
+    stability: development
+    brief: "The name of the virtual network interface (vNIC) attached to the virtual machine."
+    examples: ["Network adapter 1", "eth0", "vmxnet3-0"]
+    note: >
+      The interface name as reported by the hypervisor management API.
+      Used to attribute per-NIC throughput metrics when a VM has multiple
+      virtual network interfaces. For IBM Z DPM partitions this corresponds
+      to the NIC object name reported by the HMC Web Services API; for
+      VMware ESXi it is the network adapter label; for Microsoft Hyper-V
+      it is the virtual network adapter name.
+
+  - key: virtualization.vm.node.name
+    type: string
+    stability: development
+    brief: "The name of the host node on which the virtual machine is currently scheduled to run."
+    examples: ["worker-node-01", "compute-az1-007", "rhcos-node-03"]
+    note: >
+      In KVM-based environments managed by Kubernetes such as OpenShift Virtualization
+      (KubeVirt), a virtual machine instance (VMI) runs as a pod on a Kubernetes node.
+      This attribute corresponds to the Kubernetes node name (spec.nodeName on the VMI
+      pod) and is equivalent to `k8s.node.name` for standard workloads. It is used to
+      correlate VM performance with the physical host's resource availability.
+      In standalone KVM environments managed by libvirt, this corresponds to the
+      hypervisor hostname. Not applicable on IBM Z PR/SM or cloud hypervisors where
+      VM placement is opaque to the consumer.
