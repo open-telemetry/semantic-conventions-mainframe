@@ -18,7 +18,9 @@
 | <a id="mainframe-channel-owning-partition" href="#mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [8] | `LPAR01`; `shared` |
 | <a id="mainframe-channel-type" href="#mainframe-channel-type">`mainframe.channel.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The protocol and connectivity type of the I/O channel path. [9] | `ficon`; `zhyperlink`; `osa` |
 | <a id="mainframe-lpar-name" href="#mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
-| <a id="mainframe-partition-nic-name" href="#mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [10] | `nic-0`; `nic-mgmt`; `nic-prod` |
+| <a id="mainframe-partition-memory-type" href="#mainframe-partition-memory-type">`mainframe.partition.memory.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of memory allocation for the logical partition (LPAR) being measured. [10] | `central-initial`; `central-current`; `central-maximum` |
+| <a id="mainframe-partition-nic-name" href="#mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [11] | `nic-0`; `nic-mgmt`; `nic-prod` |
+| <a id="mainframe-partition-status" href="#mainframe-partition-status">`mainframe.partition.status`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational status of the logical partition (LPAR) or DPM partition. [12] | `operating`; `active`; `degraded` |
 
 
 **[1] `mainframe.adapter.id`:** The PCHID is the hexadecimal location of the adapter in the Central Processing Complex (CPC) and is unique within one CPC. Reported by the HMC Web Services API adapter object field `adapter-id`.
@@ -39,7 +41,11 @@
 
 **[9] `mainframe.channel.type`:** Reported by the IBM Z HMC Web Services API adapter object property `type`, whose values include `ficon`, `osa`, `hipersockets` and `network-express`.
 
-**[10] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
+**[10] `mainframe.partition.memory.type`:** Reported by the HMC Web Services API partition object storage allocation properties. Central storage is equivalent to RAM; expanded storage is an additional address extension beyond central storage. IBM Virtual Flash Memory (VFM) is a solid-state tier extending the memory address space.
+
+**[11] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
+
+**[12] `mainframe.partition.status`:** In classic mode (LPAR), reported by the HMC Web Services API partition object field `status` with values: operating, not-operating, not-activated, exceptions. In DPM mode, reported with values: active, degraded, paused, stopped, starting, stopping, reservation-error, terminated, communications-not-active, status-check.
 
 ---
 
@@ -74,3 +80,43 @@
 | `osa` | Open Systems Adapter (OSA) channel path for Ethernet LAN connectivity. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `roce` | RDMA over Converged Ethernet (RoCE) channel path for high-speed memory-to-memory data transfers. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `zhyperlink` | zHyperLink express channel path providing ultra-low-latency synchronous PCIe storage access. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.partition.memory.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `central-current` | Current amount of central storage (RAM) allocated to the partition. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `central-initial` | Initial amount of central storage (RAM) allocated to the partition at activation. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `central-maximum` | Maximum amount of central storage (RAM) the operating system in the partition may allocate. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `dpm-initial` | Initial amount of memory (RAM) allocated when the DPM partition becomes active, in MiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `dpm-maximum` | Maximum amount of memory to which the operating system in the DPM partition can increase the allocation, in MiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `dpm-reserved` | Amount of memory reserved but not yet allocated (maximum minus initial) for the DPM partition, in MiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `expanded-current` | Current amount of expanded storage allocated to the partition. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `expanded-initial` | Initial amount of expanded storage allocated to the partition at activation. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `expanded-maximum` | Maximum amount of expanded storage the operating system in the partition may allocate. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vfm-current` | Current amount of IBM Virtual Flash Memory (VFM) allocated to the partition, in GiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vfm-initial` | Initial amount of IBM Virtual Flash Memory (VFM) allocated at partition activation, in GiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vfm-maximum` | Maximum amount of IBM Virtual Flash Memory (VFM) that can be allocated to the partition, in GiB. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.partition.status` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `active` | The DPM partition is active and operating normally. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `communications-not-active` | Communications with the DPM partition are not active. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `degraded` | The DPM partition is active but running in a degraded state. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `exceptions` | The partition has exceptions that require operator attention. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `not-activated` | The classic-mode partition is not activated. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `not-operating` | The classic-mode partition is not operating. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `operating` | The partition (classic mode) or DPM partition is operating normally. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `paused` | The DPM partition is paused. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `reservation-error` | The DPM partition is in a reservation error state. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `starting` | The DPM partition is starting up. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `status-check` | The DPM partition is in a status check state requiring operator attention. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopped` | The DPM partition is stopped. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopping` | The DPM partition is in the process of stopping. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `terminated` | The DPM partition has terminated. | ![Development](https://img.shields.io/badge/-development-blue) |
