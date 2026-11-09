@@ -1,0 +1,24 @@
+file_format: definition/2
+attributes:
+  - key: virtualization.cluster.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization cluster."
+    examples: ["SSIPLEX1", "1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/domain-c7"]
+    note: >
+      Uniquely identifies the cluster across management domains.
+
+      - IBM z/VM: the SSI cluster name.
+      - VMware vSphere: the vCenter instance UUID and the ClusterComputeResource
+        MoRef ID, e.g. `<vCenter UUID>/domain-c7`.
+
+  - key: virtualization.cluster.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization cluster."
+    examples: ["prod-cluster-01", "us-east-zone-a"]
+    note: >
+      The name as configured in the cluster management interface. For VMware
+      vSphere this is the cluster name shown in vCenter. For IBM Z HMC
+      multi-CPC management domains this corresponds to the HMC ensemble or
+      management domain name.
