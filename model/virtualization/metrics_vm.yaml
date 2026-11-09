@@ -1,0 +1,23 @@
+file_format: definition/2
+metrics:
+  - name: virtualization.vm.cpu.count
+    brief: "The number of virtual CPUs (vCPUs) currently allocated to the virtual machine."
+    note: >
+      Reports the current vCPU allocation, which may differ from the maximum
+      configured count on hypervisors that support hot-add of vCPUs. In IBM Z
+      PR/SM (classic mode) this corresponds to the total processor count fields
+      on the logical partition object via the HMC Web Services API. In VMware
+      ESXi it corresponds to config.numCpu. In Microsoft Hyper-V it corresponds
+      to the virtual processor count property of the VM configuration.
+    instrument: updowncounter
+    unit: "{vcpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.vm
+    attributes:
+      - ref: virtualization.vm.id
+        requirement_level: required

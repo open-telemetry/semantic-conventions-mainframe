@@ -1,0 +1,1 @@
+Map IBM Z onto the virtualization entities: the CPC as `virtualization.platform`, LPARs as `virtualization.partition`, shared processor pools as `virtualization.resource_pool`, z/VM as `virtualization.hypervisor`, z/VM guests as `virtualization.vm`, z/VM and DPM virtual switches as `virtualization.vswitch` and DPM storage groups as `virtualization.storage_pool`.
