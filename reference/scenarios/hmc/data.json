@@ -1,0 +1,596 @@
+{
+  "spans": {},
+  "events": {},
+  "metrics": {
+    "mainframe.adapter.physical_channel.status.code": [
+      "mainframe.adapter.id"
+    ],
+    "mainframe.adapter.status.code": [
+      "mainframe.adapter.id",
+      "mainframe.adapter.status"
+    ],
+    "mainframe.adapter.utilization": [
+      "mainframe.adapter.id",
+      "mainframe.adapter.type"
+    ],
+    "mainframe.channel.utilization": [
+      "mainframe.channel.mode",
+      "mainframe.channel.name"
+    ],
+    "mainframe.cpu.smt_mode.utilization": [
+      "mainframe.cpu.name"
+    ],
+    "mainframe.cpu.thread0.utilization": [
+      "mainframe.cpu.name"
+    ],
+    "mainframe.cpu.thread1.utilization": [
+      "mainframe.cpu.name"
+    ],
+    "mainframe.cpu.utilization": [
+      "mainframe.cpu.name"
+    ],
+    "mainframe.host.adapter.utilization": [
+      "mainframe.adapter.type"
+    ],
+    "mainframe.host.channel.utilization": [],
+    "mainframe.host.cpu.active.count": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.host.cpu.defective.count": [],
+    "mainframe.host.cpu.spare.count": [],
+    "mainframe.host.cpu.utilization": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.host.dewpoint": [],
+    "mainframe.host.heatload": [
+      "mainframe.host.heatload.type"
+    ],
+    "mainframe.host.humidity": [],
+    "mainframe.host.memory.size": [
+      "mainframe.memory.type"
+    ],
+    "mainframe.host.memory.vfm.increment.size": [],
+    "mainframe.host.memory.vfm.size": [],
+    "mainframe.host.power.cord.usage": [
+      "mainframe.host.power.cord",
+      "mainframe.host.power.phase"
+    ],
+    "mainframe.host.power.usage": [
+      "mainframe.host.power.usage.type"
+    ],
+    "mainframe.host.status.unacceptable": [],
+    "mainframe.partition.adapter.utilization": [
+      "mainframe.adapter.type"
+    ],
+    "mainframe.partition.capacity.defined": [],
+    "mainframe.partition.cpu.capped.count": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.partition.cpu.mode": [],
+    "mainframe.partition.cpu.reserved.count": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.partition.cpu.threads_per_processor": [],
+    "mainframe.partition.cpu.utilization": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.partition.cpu.virtual.count": [
+      "mainframe.cpu.type"
+    ],
+    "mainframe.partition.memory.size": [
+      "mainframe.partition.memory.type"
+    ],
+    "mainframe.partition.power.usage": [],
+    "mainframe.partition.status.code": [
+      "mainframe.partition.status"
+    ],
+    "mainframe.partition.status.unacceptable": [],
+    "mainframe.partition.wlm.enabled": [],
+    "mainframe.storage.group.capacity": [
+      "mainframe.storage.group.name",
+      "mainframe.storage.group.type",
+      "virtualization.platform.id"
+    ],
+    "mainframe.storage.group.usage": [
+      "mainframe.storage.group.name",
+      "mainframe.storage.group.type",
+      "virtualization.platform.id"
+    ],
+    "mainframe.storage.group.volume.capacity": [
+      "mainframe.storage.fulfillment.state",
+      "mainframe.storage.group.name",
+      "mainframe.storage.group.volume.name",
+      "virtualization.platform.id"
+    ],
+    "refinement.mainframe.nic.system.network.errors": [
+      "mainframe.partition.nic.name",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.nic.system.network.io": [
+      "mainframe.partition.nic.name",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.nic.system.network.packet.count": [
+      "mainframe.partition.nic.name",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.nic.system.network.packet.dropped": [
+      "mainframe.partition.nic.name",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.port.system.network.errors": [
+      "mainframe.adapter.port.id",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.port.system.network.io": [
+      "mainframe.adapter.port.id",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.port.system.network.packet.count": [
+      "mainframe.adapter.port.id",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.port.system.network.packet.dropped": [
+      "mainframe.adapter.port.id",
+      "network.io.direction"
+    ],
+    "refinement.mainframe.system.cpu.utilization": [
+      "mainframe.cpu.type"
+    ],
+    "refinement.mainframe.virtualization.partition.cpu.weight": [
+      "mainframe.partition.weight.type",
+      "virtualization.partition.id"
+    ],
+    "refinement.virtualization.hw.energy": [
+      "hw.id",
+      "hw.name",
+      "hw.type",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.errors": [
+      "hw.id",
+      "hw.name",
+      "hw.type",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.host.ambient_temperature": [
+      "hw.id",
+      "hw.name",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.host.energy": [
+      "hw.id",
+      "hw.name",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.host.heating_margin": [
+      "hw.id",
+      "hw.name",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.host.power": [
+      "hw.id",
+      "hw.name",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.network.bandwidth.limit": [
+      "hw.id",
+      "hw.name",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.hw.network.bandwidth.utilization": [
+      "hw.id",
+      "hw.name",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.hw.network.io": [
+      "hw.id",
+      "hw.name",
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.hw.network.packets": [
+      "hw.id",
+      "hw.name",
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.hw.network.up": [
+      "hw.id",
+      "hw.name",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.hw.power": [
+      "hw.id",
+      "hw.name",
+      "hw.type",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.status": [
+      "hw.id",
+      "hw.name",
+      "hw.state",
+      "hw.type",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.hw.temperature": [
+      "hw.id",
+      "hw.name",
+      "hw.sensor_location",
+      "virtualization.platform.id"
+    ],
+    "refinement.virtualization.system.cpu.time": [
+      "virtualization.partition.cpu.type"
+    ],
+    "refinement.virtualization.system.cpu.utilization": [
+      "virtualization.partition.cpu.type"
+    ],
+    "refinement.virtualization.system.disk.limit": [
+      "virtualization.storage_pool.name"
+    ],
+    "refinement.virtualization.system.network.errors": [
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.system.network.io": [
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.system.network.packet.count": [
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.system.network.packet.dropped": [
+      "network.io.direction",
+      "virtualization.vswitch.name"
+    ],
+    "refinement.virtualization.vm.system.filesystem.usage": [
+      "system.device",
+      "system.filesystem.mountpoint",
+      "system.filesystem.state",
+      "system.filesystem.type"
+    ],
+    "refinement.virtualization.vm.system.filesystem.utilization": [
+      "system.device",
+      "system.filesystem.mountpoint",
+      "system.filesystem.state",
+      "system.filesystem.type"
+    ],
+    "refinement.virtualization.vm.system.memory.usage": [
+      "system.memory.state"
+    ],
+    "refinement.virtualization.vm.system.memory.utilization": [
+      "system.memory.state"
+    ],
+    "refinement.virtualization.vm.system.paging.faults": [
+      "system.paging.fault.type"
+    ],
+    "refinement.virtualization.vm.system.uptime": [],
+    "virtualization.cluster.host.count": [
+      "virtualization.cluster.id",
+      "virtualization.cluster.name"
+    ],
+    "virtualization.cluster.vm.count": [
+      "virtualization.cluster.id",
+      "virtualization.cluster.name",
+      "virtualization.vm.state"
+    ],
+    "virtualization.hypervisor.memory.overcommit_ratio": [
+      "virtualization.hypervisor.id",
+      "virtualization.system.name"
+    ],
+    "virtualization.partition.cpu.count": [
+      "virtualization.partition.cpu.type",
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.cpu.is_capped": [
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.cpu.time": [
+      "virtualization.partition.cpu.type",
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.cpu.utilization": [
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.cpu.weight": [
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.memory.size": [
+      "virtualization.partition.id"
+    ],
+    "virtualization.partition.state.code": [
+      "virtualization.partition.id",
+      "virtualization.partition.state"
+    ],
+    "virtualization.platform.cpu.utilization": [
+      "virtualization.platform.id"
+    ],
+    "virtualization.platform.memory.total": [
+      "virtualization.platform.id"
+    ],
+    "virtualization.platform.memory.used": [
+      "virtualization.platform.id"
+    ],
+    "virtualization.platform.partition.count": [
+      "virtualization.partition.state",
+      "virtualization.platform.id"
+    ],
+    "virtualization.platform.power.usage": [
+      "virtualization.platform.id"
+    ],
+    "virtualization.platform.vm.count": [
+      "virtualization.platform.id",
+      "virtualization.platform.vm.state"
+    ],
+    "virtualization.resource_pool.cpu.allocated": [
+      "virtualization.resource_pool.id",
+      "virtualization.resource_pool.name",
+      "virtualization.system.name"
+    ],
+    "virtualization.resource_pool.memory.allocated": [
+      "virtualization.resource_pool.id",
+      "virtualization.resource_pool.name",
+      "virtualization.system.name"
+    ],
+    "virtualization.storage_pool.available": [
+      "virtualization.storage_pool.id",
+      "virtualization.storage_pool.name",
+      "virtualization.system.name"
+    ],
+    "virtualization.storage_pool.used": [
+      "virtualization.storage_pool.id",
+      "virtualization.storage_pool.name",
+      "virtualization.system.name"
+    ],
+    "virtualization.vm.cpu.count": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.cpu.ready_time": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.cpu.steal_time": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.cpu.utilization": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.disk.errors": [
+      "virtualization.vm.disk.direction",
+      "virtualization.vm.disk.name",
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.disk.io": [
+      "virtualization.vm.disk.direction",
+      "virtualization.vm.disk.name",
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.disk.latency.time": [
+      "virtualization.vm.disk.direction",
+      "virtualization.vm.disk.name",
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.disk.operations": [
+      "virtualization.vm.disk.direction",
+      "virtualization.vm.disk.name",
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.memory.allocated": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.memory.balloon": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.memory.rss": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.memory.swapped": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.memory.used": [
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.network.io": [
+      "network.io.direction",
+      "virtualization.vm.id"
+    ],
+    "virtualization.vm.power.state": [
+      "virtualization.vm.id",
+      "virtualization.vm.state"
+    ]
+  },
+  "entities": {
+    "host": {
+      "identity": [
+        "host.id"
+      ],
+      "description": [
+        "host.arch",
+        "host.name",
+        "host.type",
+        "mainframe.host.machine_model",
+        "mainframe.host.machine_type",
+        "mainframe.host.serial_number",
+        "virtualization.platform.firmware.version",
+        "virtualization.platform.serial_number",
+        "virtualization.system.name"
+      ]
+    },
+    "mainframe.adapter": {
+      "identity": [
+        "mainframe.adapter.id",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "mainframe.adapter.name",
+        "mainframe.adapter.owning.partition",
+        "mainframe.adapter.type"
+      ]
+    },
+    "mainframe.adapter.port": {
+      "identity": [
+        "mainframe.adapter.id",
+        "mainframe.adapter.port.id",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.name"
+      ]
+    },
+    "mainframe.channel": {
+      "identity": [
+        "mainframe.channel.name",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "mainframe.channel.id",
+        "mainframe.channel.mode",
+        "mainframe.channel.owning.partition",
+        "mainframe.channel.type"
+      ]
+    },
+    "mainframe.cpu": {
+      "identity": [
+        "mainframe.cpu.name",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "mainframe.cpu.type"
+      ]
+    },
+    "mainframe.partition.nic": {
+      "identity": [
+        "mainframe.partition.nic.name",
+        "virtualization.partition.id",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.name",
+        "mainframe.adapter.id",
+        "mainframe.adapter.port.id"
+      ]
+    },
+    "mainframe.storage.group": {
+      "identity": [
+        "mainframe.storage.group.name",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.name",
+        "mainframe.storage.group.type"
+      ]
+    },
+    "mainframe.storage.group.volume": {
+      "identity": [
+        "mainframe.storage.group.name",
+        "mainframe.storage.group.volume.name",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.name"
+      ]
+    },
+    "virtualization.cluster": {
+      "identity": [
+        "virtualization.cluster.id"
+      ],
+      "description": [
+        "virtualization.cluster.name"
+      ]
+    },
+    "virtualization.hypervisor": {
+      "identity": [
+        "virtualization.hypervisor.id"
+      ],
+      "description": [
+        "mainframe.zvm.hypervisor.name",
+        "virtualization.hypervisor.state",
+        "virtualization.hypervisor.type",
+        "virtualization.hypervisor.version",
+        "virtualization.system.name"
+      ]
+    },
+    "virtualization.partition": {
+      "identity": [
+        "virtualization.partition.id",
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.name",
+        "mainframe.partition.name",
+        "mainframe.partition.number",
+        "mainframe.partition.type",
+        "virtualization.partition.name",
+        "virtualization.partition.number",
+        "virtualization.partition.state",
+        "virtualization.partition.type",
+        "virtualization.system.name"
+      ]
+    },
+    "virtualization.platform": {
+      "identity": [
+        "virtualization.platform.id"
+      ],
+      "description": [
+        "host.arch",
+        "host.id",
+        "host.name",
+        "host.type",
+        "mainframe.host.machine_model",
+        "mainframe.host.machine_type",
+        "mainframe.host.serial_number",
+        "virtualization.platform.firmware.version",
+        "virtualization.platform.serial_number",
+        "virtualization.system.name"
+      ]
+    },
+    "virtualization.resource_pool": {
+      "identity": [
+        "virtualization.resource_pool.id"
+      ],
+      "description": [
+        "mainframe.cpu.type",
+        "virtualization.resource_pool.name",
+        "virtualization.system.name"
+      ]
+    },
+    "virtualization.storage_pool": {
+      "identity": [
+        "virtualization.storage_pool.id"
+      ],
+      "description": [
+        "mainframe.storage.group.name",
+        "mainframe.storage.group.type",
+        "virtualization.storage_pool.name",
+        "virtualization.system.name"
+      ]
+    },
+    "virtualization.vm": {
+      "identity": [
+        "virtualization.vm.id"
+      ],
+      "description": [
+        "mainframe.zvm.guest.userid",
+        "mainframe.zvm.hypervisor.name",
+        "virtualization.system.name",
+        "virtualization.vm.cpu.count",
+        "virtualization.vm.machine_type",
+        "virtualization.vm.memory.size",
+        "virtualization.vm.name",
+        "virtualization.vm.nested_virtualization.enabled",
+        "virtualization.vm.state"
+      ]
+    },
+    "virtualization.vswitch": {
+      "identity": [
+        "virtualization.vswitch.id"
+      ],
+      "description": [
+        "mainframe.vswitch.name",
+        "virtualization.system.name",
+        "virtualization.vswitch.name"
+      ]
+    }
+  },
+  "findings": []
+}

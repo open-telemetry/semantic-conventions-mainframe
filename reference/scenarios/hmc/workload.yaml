@@ -1,0 +1,241 @@
+# Values for every metric model/ associates with the entities in topology.yaml.
+# The first matching rule wins. `unit` is the unit a rule's numbers are in and
+# must equal the unit model/ declares (bytes for By, ratios 0..1 for "1"), so a
+# unit change in the model fails the scenario instead of mis-scaling values.
+# Attributes listed here become one series per value; attributes of the
+# resource are copied; required ones nobody sets take the registry's first
+# enum member or example.
+
+# ── CPC environmentals and power (HMC environmentals-and-power metrics) ──
+- metric: '^mainframe\.host\.dewpoint$'
+  unit: Cel
+  generator: {function: gaussian, mean: 11.2, stddev: 0.8, min: 5, max: 18}
+- metric: '^hw\.host\.heating_margin$'
+  unit: Cel
+  generator: {function: gaussian, mean: 14.0, stddev: 1.0, min: 0}
+  attributes: {hw.id: 3931-45A01, hw.name: CPC01}
+- metric: '^hw\.(host\.ambient_)?temperature$'
+  unit: Cel
+  generator: {function: gaussian, mean: 23.5, stddev: 1.2, min: 18, max: 32}
+  attributes: {hw.id: 3931-45A01-inlet, hw.name: CPC01, hw.sensor_location: inlet}
+- metric: '^mainframe\.host\.humidity$'
+  unit: "1"
+  generator: {function: gaussian, mean: 0.45, stddev: 0.03, min: 0.3, max: 0.65}
+- metric: '^mainframe\.host\.heatload$'
+  unit: J/h
+  # 18 000 - 34 000 BTU/h (1 BTU/h = 1055.06 J/h)
+  generator: {function: diurnal, base: 2.64e7, amplitude: 7.4e6, noise: 2.1e5, min: 1.9e7, max: 3.59e7}
+  attributes: {mainframe.host.heatload.type: [total, forced-air, water]}
+- metric: '^mainframe\.host\.power\.cord\.usage$'
+  unit: W
+  generator: {function: diurnal, base: 1550, amplitude: 400, noise: 15, min: 1100, max: 2100}
+  attributes: {mainframe.host.power.cord: ["1", "2", "3", "4"], mainframe.host.power.phase: A}
+- metric: '^(mainframe\.host|virtualization\.platform)\.power\.usage$|^hw\.(host\.)?power$'
+  unit: W
+  generator: {function: diurnal, base: 6200, amplitude: 1600, noise: 50, min: 4500, max: 8200}
+  attributes:
+    mainframe.host.power.usage.type: [total, partitions, infrastructure]
+    hw.id: 3931-45A01
+    hw.name: CPC01
+    hw.type: power_supply
+- metric: '^hw\.(host\.)?energy$'
+  unit: J
+  generator: {function: counter, rate: {function: diurnal, base: 6200, amplitude: 1600, min: 4500}}
+  attributes: {hw.id: 3931-45A01, hw.name: CPC01, hw.type: power_supply}
+- metric: '^hw\.errors$'
+  unit: "{error}"
+  generator: {function: counter, rate: {function: constant, value: 0}}
+  attributes: {hw.id: 3931-45A01, hw.name: CPC01, hw.type: cpu}
+- metric: '^hw\.status$'
+  unit: "1"
+  generator: {function: constant, value: 1}
+  attributes: {hw.id: 3931-45A01, hw.name: CPC01, hw.type: enclosure, hw.state: ok}
+- metric: '^mainframe\.(host|partition)\.status\.unacceptable$'
+  unit: "1"
+  generator: {function: constant, value: 0}
+- metric: '^mainframe\.partition\.power\.usage$'
+  unit: W
+  generator: {function: diurnal, base: 1100, amplitude: 450, noise: 25, min: 600, max: 1800}
+
+# ── Processor and memory configuration (bytes, counts) ──
+- metric: '^mainframe\.host\.cpu\.active\.count$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 8}
+  attributes: {mainframe.cpu.type: [cp, ifl, iip, icf, sap]}
+- metric: '^mainframe\.host\.cpu\.spare\.count$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 2}
+- metric: '^mainframe\.host\.cpu\.defective\.count$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 0}
+- metric: '^mainframe\.partition\.cpu\.(virtual|reserved|capped)\.count$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 4}
+  attributes: {mainframe.cpu.type: [cp, iip]}
+- metric: '^mainframe\.host\.memory\.size$'
+  unit: By
+  generator: {function: constant, value: 4398046511104}  # 4 TiB
+  attributes: {mainframe.memory.type: [total, HSA, partitions, available]}
+- metric: '^mainframe\.host\.memory\.vfm\.size$'
+  unit: By
+  generator: {function: constant, value: 549755813888}  # 512 GiB
+- metric: '^mainframe\.host\.memory\.vfm\.increment\.size$'
+  unit: By
+  generator: {function: constant, value: 17179869184}  # 16 GiB
+- metric: '^mainframe\.partition\.memory\.size$'
+  unit: By
+  generator: {function: constant, value: 274877906944}  # 256 GiB
+  attributes: {mainframe.partition.memory.type: [central-initial, central-current, central-maximum]}
+- metric: '^virtualization\.(partition\.memory\.size|platform\.memory\.total)$'
+  unit: By
+  generator: {function: constant, value: 274877906944}
+- metric: '^virtualization\.platform\.memory\.used$'
+  unit: By
+  generator: {function: diurnal, base: 2.2e11, amplitude: 2.0e10, noise: 1.0e9, min: 1.0e11, max: 2.7e11}
+
+# ── Partition (LPAR) configuration ──
+- metric: '^mainframe\.partition\.capacity\.defined$'
+  unit: "{MSU}/h"
+  generator: {function: constant, value: 450}
+- metric: '^mainframe\.partition\.cpu\.threads_per_processor$'
+  unit: "{thread}"
+  generator: {function: constant, value: 2}
+- metric: '^virtualization\.partition\.cpu\.weight$'
+  unit: "1"
+  generator: {function: constant, value: 200}
+  attributes: {mainframe.partition.weight.type: [initial, current]}
+- metric: '^(mainframe\.partition\.(wlm\.enabled)|virtualization\.partition\.cpu\.is_capped)$'
+  unit: "1"
+  generator: {function: constant, value: 1}
+# Coded states: 0 = operating / active / running.
+- metric: '\.(status|state)\.code$|^mainframe\.partition\.cpu\.mode$'
+  unit: "1"
+  generator: {function: constant, value: 0}
+  attributes: {mainframe.adapter.status: active, mainframe.partition.status: operating}
+- metric: '^virtualization\.vm\.power\.state$'
+  unit: "1"
+  generator: {function: constant, value: 1}
+- metric: '^virtualization\.hypervisor\.memory\.overcommit_ratio$'
+  unit: "1"
+  generator: {function: gaussian, mean: 1.3, stddev: 0.05, min: 1.0}
+
+# ── Utilization gauges (ratios 0..1) with their dimensions ──
+- metric: '^mainframe\.(host|partition)\.adapter\.utilization$'
+  unit: "1"
+  generator: {function: diurnal, base: 0.35, amplitude: 0.2, noise: 0.02, min: 0, max: 1}
+  attributes: {mainframe.adapter.type: [network, storage, crypto]}
+- metric: '^mainframe\.(host|partition)\.cpu\.utilization$'
+  unit: "1"
+  generator: {function: diurnal, base: 0.55, amplitude: 0.3, noise: 0.02, min: 0, max: 1}
+  attributes: {mainframe.cpu.type: [all, cp, ifl]}
+- metric: '^system\.cpu\.utilization$'
+  unit: "1"
+  generator: {function: diurnal, base: 0.55, amplitude: 0.3, noise: 0.02, min: 0, max: 1}
+  attributes: {mainframe.cpu.type: [cp, ifl], virtualization.partition.cpu.type: [cp, ifl]}
+- metric: '^hw\.network\.bandwidth\.utilization$'
+  unit: "1"
+  generator: {function: diurnal, base: 0.2, amplitude: 0.1, min: 0, max: 1}
+  attributes: {hw.id: VSWITCH1, hw.name: VSWITCH1}
+- metric: '^system\.(memory|filesystem)\.utilization$'
+  unit: "1"
+  generator: {function: gaussian, mean: 0.6, stddev: 0.05, min: 0, max: 1}
+  attributes: {system.memory.state: used, system.filesystem.state: used, system.filesystem.type: ext4,
+               system.filesystem.mountpoint: /, system.device: dasda1}
+
+# ── z/VM guests and virtual infrastructure ──
+- metric: '^virtualization\.(vm|partition)\.cpu\.count$'
+  unit: "{vcpu}"
+  generator: {function: constant, value: 4}
+  attributes: {virtualization.partition.cpu.type: ifl}
+- metric: '^virtualization\.platform\.partition\.count$'
+  unit: "{partition}"
+  generator: {function: constant, value: 2}
+  attributes: {virtualization.partition.state: active}
+- metric: '\.vm\.count$'
+  unit: "{vm}"
+  generator: {function: constant, value: 2}
+  attributes: {virtualization.platform.vm.state: running, virtualization.vm.state: running}
+- metric: '^virtualization\.cluster\.host\.count$'
+  unit: "{host}"
+  generator: {function: constant, value: 2}
+- metric: '^virtualization\.resource_pool\.cpu\.allocated$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 8}
+- metric: '^virtualization\.vm\.memory\.(allocated|used|rss)$|^virtualization\.resource_pool\.memory\.allocated$'
+  unit: By
+  generator: {function: gaussian, mean: 8589934592, stddev: 2.6e8, min: 1073741824}  # ~8 GiB
+- metric: '^virtualization\.vm\.memory\.(balloon|swapped)$'
+  unit: By
+  generator: {function: gaussian, mean: 1.0e8, stddev: 1.0e7, min: 0}
+- metric: '^system\.memory\.usage$'
+  unit: By
+  generator: {function: gaussian, mean: 5.0e9, stddev: 2.0e8, min: 0}
+  attributes: {system.memory.state: [used, free]}
+- metric: '^system\.uptime$'
+  unit: s
+  generator: {function: constant, value: 864000}
+- metric: '^virtualization\.vm\.cpu\.(ready|steal)_time$'
+  unit: s
+  generator: {function: counter, start: 120, rate: {function: gaussian, mean: 0.02, stddev: 0.005}}
+- metric: '\.cpu\.time$'
+  unit: s
+  generator: {function: counter, start: 3.6e6, rate: {function: diurnal, base: 2.0, amplitude: 1.0, min: 0}}
+  attributes: {virtualization.partition.cpu.type: [cp, ifl]}
+- metric: '^virtualization\.vm\.disk\.latency\.time$'
+  unit: s
+  generator: {function: counter, start: 30, rate: {function: gaussian, mean: 0.35, stddev: 0.05}}
+  attributes: {virtualization.vm.disk.direction: [read, write], virtualization.vm.disk.name: dasda}
+- metric: '^virtualization\.vm\.disk\.io$'
+  unit: By
+  generator: {function: counter, start: 1.0e10, rate: {function: diurnal, base: 2.4e6, amplitude: 1.6e6, min: 0}}
+  attributes: {virtualization.vm.disk.direction: [read, write], virtualization.vm.disk.name: dasda}
+- metric: '^virtualization\.vm\.disk\.operations$'
+  unit: "{operation}"
+  generator: {function: counter, start: 1.0e6, rate: {function: diurnal, base: 320, amplitude: 210, min: 0}}
+  attributes: {virtualization.vm.disk.direction: [read, write], virtualization.vm.disk.name: dasda}
+- metric: '^virtualization\.vm\.disk\.errors$'
+  unit: "{error}"
+  generator: {function: counter, rate: {function: constant, value: 0}}
+  attributes: {virtualization.vm.disk.direction: [read, write], virtualization.vm.disk.name: dasda}
+- metric: '^system\.paging\.faults$'
+  unit: "{fault}"
+  generator: {function: counter, start: 5.0e5, rate: {function: gaussian, mean: 40, stddev: 5}}
+  attributes: {system.paging.fault.type: [major, minor]}
+
+# ── Network: adapter ports, partition NICs, guests, VSWITCH ──
+- metric: '^hw\.network\.bandwidth\.limit$'
+  unit: By/s
+  generator: {function: constant, value: 3125000000}  # 25 Gbit/s
+  attributes: {hw.id: VSWITCH1, hw.name: VSWITCH1}
+- metric: '^hw\.network\.up$'
+  unit: "1"
+  generator: {function: constant, value: 1}
+  attributes: {hw.id: VSWITCH1, hw.name: VSWITCH1}
+- metric: '^hw\.network\.io$|\.network\.io$'
+  unit: By
+  generator: {function: counter, start: 1.0e12, rate: {function: diurnal, base: 1.25e6, amplitude: 9.0e5, min: 0}}
+  attributes: {network.io.direction: [receive, transmit], hw.id: VSWITCH1, hw.name: VSWITCH1}
+- metric: '^hw\.network\.packets$|^system\.network\.packet\.(count|dropped)$'
+  unit: "{packet}"
+  generator: {function: counter, start: 1.0e9, rate: {function: diurnal, base: 2500, amplitude: 1500, min: 0}}
+  attributes: {network.io.direction: [receive, transmit], hw.id: VSWITCH1, hw.name: VSWITCH1}
+- metric: '^system\.network\.errors$'
+  unit: "{error}"
+  generator: {function: counter, rate: {function: constant, value: 0}}
+  attributes: {network.io.direction: [receive, transmit]}
+
+# ── DPM storage (bytes) ──
+- metric: '^mainframe\.storage\.group\.(volume\.)?capacity$|^virtualization\.storage_pool\.available$|^system\.disk\.limit$'
+  unit: By
+  generator: {function: constant, value: 2199023255552}  # 2 TiB
+  attributes: {mainframe.storage.fulfillment.state: complete}
+- metric: '^mainframe\.storage\.group\.usage$|^virtualization\.storage_pool\.used$|^system\.filesystem\.usage$'
+  unit: By
+  generator: {function: gaussian, mean: 1.1e12, stddev: 1.0e10, min: 0}
+  attributes: {system.filesystem.state: used, system.filesystem.type: ext4, system.filesystem.mountpoint: /,
+               system.device: dasda1}
+
+# ── Every other ratio gauge: processor, channel and adapter utilization ──
+- unit: "1"
+  instrument: gauge
+  generator: {function: diurnal, base: 0.45, amplitude: 0.3, noise: 0.02, min: 0, max: 1}

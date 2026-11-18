@@ -1,0 +1,111 @@
+# The IBM Z HMC reference scenario: one CPC (see topology.yaml) emitting every
+# metric model/ associates with its entities. `metrics` is checked exactly.
+runner: mainframe-conformance
+instrumented_library: hmc
+instrumentation_library: reference
+
+scenarios:
+  cpc:
+    run: uv run --frozen --project ../.. python scenario.py
+    metrics:
+      - hw.energy
+      - hw.errors
+      - hw.host.ambient_temperature
+      - hw.host.energy
+      - hw.host.heating_margin
+      - hw.host.power
+      - hw.network.bandwidth.limit
+      - hw.network.bandwidth.utilization
+      - hw.network.io
+      - hw.network.packets
+      - hw.network.up
+      - hw.power
+      - hw.status
+      - hw.temperature
+      - mainframe.adapter.physical_channel.status.code
+      - mainframe.adapter.status.code
+      - mainframe.adapter.utilization
+      - mainframe.channel.utilization
+      - mainframe.cpu.smt_mode.utilization
+      - mainframe.cpu.thread0.utilization
+      - mainframe.cpu.thread1.utilization
+      - mainframe.cpu.utilization
+      - mainframe.host.adapter.utilization
+      - mainframe.host.channel.utilization
+      - mainframe.host.cpu.active.count
+      - mainframe.host.cpu.defective.count
+      - mainframe.host.cpu.spare.count
+      - mainframe.host.cpu.utilization
+      - mainframe.host.dewpoint
+      - mainframe.host.heatload
+      - mainframe.host.humidity
+      - mainframe.host.memory.size
+      - mainframe.host.memory.vfm.increment.size
+      - mainframe.host.memory.vfm.size
+      - mainframe.host.power.cord.usage
+      - mainframe.host.power.usage
+      - mainframe.host.status.unacceptable
+      - mainframe.partition.adapter.utilization
+      - mainframe.partition.capacity.defined
+      - mainframe.partition.cpu.capped.count
+      - mainframe.partition.cpu.mode
+      - mainframe.partition.cpu.reserved.count
+      - mainframe.partition.cpu.threads_per_processor
+      - mainframe.partition.cpu.utilization
+      - mainframe.partition.cpu.virtual.count
+      - mainframe.partition.memory.size
+      - mainframe.partition.power.usage
+      - mainframe.partition.status.code
+      - mainframe.partition.status.unacceptable
+      - mainframe.partition.wlm.enabled
+      - mainframe.storage.group.capacity
+      - mainframe.storage.group.usage
+      - mainframe.storage.group.volume.capacity
+      - system.cpu.time
+      - system.cpu.utilization
+      - system.disk.limit
+      - system.filesystem.usage
+      - system.filesystem.utilization
+      - system.memory.usage
+      - system.memory.utilization
+      - system.network.errors
+      - system.network.io
+      - system.network.packet.count
+      - system.network.packet.dropped
+      - system.paging.faults
+      - system.uptime
+      - virtualization.cluster.host.count
+      - virtualization.cluster.vm.count
+      - virtualization.hypervisor.memory.overcommit_ratio
+      - virtualization.partition.cpu.count
+      - virtualization.partition.cpu.is_capped
+      - virtualization.partition.cpu.time
+      - virtualization.partition.cpu.utilization
+      - virtualization.partition.cpu.weight
+      - virtualization.partition.memory.size
+      - virtualization.partition.state.code
+      - virtualization.platform.cpu.utilization
+      - virtualization.platform.memory.total
+      - virtualization.platform.memory.used
+      - virtualization.platform.partition.count
+      - virtualization.platform.power.usage
+      - virtualization.platform.vm.count
+      - virtualization.resource_pool.cpu.allocated
+      - virtualization.resource_pool.memory.allocated
+      - virtualization.storage_pool.available
+      - virtualization.storage_pool.used
+      - virtualization.vm.cpu.count
+      - virtualization.vm.cpu.ready_time
+      - virtualization.vm.cpu.steal_time
+      - virtualization.vm.cpu.utilization
+      - virtualization.vm.disk.errors
+      - virtualization.vm.disk.io
+      - virtualization.vm.disk.latency.time
+      - virtualization.vm.disk.operations
+      - virtualization.vm.memory.allocated
+      - virtualization.vm.memory.balloon
+      - virtualization.vm.memory.rss
+      - virtualization.vm.memory.swapped
+      - virtualization.vm.memory.used
+      - virtualization.vm.network.io
+      - virtualization.vm.power.state

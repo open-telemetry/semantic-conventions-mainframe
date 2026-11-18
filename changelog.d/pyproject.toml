@@ -1,0 +1,8 @@
+[project]
+name = "semconv-mainframe-changelog"
+version = "0.1.0"
+description = "Towncrier changelog management for semantic-conventions-mainframe"
+requires-python = ">=3.12"
+dependencies = [
+    "towncrier>=24.8.0",
+]
