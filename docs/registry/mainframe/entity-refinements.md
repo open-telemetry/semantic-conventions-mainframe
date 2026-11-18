@@ -10,6 +10,13 @@ Mainframe domain.
 | Refinement ID | Refined Entity Type | Description |
 | --- | --- | --- |
 | `refinement.mainframe.host` | `host` | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
+| `refinement.mainframe.host.virtualization.platform` | `virtualization.platform` | Mainframe refinement of virtualization.platform for the IBM Z Central Processing Complex (CPC). A CPC is a physical computing platform that hosts firmware-enforced logical partitions (LPARs) via PR/SM, directly analogous to virtualization.platform in the generic virtualization schema. |
+| `refinement.mainframe.partition.virtualization.partition` | `virtualization.partition` | Mainframe refinement of virtualization.partition for an IBM Z logical partition (LPAR).  An LPAR is a firmware-enforced partition managed by PR/SM, directly analogous to virtualization.partition in the generic virtualization schema. |
+| `refinement.mainframe.processor_pool.virtualization.resource_pool` | `virtualization.resource_pool` | Mainframe refinement of virtualization.resource_pool for an IBM Z shared processor pool. A shared processor pool defines a capacity boundary for a group of physical processor engines (CP, IFL, zIIP, ICF) shared by logical partitions, directly analogous to virtualization.resource_pool in the generic virtualization schema. |
+| `refinement.mainframe.storage_group.virtualization.storage_pool` | `virtualization.storage_pool` | Mainframe refinement of virtualization.storage_pool for an IBM Z DPM storage group. A storage group aggregates FCP/SCSI or FICON/ECKD volumes allocated to partitions and guests, directly analogous to virtualization.storage_pool in the generic virtualization schema. |
+| `refinement.mainframe.vswitch.virtualization.vswitch` | `virtualization.vswitch` | Mainframe refinement of virtualization.vswitch for an IBM z/VM VSWITCH or DPM virtual switch. A mainframe virtual switch bridges partitions and guest VMs to physical OSA-Express or RoCE network adapters, directly analogous to virtualization.vswitch in the generic virtualization schema. |
+| `refinement.mainframe.zvm.guest.virtualization.vm` | `virtualization.vm` | Mainframe refinement of virtualization.vm for an IBM z/VM guest virtual machine. A z/VM guest is a virtual machine managed by the z/VM Control Program (CP), running Linux on Z or z/OS, directly analogous to virtualization.vm in the generic virtualization schema. |
+| `refinement.mainframe.zvm.hypervisor.virtualization.hypervisor` | `virtualization.hypervisor` | Mainframe refinement of virtualization.hypervisor for the z/VM Control Program (CP). z/VM is a Type-1 software hypervisor that runs on IBM Z hardware (bare-metal or inside a PR/SM LPAR) and manages hundreds to thousands of guest virtual machines, directly analogous to virtualization.hypervisor in the generic virtualization schema. |
 
 
 ## `refinement.mainframe.host`
@@ -73,3 +80,537 @@ Mainframe refinement of the generic host entity for the IBM Z Central Processing
 | `ppc64` | 64-bit PowerPC | ![Development](https://img.shields.io/badge/-development-blue) |
 | `s390x` | IBM z/Architecture | ![Development](https://img.shields.io/badge/-development-blue) |
 | `x86` | 32-bit x86 | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.host.virtualization.platform`
+
+Refines upstream entity: `virtualization.platform`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.platform for the IBM Z Central Processing Complex (CPC). A CPC is a physical computing platform that hosts firmware-enforced logical partitions (LPARs) via PR/SM, directly analogous to virtualization.platform in the generic virtualization schema.
+
+**Type:** `virtualization.platform`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.platform.id`](/docs/registry/virtualization/README.md#virtualization-platform-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtualization platform. [10] | `3931-45A01`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
+| Description | [`host.arch`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/host.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The CPU architecture the host system is running on. [11] | `amd64`; `arm32`; `arm64` |
+| Description | [`host.id`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/host.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique host ID. For Cloud, this must be the instance_id assigned by the cloud provider. For non-containerized systems, this should be the `machine-id`. See the table below for the sources to use to determine the `machine-id` based on operating system. [12] | `fdbf79e8af94cb7f9e8df36789187052` |
+| Description | [`host.name`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/host.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On UNIX systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [13] | `opentelemetry-test` |
+| Description | [`host.type`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/host.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Type of host. For Cloud, this must be the machine type. [14] | `n1-standard-1` |
+| Description | [`mainframe.host.machine_model`](/docs/registry/mainframe/README.md#mainframe-host-machine-model) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The IBM machine model of the Central Processing Complex (CPC), identifying the capacity tier within a machine type. [15] | `ME1`; `ML1`; `A01`; `LA1` |
+| Description | [`mainframe.host.machine_type`](/docs/registry/mainframe/README.md#mainframe-host-machine-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The four-digit IBM machine type of the Central Processing Complex (CPC), identifying the hardware generation. [16] | `9175`; `3931` |
+| Description | [`mainframe.host.serial_number`](/docs/registry/mainframe/README.md#mainframe-host-serial-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The serial number of the Central Processing Complex (CPC). [17] | `0000000ABCDE` |
+| Description | [`virtualization.platform.firmware.version`](/docs/registry/virtualization/README.md#virtualization-platform-firmware-version) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The version string of the firmware running on the virtualization platform. [18] | `S72`; `H23`; `3.1.0.0` |
+| Description | [`virtualization.platform.serial_number`](/docs/registry/virtualization/README.md#virtualization-platform-serial-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The serial number of the virtualization platform hardware. [19] | `12ABC34`; `0000000ABCDE` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [20] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| Description | [`virtualization.platform.model`](/docs/registry/virtualization/README.md#virtualization-platform-model) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The model identifier of the virtualization platform hardware. [21] | `9175-ME1`; `9175-728`; `IBM z15` |
+| Description | [`virtualization.platform.name`](/docs/registry/virtualization/README.md#virtualization-platform-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Opt-In` | string | The human-readable name assigned to the virtualization platform. [22] | `MyCPC`; `PROD-Z15`; `TESTLPAR` |
+
+**[10] `virtualization.platform.id`:** Stable and identical for every observer of the platform; see the attribute definition for how each platform fills it (IBM Z: `<machine type>-<serial number>` of the CPC).
+
+**[11] `host.arch`:** The CPU architecture of the platform. SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+
+**[12] `host.id`:** SHOULD be equal to `virtualization.platform.id`, so consumers that use only the generic host entity identify the same platform.
+
+**[13] `host.name`:** The name of the physical computing platform as configured in the platform management interface. For IBM Z systems this is the CPC name as configured on the Hardware Management Console (HMC). Descriptive only: a platform can be renamed without becoming a different platform.
+
+**[14] `host.type`:** The hardware model of the physical platform. For IBM Z systems this is the machine type and model concatenated with a hyphen, e.g., "9175-ME1" for the IBM z16 Model ME1. Consumers that use only the generic host entity should prefer host.type over virtualization.platform.model.
+
+**[15] `mainframe.host.machine_model`:** IBM machine model tier (e.g. "ME1"). Combined with mainframe.host.machine_type, this forms the full type-model string.
+
+**[16] `mainframe.host.machine_type`:** IBM four-digit machine type (e.g. "9175"). Use alongside virtualization.platform.model for cross-platform consumers.
+
+**[17] `mainframe.host.serial_number`:** Mainframe-specific serial number of the CPC. Use alongside virtualization.platform.serial_number for cross-platform consumers.
+
+**[18] `virtualization.platform.firmware.version`:** The firmware or microcode version as reported by the platform management interface. For IBM Z this corresponds to the driver or MCL level reported by the HMC. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+
+**[19] `virtualization.platform.serial_number`:** The hardware serial number as reported by the platform management interface.
+
+**[20] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology managing this platform (e.g. ibm.prsm, ibm.zvm, vmware.esxi).
+
+**[21] `virtualization.platform.model`:** The model identifier of the platform hardware. Consumers should prefer host.type; this attribute is retained for implementations that need the platform-specific model string separately.
+
+**[22] `virtualization.platform.name`:** The human-readable name as configured in the platform management interface. Consumers should prefer host.name as the name attribute; this attribute is retained for compatibility with implementations that populate both.
+
+---
+
+`host.arch` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `amd64` | AMD64 | ![Development](https://img.shields.io/badge/-development-blue) |
+| `arm32` | ARM32 | ![Development](https://img.shields.io/badge/-development-blue) |
+| `arm64` | ARM64 | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ia64` | Itanium | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ppc32` | 32-bit PowerPC | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ppc64` | 64-bit PowerPC | ![Development](https://img.shields.io/badge/-development-blue) |
+| `s390x` | IBM z/Architecture | ![Development](https://img.shields.io/badge/-development-blue) |
+| `x86` | 32-bit x86 | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.partition.virtualization.partition`
+
+Refines upstream entity: `virtualization.partition`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.partition for an IBM Z logical partition (LPAR).  An LPAR is a firmware-enforced partition managed by PR/SM, directly analogous to virtualization.partition in the generic virtualization schema.
+
+**Type:** `virtualization.partition`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.partition.id`](/docs/registry/virtualization/README.md#virtualization-partition-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the hardware or firmware partition. [23] | `LPAR01`; `PRODZ` |
+| Identity | [`virtualization.platform.id`](/docs/registry/virtualization/README.md#virtualization-platform-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtualization platform. [24] | `3931-45A01`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
+| Description | [`host.name`](https://github.com/open-telemetry/semantic-conventions/blob/v1.44.0/docs/registry/attributes/host.md) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Name of the host. On UNIX systems, it may contain what the hostname command returns, or the fully qualified hostname, or another name specified by the user. [25] | `opentelemetry-test` |
+| Description | [`mainframe.partition.name`](/docs/registry/mainframe/README.md#mainframe-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the logical partition (LPAR) running on the mainframe. [26] | `LPAR01`; `PRODZ`; `TEST1` |
+| Description | [`mainframe.partition.number`](/docs/registry/mainframe/README.md#mainframe-partition-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The numeric index assigned by PR/SM that identifies the logical partition (LPAR) within its Central Processing Complex (CPC). [27] | `1`; `3`; `15` |
+| Description | [`mainframe.partition.type`](/docs/registry/mainframe/README.md#mainframe-partition-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The workload category of the logical partition (LPAR), reflecting which operating environment it is configured to run. [28] | `general_purpose`; `linux_only`; `zvm` |
+| Description | [`virtualization.partition.name`](/docs/registry/virtualization/README.md#virtualization-partition-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The human-readable name assigned to the partition. [29] | `LPAR1`; `PROD`; `LINUX01` |
+| Description | [`virtualization.partition.number`](/docs/registry/virtualization/README.md#virtualization-partition-number) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The partition number assigned by the virtualization platform. [30] | `1`; `2`; `15` |
+| Description | [`virtualization.partition.state`](/docs/registry/virtualization/README.md#virtualization-partition-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The operational state of the partition. [31] | `active`; `not_activated`; `stopped` |
+| Description | [`virtualization.partition.type`](/docs/registry/virtualization/README.md#virtualization-partition-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The workload type or operational mode of the partition. [32] | `general_purpose`; `linux_only`; `ssc` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [33] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+
+**[23] `virtualization.partition.id`:** Identifies the partition within its virtualization platform (`virtualization.platform.id`); the pair identifies it globally. The value MUST be the same for every observer of the partition. On IBM Z and LinuxONE this is the logical partition (LPAR) name, which the HMC Web Services API, z/OS RMF (SMF type 70 `SMF70LPM`) and Linux on IBM Z (`/proc/sysinfo` `LPAR Name`) all report.
+
+**[24] `virtualization.platform.id`:** Identifies the physical computing platform. The value MUST be the same for every observer of the platform and MUST NOT change during its lifetime, so names and management-tool internal object IDs are not used.
+- IBM Z and LinuxONE: `<machine type>-<serial number>` of the Central
+  Processing Complex (CPC), with leading zeros removed from the serial,
+  e.g. `3931-45A01`. The HMC Web Services API (CPC `machine-type`,
+  `cpc-serial-number`), z/OS RMF (SMF type 70 `SMF70CPC_TYPE`,
+  `SMF70CSC`) and Linux on IBM Z (`/proc/sysinfo` `Type`,
+  `Sequence Code`) all report it.
+- VMware vSphere: the ESXi host hardware UUID. - KVM / libvirt: the host machine ID.
+Equal to `host.id` of the same platform.
+
+**[25] `host.name`:** The name of the Central Processing Complex (CPC) that hosts this logical partition (LPAR). Corresponds to the virtualization.platform identity for cross-platform portability.
+
+**[26] `mainframe.partition.name`:** The LPAR name as configured on the HMC. This is the primary human-readable identifier for the partition.
+
+**[27] `mainframe.partition.number`:** The numeric partition index assigned by PR/SM. Used to correlate HMC data with SMF records and hardware event logs that reference partitions by number rather than by name.
+
+**[28] `mainframe.partition.type`:** The workload category of the partition. Determines which processor types and software environments are licensed for this LPAR.
+
+**[29] `virtualization.partition.name`:** The name as configured in the hypervisor management interface, e.g., the HMC (Hardware Management Console) for IBM Z PR/SM partitions. On IBM Z, partition names are 1–8 uppercase alphanumeric characters.
+
+**[30] `virtualization.partition.number`:** The numeric index identifying the partition within the platform. On IBM Z PR/SM (classic) mode, this corresponds to the LPAR number as reported by the HMC Web Services API.
+
+**[31] `virtualization.partition.state`:** Reflects the current activation or execution state of the partition as reported by the virtualization platform management interface.
+
+**[32] `virtualization.partition.type`:** Classifies the partition by the category of workload it is configured to run. On IBM Z, this maps to the partition type field on the HMC.
+
+**[33] `virtualization.system.name`:** Identifies the virtualization technology managing this partition. Use this attribute to discriminate partition metrics by platform — e.g. filter on "ibm.prsm" to isolate IBM Z LPAR metrics from generic virtualization partition metrics.
+
+---
+
+`mainframe.partition.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `general_purpose` | General-purpose partition that can run any IBM Z operating system including z/OS, Linux on Z, or z/VM, using all licensed processor types. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `linux_only` | Linux-only partition restricted to running Linux on Z; cannot activate a z/OS or z/VM image. Uses only Integrated Facility for Linux (IFL) processors. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ssc` | Secure Service Container (SSC) partition for IBM Z security appliances; provides a hardware-isolated, tamper-evident execution environment. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | The partition type is not known or could not be determined from the available HMC API response. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `zvm` | Partition configured to host a z/VM hypervisor instance as its primary workload; can manage hundreds of guest virtual machines. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.partition.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `active` | Partition is active and processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `not_activated` | Partition is defined but not yet activated. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopped` | Partition has been deactivated. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Partition state is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.partition.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `general_purpose` | General-purpose partition supporting any workload type. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `linux_only` | Linux-only partition restricted to Linux operating system workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ssc` | Secure Service Container (SSC) partition for IBM Z security appliances. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Partition type is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.processor_pool.virtualization.resource_pool`
+
+Refines upstream entity: `virtualization.resource_pool`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.resource_pool for an IBM Z shared processor pool. A shared processor pool defines a capacity boundary for a group of physical processor engines (CP, IFL, zIIP, ICF) shared by logical partitions, directly analogous to virtualization.resource_pool in the generic virtualization schema.
+
+**Type:** `virtualization.resource_pool`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.resource_pool.id`](/docs/registry/virtualization/README.md#virtualization-resource-pool-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtualization resource pool. [34] | `3931-45A01/IFLPOOL`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/resgroup-21` |
+| Description | [`mainframe.cpu.type`](/docs/registry/mainframe/README.md#mainframe-cpu-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The type of mainframe processor within the Central Processing Complex (CPC). [35] | `all`; `cp`; `icf` |
+| Description | [`virtualization.resource_pool.name`](/docs/registry/virtualization/README.md#virtualization-resource-pool-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The human-readable name assigned to the virtualization resource pool. [36] | `high-priority-pool`; `linux-pool`; `Default Shared Pool` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [37] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+
+**[34] `virtualization.resource_pool.id`:** Resource pool names are not unique across management domains; see the attribute definition for how each platform fills the identifier.
+
+**[35] `mainframe.cpu.type`:** The type of processor engines managed by this shared pool. Maps to the processor-type property of the HMC Web Services API shared-processor- pool object.
+
+**[36] `virtualization.resource_pool.name`:** The name as configured in the hypervisor management interface. For VMware vSphere this is the resource pool name in vCenter. For IBM Z PR/SM this corresponds to the shared processor pool name as reported by the HMC Web Services API.
+
+**[37] `virtualization.system.name`:** Identifies the virtualization technology owning this resource pool. Filter on "ibm.prsm" to isolate IBM Z shared processor pool metrics.
+
+---
+
+`mainframe.cpu.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `aap` | Application Assist Processor (AAP), a processor dedicated to accelerating Java and XML processing for database workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `all` | All types of mainframe processors combined. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cbp` | Container Based Processor (CBP), a processor type for container-based workloads. Present only in HMC/SE versions 2.14.0 through 2.15.0. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `cp` | Central Processor (CP), the general-purpose processor that hosts a mainframe operating system such as z/OS. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `icf` | Integrated Coupling Facility (ICF), a processor dedicated to running coupling facility workloads for high-speed communication between systems in a sysplex. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ifl` | Integrated Facility for Linux (IFL), a processor dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `iip` | z Integrated Information Processor (zIIP), a processor dedicated to offloading eligible workloads such as Java applications from general-purpose processors. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `sap` | System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.storage_group.virtualization.storage_pool`
+
+Refines upstream entity: `virtualization.storage_pool`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.storage_pool for an IBM Z DPM storage group. A storage group aggregates FCP/SCSI or FICON/ECKD volumes allocated to partitions and guests, directly analogous to virtualization.storage_pool in the generic virtualization schema.
+
+**Type:** `virtualization.storage_pool`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.storage_pool.id`](/docs/registry/virtualization/README.md#virtualization-storage-pool-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtualization storage pool. [38] | `3931-45A01/SG-PROD`; `5f1e9b2c-7d3a-4e6b-8c9d-0a1b2c3d4e5f` |
+| Description | [`mainframe.storage.group.name`](/docs/registry/mainframe/README.md#mainframe-storage-group-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the DPM storage group attached to the Central Processing Complex (CPC). [39] | `sg-fcp-prod`; `sg-nvme-test` |
+| Description | [`mainframe.storage.group.type`](/docs/registry/mainframe/README.md#mainframe-storage-group-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The connectivity type of the DPM storage group. [40] | `fcp`; `fc`; `nvme` |
+| Description | [`virtualization.storage_pool.name`](/docs/registry/virtualization/README.md#virtualization-storage-pool-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The human-readable name assigned to the virtualization storage pool. [41] | `datastore-ssd-01`; `vsanDatastore`; `FCP-POOL-A` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [42] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+
+**[38] `virtualization.storage_pool.id`:** Storage pool names are not unique across management domains; see the attribute definition for how each platform fills the identifier.
+
+**[39] `mainframe.storage.group.name`:** The name of the DPM storage group. Maps to the `name` field of the storage-group HMC object. This is the z/VM/DPM equivalent of `virtualization.storage_pool.name`.
+
+**[40] `mainframe.storage.group.type`:** The connectivity type of the storage group (fcp, fc, nvme). Maps to the `type` field of the storage-group HMC object.
+
+**[41] `virtualization.storage_pool.name`:** The name as configured in the hypervisor or storage management interface. For VMware vSphere this is the datastore name in vCenter. For IBM Z DPM mode this corresponds to the storage-group name as reported by the HMC Web Services API.
+
+**[42] `virtualization.system.name`:** Identifies the virtualization technology owning this storage pool. Filter on "ibm.prsm" to isolate IBM Z DPM storage group metrics.
+
+---
+
+`mainframe.storage.group.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `fc` | FC (native Fibre Channel / ECKD) storage group — IBM ECKD disk format. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `fcp` | FCP (Fibre Channel Protocol) storage group — SCSI over Fibre Channel. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `nvme` | NVMe storage group — NVMe over Fabrics. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.vswitch.virtualization.vswitch`
+
+Refines upstream entity: `virtualization.vswitch`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.vswitch for an IBM z/VM VSWITCH or DPM virtual switch. A mainframe virtual switch bridges partitions and guest VMs to physical OSA-Express or RoCE network adapters, directly analogous to virtualization.vswitch in the generic virtualization schema.
+
+**Type:** `virtualization.vswitch`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.vswitch.id`](/docs/registry/virtualization/README.md#virtualization-vswitch-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtual network switch. [43] | `3931-45A01/ZVM1/VSWITCH1`; `3931-45A01/104.P0.OSD` |
+| Description | [`mainframe.vswitch.name`](/docs/registry/mainframe/README.md#mainframe-vswitch-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the mainframe virtual switch (VSWITCH or DPM virtual switch). [44] | `VSWITCHA`; `VSWITCH1`; `EXTLAN` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [45] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| Description | [`virtualization.vswitch.name`](/docs/registry/virtualization/README.md#virtualization-vswitch-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The human-readable name assigned to the virtual network switch. [46] | `VSWITCHA`; `dvSwitch-prod`; `br-internal` |
+
+**[43] `virtualization.vswitch.id`:** Switch names repeat across hosts and management domains; see the attribute definition for how each platform fills the identifier.
+
+**[44] `mainframe.vswitch.name`:** The name of the z/VM VSWITCH or DPM virtual switch. Maps to the `name` field of the virtual-switch HMC object.
+
+**[45] `virtualization.system.name`:** Identifies the virtualization technology owning this virtual switch. Filter on "ibm.zvm" to isolate IBM z/VM VSWITCH metrics.
+
+**[46] `virtualization.vswitch.name`:** The name as configured in the hypervisor management interface. For IBM Z z/VM this is the VSWITCH name defined in the CP directory. For IBM Z DPM mode this is the virtual switch name reported by the HMC Web Services API. For VMware vSphere this is the switch name shown in vCenter.
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.zvm.guest.virtualization.vm`
+
+Refines upstream entity: `virtualization.vm`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.vm for an IBM z/VM guest virtual machine. A z/VM guest is a virtual machine managed by the z/VM Control Program (CP), running Linux on Z or z/OS, directly analogous to virtualization.vm in the generic virtualization schema.
+
+**Type:** `virtualization.vm`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.vm.id`](/docs/registry/virtualization/README.md#virtualization-vm-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the virtual machine instance. [47] | `SSIPLEX1/LINUX01`; `502e7c9a-1b2d-4f3e-8a6b-7c8d9e0f1a2b` |
+| Description | [`mainframe.zvm.guest.userid`](/docs/registry/mainframe/README.md#mainframe-zvm-guest-userid) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The z/VM user identifier (userid) of the guest virtual machine. [48] | `LINUXVM1`; `PRODDB01`; `DEVGUEST` |
+| Description | [`mainframe.zvm.hypervisor.name`](/docs/registry/mainframe/README.md#mainframe-zvm-hypervisor-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the z/VM hypervisor instance (the LPAR running z/VM). [49] | `ZVMPROD`; `ZVMTEST`; `VMDEV01` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [50] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| Description | [`virtualization.vm.cpu.count`](/docs/registry/virtualization/README.md#virtualization-vm-cpu-count) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The number of virtual CPUs (vCPUs) allocated to the virtual machine. [51] | `1`; `2`; `4`; `8` |
+| Description | [`virtualization.vm.instance_id`](/docs/registry/virtualization/README.md#virtualization-vm-instance-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The cloud or platform provider's instance identifier for the virtual machine. [52] | `i-0abc123def456789`; `1234567890abcdef0` |
+| Description | [`virtualization.vm.machine_type`](/docs/registry/virtualization/README.md#virtualization-vm-machine-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The machine type or hardware profile assigned to the virtual machine. [53] | `n1-standard-2`; `t3.medium`; `9175-ME1` |
+| Description | [`virtualization.vm.memory.size`](/docs/registry/virtualization/README.md#virtualization-vm-memory-size) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | int | The amount of memory allocated to the virtual machine, in mebibytes (MiB). [54] | `1024`; `4096`; `16384` |
+| Description | [`virtualization.vm.name`](/docs/registry/virtualization/README.md#virtualization-vm-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The human-readable name assigned to the virtual machine. [55] | `my-web-server`; `prod-db-01`; `test-vm` |
+| Description | [`virtualization.vm.nested_virtualization.enabled`](/docs/registry/virtualization/README.md#virtualization-vm-nested-virtualization-enabled) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | boolean | Indicates whether nested virtualization is enabled on this virtual machine. [56] | |
+| Description | [`virtualization.vm.state`](/docs/registry/virtualization/README.md#virtualization-vm-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The operational state of the virtual machine. | `running`; `stopped`; `paused` |
+
+**[47] `virtualization.vm.id`:** Uniquely identifies the virtual machine across its live-migration domain, so the identity survives vMotion, KVM live migration and z/VM Live Guest Relocation. It never includes the host or hypervisor the VM runs on.
+- IBM z/VM: the SSI cluster name (or the z/VM system name outside an SSI
+  cluster) and the guest user ID, e.g. `SSIPLEX1/LINUX01`.
+- VMware vSphere: the VM `instanceUuid`. - KVM / libvirt: the domain UUID.
+
+**[48] `mainframe.zvm.guest.userid`:** The z/VM user directory identifier for this guest. Maps to the `zvm-guest-name` field of the HMC logical-partition object. This is the z/VM equivalent of `virtualization.vm.name`; together with the SSI cluster name (or the z/VM system name outside an SSI cluster) it forms `virtualization.vm.id`, so the identity survives Live Guest Relocation.
+
+**[49] `mainframe.zvm.hypervisor.name`:** The LPAR name of the z/VM hypervisor hosting this guest. Used to correlate guests with their hypervisor instance.
+
+**[50] `virtualization.system.name`:** Identifies the virtualization technology managing this VM. Use this attribute to discriminate VM metrics by platform — e.g. filter on "ibm.zvm" to isolate z/VM guest metrics.
+
+**[51] `virtualization.vm.cpu.count`:** The number of virtual CPUs visible to the guest operating system. This may differ from the number of physical CPUs on the underlying host.
+
+**[52] `virtualization.vm.instance_id`:** A provider-assigned instance identifier, distinct from the hypervisor's own identifier (`virtualization.vm.id`). For example, on AWS this would be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition object-id.
+
+**[53] `virtualization.vm.machine_type`:** A string identifying the virtual machine's hardware configuration class as defined by the hypervisor or cloud provider. For IBM Z DPM partitions this corresponds to the partition type profile.
+
+**[54] `virtualization.vm.memory.size`:** The total memory allocation visible to the guest operating system, expressed in mebibytes (MiB). This is the configured allocation, not necessarily the currently consumed amount.
+
+**[55] `virtualization.vm.name`:** The name as configured in the hypervisor management interface. Names are not guaranteed to be unique across hypervisors; use `virtualization.vm.id` for unambiguous identification.
+
+**[56] `virtualization.vm.nested_virtualization.enabled`:** When `true`, the virtual machine is configured to expose virtualization extensions to its guest operating system, allowing a hypervisor to run inside the VM. Not all hypervisors or platforms support this capability.
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.vm.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `failed` | Virtual machine has encountered a fatal error and cannot recover without operator intervention. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `migrating` | Virtual machine is being live-migrated to another host without interruption. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `paused` | Virtual machine is suspended with state preserved in memory. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `running` | Virtual machine is running and processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `scheduled` | Virtual machine has been assigned to a host node and is being prepared to start. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `scheduling` | Virtual machine has been requested but is waiting for the scheduler to assign it to a host node. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopped` | Virtual machine is stopped and not consuming CPU resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `succeeded` | Virtual machine completed its workload and terminated cleanly (applicable to batch or ephemeral VMs). | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtual machine state is not known or cannot be determined. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+## `refinement.mainframe.zvm.hypervisor.virtualization.hypervisor`
+
+Refines upstream entity: `virtualization.hypervisor`
+
+**Status:** ![Development](https://img.shields.io/badge/-development-blue)
+
+Mainframe refinement of virtualization.hypervisor for the z/VM Control Program (CP). z/VM is a Type-1 software hypervisor that runs on IBM Z hardware (bare-metal or inside a PR/SM LPAR) and manages hundreds to thousands of guest virtual machines, directly analogous to virtualization.hypervisor in the generic virtualization schema.
+
+**Type:** `virtualization.hypervisor`
+
+**Requirement Level:** `Recommended`
+
+**Attributes:**
+
+| Role | Key | Stability | [Requirement Level](https://opentelemetry.io/docs/specs/semconv/general/attribute-requirement-level/) | Value Type | Description | Example Values |
+| --- | --- | --- | --- | --- | --- | --- |
+| Identity | [`virtualization.hypervisor.id`](/docs/registry/virtualization/README.md#virtualization-hypervisor-id) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | Unique identifier for the hypervisor instance. [57] | `3931-45A01/ZVM1`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
+| Description | [`mainframe.zvm.hypervisor.name`](/docs/registry/mainframe/README.md#mainframe-zvm-hypervisor-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the z/VM hypervisor instance (the LPAR running z/VM). [58] | `ZVMPROD`; `ZVMTEST`; `VMDEV01` |
+| Description | [`virtualization.hypervisor.state`](/docs/registry/virtualization/README.md#virtualization-hypervisor-state) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The operational state of the hypervisor. | `active`; `inactive`; `unknown` |
+| Description | [`virtualization.hypervisor.type`](/docs/registry/virtualization/README.md#virtualization-hypervisor-type) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The type of hypervisor controlling the virtual machines. [59] | `type1`; `type2`; `unknown` |
+| Description | [`virtualization.hypervisor.version`](/docs/registry/virtualization/README.md#virtualization-hypervisor-version) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The version string of the hypervisor software. [60] | `6.4.0`; `2024.1.1`; `4.2.1-release` |
+| Description | [`virtualization.system.name`](/docs/registry/virtualization/README.md#virtualization-system-name) | ![Development](https://img.shields.io/badge/-development-blue) | `Recommended` | string | The name of the virtualization system (hypervisor technology) managing this platform. [61] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+
+**[57] `virtualization.hypervisor.id`:** Uniquely identifies the hypervisor instance across the management domains in which it is observed.
+- IBM z/VM: the z/VM system name qualified by the CPC
+  (`virtualization.platform.id`), e.g. `3931-45A01/ZVM1`.
+- VMware vSphere: the ESXi host hardware UUID. - KVM / libvirt: the libvirt host UUID.
+
+**[58] `mainframe.zvm.hypervisor.name`:** The name of the LPAR hosting the z/VM hypervisor instance. Maps to the `name` field of the logical-partition HMC object.
+
+**[59] `virtualization.hypervisor.type`:** Classifies the hypervisor by its position in the virtualization stack. Type-1 (bare-metal) hypervisors run directly on hardware; Type-2 (hosted) hypervisors run within a host operating system.
+
+**[60] `virtualization.hypervisor.version`:** The version as reported by the hypervisor software itself. Format is hypervisor-specific and should be used for informational purposes and correlation with vendor release notes.
+
+**[61] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology in use. This attribute allows consumers to correlate platform-specific behaviour and capabilities when multiple virtualization technologies are observed in a mixed environment. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+
+---
+
+`virtualization.hypervisor.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `active` | Hypervisor is running and managing virtual machines. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `inactive` | Hypervisor is not currently running. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Hypervisor state is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.hypervisor.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `type1` | Type-1 (bare-metal) hypervisor running directly on hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `type2` | Type-2 (hosted) hypervisor running within a host operating system. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Hypervisor type is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.system.name` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `hyperv` | Microsoft Hyper-V hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.powervm` | IBM PowerVM hypervisor for IBM Power Systems. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.prsm` | IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ibm.zvm` | IBM z/VM hypervisor running on IBM Z hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kubevirt` | KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `kvm` | Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `openshift_virtualization` | OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtualization system is not known. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `virtualbox` | Oracle VirtualBox hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
