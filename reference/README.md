@@ -15,6 +15,34 @@ in [../model/](../model/), and writes the per-scenario results to
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to run scenarios and add new ones.
 
+## Scenarios
+
+| Scenario | What it stands for |
+| --- | --- |
+| [hmc](scenarios/hmc/) | An IBM Z HMC-based collector observing one CPC: processors, channels, adapters and ports, a z/OS and a z/VM partition, z/VM guests and VSWITCH, DPM storage groups, processor and storage pools. Every metric the model associates with these entities is emitted, including the `system.*` and `hw.*` refinements. |
+
+The HMC scenario's values are synthetic, produced by a model-driven emitter
+([src/semconv_mainframe/emitter/](src/semconv_mainframe/emitter/)) from a
+topology and a workload profile; the resources, metric names, units,
+instruments and attributes are the ones the conventions prescribe.
+
+## Demo
+
+[demo.sh](demo.sh) sends the HMC scenario's telemetry to the local reference
+stack (OpenTelemetry Collector, Prometheus and Grafana, see
+[stack/README.md](stack/README.md)), to look at the conventions in a backend:
+
+```bash
+reference/demo.sh start               # fetch the upstream registry if needed, start the stack
+reference/demo.sh emit-once           # one collection: 35 resources, every metric of the scenario
+reference/demo.sh emit-continuous 60  # a collection every 60 s until Ctrl-C
+reference/demo.sh stop
+```
+
+Then query Prometheus at <http://localhost:9090> or Grafana at
+<http://localhost:3000>, for example `{"hw.host.power"}` or
+`{"mainframe.cpu.utilization", "mainframe.cpu.name"="IFL00"}`.
+
 ## Reports
 
 Generated from committed `scenarios/*/data.json` files. Do not edit this section by hand.

@@ -13,10 +13,13 @@ pyproject.toml           # Tooling project metadata
 uv.lock                  # Locked tooling dependencies (committed)
 src/
   semconv_mainframe/     # Scenario discovery, live-check runner, report generation
+    emitter/             # Model-driven synthetic emitter used by the HMC scenario
 tests/                   # Unit tests for the tooling
 scenarios/
   <scenario>/            # Reference scenarios
 reports/                 # Generated per-signal report pages
+stack/                   # Local Collector, Prometheus and Grafana (see stack/README.md)
+demo.sh                  # Sends the HMC scenario to the stack
 ```
 
 Within each scenario directory:
@@ -127,6 +130,63 @@ from the repository root.
 - Prefer focused updates to the affected scenario under `scenarios/<scenario>/`.
 - After regenerating `scenarios/*/data.json`, run `uv run update-reports` and
   commit both alongside your change.
+
+## The HMC scenario and the synthetic emitter
+
+[scenarios/hmc/](scenarios/hmc/) stands for an IBM Z HMC-based collector
+observing one CPC. Its `scenario.py` drives the emitter in
+[src/semconv_mainframe/emitter/](src/semconv_mainframe/emitter/) with two
+files of its own:
+
+- [`topology.yaml`](scenarios/hmc/topology.yaml) lists the entities, nested
+  as they are on the machine. Each node becomes one OTLP resource carrying
+  exactly the attributes its entity declares; a node takes a declared
+  attribute it does not set from its nearest ancestor (the CPC's
+  `virtualization.platform.id`, say). Identities follow the model: the CPC is
+  `<machine type>-<serial>` (`3931-45A01`, also `host.id`), partitions are
+  identified by LPAR name, adapters by PCHID, channels by `CSS.CHPID`. Nodes
+  are checked against the registry: unknown entities or attributes, invalid
+  enum values and incomplete or duplicate identities are errors.
+- [`workload.yaml`](scenarios/hmc/workload.yaml) says which values each metric
+  takes. The first rule matching a metric definition (by `metric` regex on its
+  id or name, `instrument`, `entity`) decides; `unit` is required and must equal
+  the unit the model declares, so byte quantities are emitted in bytes (`By`)
+  and ratios in `1`. A metric no rule matches is an error. A counter needs a
+  `counter` generator, so it stays monotonic.
+
+The emitter reads the registry as `weaver registry resolve --v2` resolves
+`model/` (cached under `.cache/`), so upstream signals arrive resolved whatever
+file format upstream defines them in, and every refinement is emitted with the
+attributes of the signal it refines. Definitions sharing a wire name on one
+entity -- a base metric and its refinement -- are emitted as one metric with
+each definition's series. `scenario.py` fails when a metric definition
+associated with an entity of the topology would emit no data point, and
+[tests/test_hmc_scenario.py](tests/test_hmc_scenario.py) asserts that every
+metric and every metric refinement in the model is emitted.
+
+When the model changes:
+
+1. Add a topology node for a new entity, or a workload rule for a new metric
+   (`uv run --extra dev pytest tests/test_hmc_scenario.py` says what is missing).
+2. Update the `metrics:` list in `scenarios/hmc/conformance.yaml` if a wire
+   name was added or removed.
+3. Run `uv run run-scenario hmc --strict` and `uv run update-reports`, and
+   commit `data.json`, `README.md` and `reports/`.
+
+## Demo
+
+[demo.sh](demo.sh) runs the same emitter against the local reference stack in
+[stack/](stack/) instead of Weaver: `start` materializes the filtered upstream
+registry (`make filter-upstream`) and runs `make stack-up`; `emit-once` and
+`emit-continuous [secs]` send the HMC scenario to `OTLP_ENDPOINT` (default
+`http://localhost:4317`); `stop` runs `make stack-down`. The emitter can also be
+run directly:
+
+```bash
+uv run python -m semconv_mainframe.emitter \
+    --topology scenarios/hmc/topology.yaml --workload scenarios/hmc/workload.yaml \
+    --endpoint http://localhost:4317 --cycles 1
+```
 
 ## Adding a scenario
 
