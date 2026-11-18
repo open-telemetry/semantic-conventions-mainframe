@@ -8,13 +8,18 @@ first — it covers the CLA, Code of Conduct, and other prerequisites.
 
 ## Prerequisites
 
-- [Docker](https://docs.docker.com/get-docker/) (or a compatible runtime
-  such as Podman aliased as `docker`) — `make` runs Weaver via the
-  `otel/weaver` container image.
+- [Podman](https://podman.io/) or [Docker](https://docs.docker.com/get-docker/)
+  — `make` runs Weaver via the `otel/weaver` container image. The Makefile
+  uses `podman` if it is installed and falls back to `docker`. If you have
+  several Podman machines, make the running one the default connection
+  (`podman system connection default <name>`).
 - [GNU Make](https://www.gnu.org/software/make/) — pre-installed on macOS
   and Linux. On Windows, use [WSL](https://learn.microsoft.com/windows/wsl/install)
   or install via [Chocolatey](https://chocolatey.org/) (`choco install make`)
   or [Scoop](https://scoop.sh/) (`scoop install make`).
+- [uv](https://docs.astral.sh/uv/) — runs the reference scenarios under
+  `reference/`; it fetches the Python version the tooling declares.
+- [mise](https://mise.jdx.dev/) (optional) — runs the link checks.
 
 ## Code structure
 
@@ -352,9 +357,10 @@ Stability progresses in one direction: `development` → `release_candidate` →
 
 ### 1. Modify the YAML model
 
-Refer to the
-[Semantic Convention YAML Language](https://github.com/open-telemetry/weaver/blob/main/schemas/semconv-syntax.md)
-to learn about the YAML file syntax.
+Create or update the files under `model/<namespace>/` following the
+[authoring principles](#authoring-principles), the
+[four-step authoring process](#four-step-authoring-process) and the
+[YAML authoring rules](#yaml-authoring-rules).
 
 ### 2. Regenerate the docs
 
@@ -364,9 +370,14 @@ After updating the YAML, run:
 make generate-all
 ```
 
-This regenerates the attribute registry pages under `docs/registry/`,
-refreshes the generated tables embedded in the hand-written docs under
-`docs/mainframe/` and regenerates the status reports.
+This regenerates the registry pages under `docs/registry/` (one page per
+definition kind a namespace uses — `entities.md`, `entity-refinements.md`,
+`metrics.md`, `metric-refinements.md` — plus the namespace `README.md`) and the
+reference reports. Commit the regenerated files with your change; CI checks
+that they match what `make generate-all` produces.
+
+`make generate-docs` refreshes the tables that Weaver embeds in hand-written
+pages between `<!-- weaver ... -->` markers. Run it if you add such markers.
 
 ### 3. Validate
 
@@ -378,7 +389,20 @@ make check-policies
 
 This validates the model against shared OpenTelemetry policies covering
 naming conventions, attribute type rules, stability requirements, and
-backwards compatibility.
+backwards compatibility, plus the repository's own policies under
+`policies/check/`.
+
+Optionally, emit one synthetic data point for every signal of the resolved
+registry to see what the conventions produce:
+
+```bash
+make emit                                                      # print to stdout
+make emit OTLP_ENDPOINT=http://host.containers.internal:4317   # send to a collector (Podman)
+make emit OTLP_ENDPOINT=http://host.docker.internal:4317       # send to a collector (Docker)
+```
+
+Weaver runs in a container, so `localhost` refers to the container; use the
+host alias of your container runtime to reach a collector on your machine.
 
 Run the link checks (optional, requires [mise](https://mise.jdx.dev/)):
 
@@ -386,14 +410,71 @@ Run the link checks (optional, requires [mise](https://mise.jdx.dev/)):
 mise run links
 ```
 
+CI checks every local link in the repository, so links between hand-written
+pages must point to files that exist in the same pull request.
+
 ### 4. Update reference scenarios
 
-Changes under `model/` or `docs/` typically require updating the
-reference scenarios under `reference/` to demonstrate that the proposed
-updates are capturable. See
-[reference/CONTRIBUTING.md](reference/CONTRIBUTING.md).
+Changes under `model/` or `docs/` typically require updating the reference
+scenarios under `reference/` to demonstrate that the proposed updates are
+capturable. Each scenario lives in `reference/scenarios/<feature>/` with a
+`scenario.py`, a `pyproject.toml`, a committed `uv.lock` and the committed
+results in `data.json`. The shared framework in `reference/src/` runs a
+scenario, validates the emitted telemetry against the conventions and writes
+the results that feed the reports.
 
-### 5. Update the changelog
+Run the commands from the `reference/` directory:
+
+```bash
+uv sync                                   # first-time setup
+uv run run-scenario <feature>             # run one scenario
+uv run run-scenario --all                 # run all scenarios
+uv run run-scenario --all --keep-going    # report all failures at the end
+uv run update-reports                     # regenerate the status section in reference/README.md
+```
+
+Requirements:
+
+- Every entity type that carries a signal you add or change is exercised by a
+  scenario, and its identifying attributes are filled as the attribute
+  definitions describe.
+- Emit only what the reference can actually produce. If a source emits
+  unrelated telemetry that obscures the validation, suppress it in the
+  scenario rather than changing the conventions to match it.
+- After regenerating `scenarios/*/data.json`, run `uv run update-reports` and
+  commit both with your change.
+
+See [reference/CONTRIBUTING.md](reference/CONTRIBUTING.md) for the scenario
+layout, dependency pinning and linting.
+
+### 5. Update the documentation
+
+Documentation comes in two forms:
+
+- **Generated registry pages** under `docs/registry/<namespace>/` are produced
+  by `make generate-all` and MUST NOT be edited by hand. Their text comes from
+  the `brief` and `note` fields of the model, so write those fields carefully
+  and check how they render.
+- **Hand-written pages** under `docs/` carry what cannot be derived from the
+  model: design rationale and diagrams (`mainframe-discovered.md`,
+  `virtualization-discovered.md`), platform implementation guides
+  (`virtualization-vmware.md`, `virtualization-kvm.md`) and the IBM Z HMC
+  Web Services API background and cross-reference (`hmc-api-background.md`,
+  `hmc-api-signal-mapping.md`).
+
+When you change the model:
+
+- Every attribute, metric, entity and refinement name used in a hand-written
+  page must exist in the model or the upstream registry. Update the pages that
+  use a name you rename or remove.
+- If a definition carries `annotations.hmc_source`, add or update the matching
+  rows in `docs/hmc-api-signal-mapping.md` in the same pull request. The
+  annotation is authoritative; the page only covers signals with an HMC source.
+- Do not repeat content that the registry pages already show, such as
+  complete metric-to-entity association lists; link to the registry pages
+  instead.
+
+### 6. Update the changelog
 
 Add a Towncrier fragment under [changelog.d/](changelog.d/) for any change to
 the conventions that a consumer would care about. Editorial changes — typos,
@@ -403,6 +484,30 @@ Use a filename of `<pr-number>.<type>.md` once the pull request number is
 known, or `+.<type>.md` before then. Add a numeric counter before `.md` when
 one pull request needs multiple fragments of the same type. See
 [changelog.d/README.md](changelog.d/README.md) for the supported types.
+
+### Adding a new namespace
+
+To add a namespace (for example a new platform or operating system layer):
+
+1. **Inventory:** list all target entities and signals
+   ([step 1](#step-1--inventory)).
+2. **Upstream:** check the OpenTelemetry registry for reusable entities and
+   signals ([step 2](#step-2--upstream-reuse)).
+3. **Directory:** create `model/<namespace>/`.
+4. **Definitions:** add `attributes_<concept>.yaml`, `entities.yaml`,
+   `metrics_<concept>.yaml` and, for refinements of other namespaces,
+   `metrics_refinements_<base>.yaml`, each starting with
+   `file_format: definition/2` (see [File naming](#file-naming)). Define the
+   identifying attributes of every entity following
+   [Entity identity](#entity-identity).
+5. **Generate and validate:** run `make generate-all` and
+   `make check-policies`.
+6. **Reference scenario:** add or extend a scenario under
+   `reference/scenarios/` that emits the new signals, then run
+   `uv run run-scenario <feature>` and `uv run update-reports`.
+7. **Documentation:** check the generated registry pages and add narrative or
+   source-mapping pages under `docs/` where needed.
+8. **Changelog:** add a fragment under `changelog.d/`.
 
 ## Keep PRs small
 
