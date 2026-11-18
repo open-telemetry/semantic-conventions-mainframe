@@ -5,6 +5,7 @@
 
 - [Entities](#entities)
 - [Entity refinements](#entity-refinements)
+- [Metric refinements](#metric-refinements)
 - [Attributes](#attributes)
 
 ## Entities
@@ -22,6 +23,21 @@
 | Id | Stability | Description |
 | --- | --- | --- |
 | [`refinement.mainframe.host`](/docs/registry/mainframe/entity-refinements.md#refinementmainframehost) | ![Development](https://img.shields.io/badge/-development-blue) | Mainframe refinement of the generic host entity for the IBM Z Central Processing Complex (CPC). A CPC is a physical bare-metal server — the mainframe equivalent of any host. The IBM Z-specific attributes (serial number, machine type, machine model) extend the generic host description while preserving full compatibility with consumers that understand the base host entity. |
+
+## Metric refinements
+
+| Id | Stability | Description |
+| --- | --- | --- |
+| [`refinement.mainframe.nic.system.network.errors`](/docs/registry/mainframe/metric-refinements.md#refinementmainframenicsystemnetworkerrors) | ![Development](https://img.shields.io/badge/-development-blue) | Count of network errors detected on the partition virtual NIC. |
+| [`refinement.mainframe.nic.system.network.io`](/docs/registry/mainframe/metric-refinements.md#refinementmainframenicsystemnetworkio) | ![Development](https://img.shields.io/badge/-development-blue) | Network bytes transmitted and received through the partition virtual NIC. |
+| [`refinement.mainframe.nic.system.network.packet.count`](/docs/registry/mainframe/metric-refinements.md#refinementmainframenicsystemnetworkpacketcount) | ![Development](https://img.shields.io/badge/-development-blue) | Network packets transferred through the partition virtual NIC. |
+| [`refinement.mainframe.nic.system.network.packet.dropped`](/docs/registry/mainframe/metric-refinements.md#refinementmainframenicsystemnetworkpacketdropped) | ![Development](https://img.shields.io/badge/-development-blue) | Network packets dropped on the partition virtual NIC. |
+| [`refinement.mainframe.port.system.network.errors`](/docs/registry/mainframe/metric-refinements.md#refinementmainframeportsystemnetworkerrors) | ![Development](https://img.shields.io/badge/-development-blue) | Count of network errors detected on the mainframe physical adapter port. |
+| [`refinement.mainframe.port.system.network.io`](/docs/registry/mainframe/metric-refinements.md#refinementmainframeportsystemnetworkio) | ![Development](https://img.shields.io/badge/-development-blue) | Network bytes transmitted and received through the mainframe physical adapter port. |
+| [`refinement.mainframe.port.system.network.packet.count`](/docs/registry/mainframe/metric-refinements.md#refinementmainframeportsystemnetworkpacketcount) | ![Development](https://img.shields.io/badge/-development-blue) | Network packets transferred through the mainframe physical adapter port. |
+| [`refinement.mainframe.port.system.network.packet.dropped`](/docs/registry/mainframe/metric-refinements.md#refinementmainframeportsystemnetworkpacketdropped) | ![Development](https://img.shields.io/badge/-development-blue) | Network packets dropped on the mainframe physical adapter port. |
+| [`refinement.mainframe.system.cpu.utilization`](/docs/registry/mainframe/metric-refinements.md#refinementmainframesystemcpuutilization) | ![Development](https://img.shields.io/badge/-development-blue) | Per-logical-CPU utilization by mode, extended for IBM Z processor specialization. |
+| [`refinement.mainframe.virtualization.partition.cpu.weight`](/docs/registry/mainframe/metric-refinements.md#refinementmainframevirtualizationpartitioncpuweight) | ![Development](https://img.shields.io/badge/-development-blue) | Processing weight of the logical partition (LPAR), by IBM Z weight category. |
 
 ## Attributes
 
@@ -47,6 +63,7 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | <a id="mainframe-host-serial-number">`mainframe.host.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the Central Processing Complex (CPC). [13] | `0000000ABCDE` |
 | <a id="mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
 | <a id="mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [14] | `nic-0`; `nic-mgmt`; `nic-prod` |
+| <a id="mainframe-partition-weight-type">`mainframe.partition.weight.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The scheduling weight type that determines how processor time is allocated to the logical partition (LPAR). | `initial`; `minimum`; `current` |
 
 **[1] `mainframe.adapter.id`:** The PCHID is the hexadecimal location of the adapter in the Central Processing Complex (CPC) and is unique within one CPC. Reported by the HMC Web Services API adapter object field `adapter-id`.
 
@@ -134,3 +151,14 @@ Attributes defined in the `mainframe` namespace. Application developers are enco
 | `ifl` | Integrated Facility for Linux (IFL), a processor dedicated to running Linux workloads on the mainframe. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `iip` | z Integrated Information Processor (zIIP), a processor dedicated to offloading eligible workloads such as Java applications from general-purpose processors. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `sap` | System Assist Processor (SAP), a processor dedicated to system management and I/O processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.partition.weight.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `current` | The current processor weight actively in use by the partition at the time of observation. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `initial` | The initial processor weight assigned to the partition at activation, representing its baseline entitlement. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `maximum` | The maximum processor weight the partition may consume when spare capacity is available. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `minimum` | The minimum processor weight guaranteed to the partition, below which its allocation will not fall. | ![Development](https://img.shields.io/badge/-development-blue) |
