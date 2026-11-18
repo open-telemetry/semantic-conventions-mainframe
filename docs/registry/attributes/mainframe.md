@@ -17,6 +17,10 @@
 | <a id="mainframe-channel-name" href="#mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. [7] | `0.00`; `0.2D`; `1.E3` |
 | <a id="mainframe-channel-owning-partition" href="#mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [8] | `LPAR01`; `shared` |
 | <a id="mainframe-channel-type" href="#mainframe-channel-type">`mainframe.channel.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The protocol and connectivity type of the I/O channel path. [9] | `ficon`; `zhyperlink`; `osa` |
+| <a id="mainframe-host-heatload-type" href="#mainframe-host-heatload-type">`mainframe.host.heatload.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of heat load measurement reported for the Central Processing Complex (CPC). | `total`; `forced-air`; `water` |
+| <a id="mainframe-host-power-cord" href="#mainframe-host-power-cord">`mainframe.host.power.cord`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The identifier of the power cord supplying the Central Processing Complex (CPC). | `1`; `2`; `3` |
+| <a id="mainframe-host-power-phase" href="#mainframe-host-power-phase">`mainframe.host.power.phase`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The AC power phase supplying the Central Processing Complex (CPC). | `A`; `B`; `C` |
+| <a id="mainframe-host-power-usage-type" href="#mainframe-host-power-usage-type">`mainframe.host.power.usage.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The category of power usage measurement reported for the Central Processing Complex (CPC). | `total`; `partitions`; `infrastructure` |
 | <a id="mainframe-lpar-name" href="#mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
 | <a id="mainframe-partition-nic-name" href="#mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [10] | `nic-0`; `nic-mgmt`; `nic-prod` |
 
@@ -74,3 +78,49 @@
 | `osa` | Open Systems Adapter (OSA) channel path for Ethernet LAN connectivity. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `roce` | RDMA over Converged Ethernet (RoCE) channel path for high-speed memory-to-memory data transfers. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `zhyperlink` | zHyperLink express channel path providing ultra-low-latency synchronous PCIe storage access. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.host.heatload.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `forced-air` | Heat load dissipated via forced-air cooling. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `total` | Total heat load produced by the entire CPC frame. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `water` | Heat load dissipated via water cooling. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.host.power.cord` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `1` | Power cord 1. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `2` | Power cord 2. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `3` | Power cord 3. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `4` | Power cord 4. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `5` | Power cord 5. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `6` | Power cord 6. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `7` | Power cord 7. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `8` | Power cord 8. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.host.power.phase` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `A` | Power phase A. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `B` | Power phase B. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `C` | Power phase C. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.host.power.usage.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `infrastructure` | Power consumed by CPC infrastructure components such as cooling and I/O. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `partitions` | Aggregate power consumed by all active logical partitions (LPARs). | ![Development](https://img.shields.io/badge/-development-blue) |
+| `total` | Total power consumed by the entire CPC. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unassigned` | Power consumed by components not attributed to any active partition. | ![Development](https://img.shields.io/badge/-development-blue) |
