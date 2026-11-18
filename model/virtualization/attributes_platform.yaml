@@ -1,0 +1,167 @@
+file_format: definition/2
+
+attributes:
+  - key: virtualization.system.name
+    stability: development
+    brief: "The name of the virtualization system (hypervisor technology) managing this platform."
+    note: >
+      Identifies the specific hypervisor or partitioning technology in use.
+      This attribute allows consumers to correlate platform-specific behaviour
+      and capabilities when multiple virtualization technologies are observed
+      in a mixed environment.
+      No equivalent exists in the upstream OTel base registry; this attribute
+      is specific to the virtualization schema.
+    type:
+      members:
+        - id: ibm.prsm
+          value: "ibm.prsm"
+          brief: "IBM PR/SM (Processor Resource/System Manager) Type-1 hypervisor for IBM Z."
+          stability: development
+        - id: ibm.zvm
+          value: "ibm.zvm"
+          brief: "IBM z/VM hypervisor running on IBM Z hardware."
+          stability: development
+        - id: ibm.powervm
+          value: "ibm.powervm"
+          brief: "IBM PowerVM hypervisor for IBM Power Systems."
+          stability: development
+        - id: vmware.esxi
+          value: "vmware.esxi"
+          brief: "VMware ESXi bare-metal hypervisor."
+          stability: development
+        - id: vmware.workstation
+          value: "vmware.workstation"
+          brief: "VMware Workstation hosted hypervisor."
+          stability: development
+        - id: kvm
+          value: "kvm"
+          brief: "Kernel-based Virtual Machine (KVM) — a Type-1 hypervisor built into the Linux kernel, commonly used with QEMU for full virtualisation on x86 and IBM Z (KVM on z Systems) hardware."
+          stability: development
+        - id: hyperv
+          value: "hyperv"
+          brief: "Microsoft Hyper-V hypervisor."
+          stability: development
+        - id: virtualbox
+          value: "virtualbox"
+          brief: "Oracle VirtualBox hosted hypervisor."
+          stability: development
+        - id: kubevirt
+          value: "kubevirt"
+          brief: "KubeVirt — a Kubernetes extension that enables running virtual machines (VMs) as Kubernetes workloads, using KVM under the hood."
+          stability: development
+        - id: openshift_virtualization
+          value: "openshift_virtualization"
+          brief: "OpenShift Virtualization — Red Hat's enterprise distribution of KubeVirt integrated into OpenShift Container Platform, managing VMs as first-class Kubernetes resources."
+          stability: development
+        - id: xen
+          value: "xen"
+          brief: "Xen open-source hypervisor."
+          stability: development
+        - id: unknown
+          value: "unknown"
+          brief: "Virtualization system is not known."
+          stability: development
+
+  - key: virtualization.platform.id
+    type: string
+    stability: development
+    brief: "Unique identifier for the virtualization platform."
+    examples: ["3931-45A01", "4c4c4544-0042-3510-8058-b4c04f4e3732"]
+    note: >
+      Identifies the physical computing platform. The value MUST be the same
+      for every observer of the platform and MUST NOT change during its
+      lifetime, so names and management-tool internal object IDs are not used.
+
+      - IBM Z and LinuxONE: `<machine type>-<serial number>` of the Central
+        Processing Complex (CPC), with leading zeros removed from the serial,
+        e.g. `3931-45A01`. The HMC Web Services API (CPC `machine-type`,
+        `cpc-serial-number`), z/OS RMF (SMF type 70 `SMF70CPC_TYPE`,
+        `SMF70CSC`) and Linux on IBM Z (`/proc/sysinfo` `Type`,
+        `Sequence Code`) all report it.
+      - VMware vSphere: the ESXi host hardware UUID.
+      - KVM / libvirt: the host machine ID.
+
+      Equal to `host.id` of the same platform.
+
+  - key: virtualization.platform.name
+    type: string
+    stability: development
+    brief: "The human-readable name assigned to the virtualization platform."
+    examples: ["MyCPC", "PROD-Z15", "TESTLPAR"]
+    note: >
+      The name as configured in the platform management interface. For IBM Z
+      this is the CPC name as configured on the Hardware Management Console
+      (HMC).
+      Alignment with OTel base registry: this attribute is equivalent to
+      `host.name`, which the `virtualization.platform` entity uses as a
+      descriptive attribute; this attribute is retained for implementations
+      that also populate the platform-specific name separately or for
+      consumers that expect the virtualization namespace naming.
+
+  - key: virtualization.platform.model
+    type: string
+    stability: development
+    brief: "The model identifier of the virtualization platform hardware."
+    examples: ["9175-ME1", "9175-728", "IBM z15"]
+    note: >
+      Identifies the hardware model of the physical platform. For IBM Z
+      systems this is the machine type and model concatenated with a hyphen,
+      e.g., "9175-ME1" for the IBM z16 Model ME1.
+      Alignment with OTel base registry: this attribute is equivalent to
+      `host.type`. The `virtualization.platform` entity uses `host.type` in
+      its description; this attribute is retained for implementations that
+      also populate the platform-specific model string separately or for
+      consumers that expect the virtualization namespace naming.
+
+  - key: virtualization.platform.serial_number
+    type: string
+    stability: development
+    brief: "The serial number of the virtualization platform hardware."
+    examples: ["12ABC34", "0000000ABCDE"]
+    note: >
+      The hardware serial number as reported by the platform management
+      interface. Used to uniquely identify a physical system when multiple
+      systems share the same model or name.
+      Alignment with OTel base registry: the base registry does not have a
+      dedicated serial-number attribute. For IBM Z, the CPC serial number is
+      part of `virtualization.platform.id` and `host.id`
+      (`<machine type>-<serial number>`).
+
+  - key: virtualization.platform.firmware.version
+    type: string
+    stability: development
+    brief: "The version string of the firmware running on the virtualization platform."
+    examples: ["S72", "H23", "3.1.0.0"]
+    note: >
+      The firmware or microcode version as reported by the platform management
+      interface. For IBM Z this corresponds to the driver or MCL level
+      reported by the HMC.
+      No equivalent exists in the upstream OTel base registry; this attribute
+      is specific to the virtualization schema.
+
+  - key: virtualization.platform.vm.state
+    stability: development
+    brief: "The power state of virtual machines used as a dimension to break down platform-level VM count metrics."
+    note: >
+      Used as a discriminating dimension on the `virtualization.platform.vm.count`
+      metric to report counts broken down by VM power state. Use `all` to report
+      the total count across all states. Implementations may omit this attribute
+      and report only the total count when per-state breakdown is not available.
+    type:
+      members:
+        - id: running
+          value: "running"
+          brief: "Virtual machines that are actively running and processing workloads."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "Virtual machines that are stopped and not consuming CPU or memory resources."
+          stability: development
+        - id: paused
+          value: "paused"
+          brief: "Virtual machines that are paused with their state preserved in memory."
+          stability: development
+        - id: all
+          value: "all"
+          brief: "All virtual machines on the platform regardless of their power state."
+          stability: development
