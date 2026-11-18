@@ -7,50 +7,70 @@
 
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
-| <a id="virtualization-hypervisor-id" href="#virtualization-hypervisor-id">`virtualization.hypervisor.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the hypervisor instance. [1] | `3931-45A01/ZVM1`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
+| <a id="virtualization-cluster-id" href="#virtualization-cluster-id">`virtualization.cluster.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization cluster. [1] | `SSIPLEX1`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/domain-c7` |
+| <a id="virtualization-cluster-name" href="#virtualization-cluster-name">`virtualization.cluster.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization cluster. [2] | `prod-cluster-01`; `us-east-zone-a` |
+| <a id="virtualization-hypervisor-id" href="#virtualization-hypervisor-id">`virtualization.hypervisor.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the hypervisor instance. [3] | `3931-45A01/ZVM1`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
 | <a id="virtualization-hypervisor-state" href="#virtualization-hypervisor-state">`virtualization.hypervisor.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational state of the hypervisor. | `active`; `inactive`; `unknown` |
-| <a id="virtualization-hypervisor-type" href="#virtualization-hypervisor-type">`virtualization.hypervisor.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of hypervisor controlling the virtual machines. [2] | `type1`; `type2`; `unknown` |
-| <a id="virtualization-hypervisor-version" href="#virtualization-hypervisor-version">`virtualization.hypervisor.version`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The version string of the hypervisor software. [3] | `6.4.0`; `2024.1.1`; `4.2.1-release` |
-| <a id="virtualization-partition-cpu-type" href="#virtualization-partition-cpu-type">`virtualization.partition.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The category of processor type allocated to the firmware partition. [4] | `cp`; `ifl`; `icf` |
-| <a id="virtualization-partition-id" href="#virtualization-partition-id">`virtualization.partition.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the hardware or firmware partition. [5] | `LPAR01`; `PRODZ` |
-| <a id="virtualization-partition-name" href="#virtualization-partition-name">`virtualization.partition.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the partition. [6] | `LPAR1`; `PROD`; `LINUX01` |
-| <a id="virtualization-partition-number" href="#virtualization-partition-number">`virtualization.partition.number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The partition number assigned by the virtualization platform. [7] | `1`; `2`; `15` |
-| <a id="virtualization-partition-state" href="#virtualization-partition-state">`virtualization.partition.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational state of the partition. [8] | `active`; `not_activated`; `stopped` |
-| <a id="virtualization-partition-type" href="#virtualization-partition-type">`virtualization.partition.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The workload type or operational mode of the partition. [9] | `general_purpose`; `linux_only`; `ssc` |
-| <a id="virtualization-platform-firmware-version" href="#virtualization-platform-firmware-version">`virtualization.platform.firmware.version`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The version string of the firmware running on the virtualization platform. [10] | `S72`; `H23`; `3.1.0.0` |
-| <a id="virtualization-platform-id" href="#virtualization-platform-id">`virtualization.platform.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization platform. [11] | `3931-45A01`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
-| <a id="virtualization-platform-model" href="#virtualization-platform-model">`virtualization.platform.model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The model identifier of the virtualization platform hardware. [12] | `9175-ME1`; `9175-728`; `IBM z15` |
-| <a id="virtualization-platform-name" href="#virtualization-platform-name">`virtualization.platform.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization platform. [13] | `MyCPC`; `PROD-Z15`; `TESTLPAR` |
-| <a id="virtualization-platform-serial-number" href="#virtualization-platform-serial-number">`virtualization.platform.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the virtualization platform hardware. [14] | `12ABC34`; `0000000ABCDE` |
-| <a id="virtualization-resource-pool-id" href="#virtualization-resource-pool-id">`virtualization.resource_pool.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization resource pool. [15] | `3931-45A01/IFLPOOL`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/resgroup-21` |
-| <a id="virtualization-resource-pool-name" href="#virtualization-resource-pool-name">`virtualization.resource_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization resource pool. [16] | `high-priority-pool`; `linux-pool`; `Default Shared Pool` |
-| <a id="virtualization-system-name" href="#virtualization-system-name">`virtualization.system.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtualization system (hypervisor technology) managing this platform. [17] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| <a id="virtualization-hypervisor-type" href="#virtualization-hypervisor-type">`virtualization.hypervisor.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of hypervisor controlling the virtual machines. [4] | `type1`; `type2`; `unknown` |
+| <a id="virtualization-hypervisor-version" href="#virtualization-hypervisor-version">`virtualization.hypervisor.version`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The version string of the hypervisor software. [5] | `6.4.0`; `2024.1.1`; `4.2.1-release` |
+| <a id="virtualization-partition-cpu-type" href="#virtualization-partition-cpu-type">`virtualization.partition.cpu.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The category of processor type allocated to the firmware partition. [6] | `cp`; `ifl`; `icf` |
+| <a id="virtualization-partition-id" href="#virtualization-partition-id">`virtualization.partition.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the hardware or firmware partition. [7] | `LPAR01`; `PRODZ` |
+| <a id="virtualization-partition-name" href="#virtualization-partition-name">`virtualization.partition.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the partition. [8] | `LPAR1`; `PROD`; `LINUX01` |
+| <a id="virtualization-partition-number" href="#virtualization-partition-number">`virtualization.partition.number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The partition number assigned by the virtualization platform. [9] | `1`; `2`; `15` |
+| <a id="virtualization-partition-state" href="#virtualization-partition-state">`virtualization.partition.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational state of the partition. [10] | `active`; `not_activated`; `stopped` |
+| <a id="virtualization-partition-type" href="#virtualization-partition-type">`virtualization.partition.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The workload type or operational mode of the partition. [11] | `general_purpose`; `linux_only`; `ssc` |
+| <a id="virtualization-platform-firmware-version" href="#virtualization-platform-firmware-version">`virtualization.platform.firmware.version`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The version string of the firmware running on the virtualization platform. [12] | `S72`; `H23`; `3.1.0.0` |
+| <a id="virtualization-platform-id" href="#virtualization-platform-id">`virtualization.platform.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization platform. [13] | `3931-45A01`; `4c4c4544-0042-3510-8058-b4c04f4e3732` |
+| <a id="virtualization-platform-model" href="#virtualization-platform-model">`virtualization.platform.model`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The model identifier of the virtualization platform hardware. [14] | `9175-ME1`; `9175-728`; `IBM z15` |
+| <a id="virtualization-platform-name" href="#virtualization-platform-name">`virtualization.platform.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization platform. [15] | `MyCPC`; `PROD-Z15`; `TESTLPAR` |
+| <a id="virtualization-platform-serial-number" href="#virtualization-platform-serial-number">`virtualization.platform.serial_number`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The serial number of the virtualization platform hardware. [16] | `12ABC34`; `0000000ABCDE` |
+| <a id="virtualization-resource-pool-id" href="#virtualization-resource-pool-id">`virtualization.resource_pool.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization resource pool. [17] | `3931-45A01/IFLPOOL`; `1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/resgroup-21` |
+| <a id="virtualization-resource-pool-name" href="#virtualization-resource-pool-name">`virtualization.resource_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization resource pool. [18] | `high-priority-pool`; `linux-pool`; `Default Shared Pool` |
+| <a id="virtualization-storage-pool-id" href="#virtualization-storage-pool-id">`virtualization.storage_pool.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtualization storage pool. [19] | `3931-45A01/SG-PROD`; `5f1e9b2c-7d3a-4e6b-8c9d-0a1b2c3d4e5f` |
+| <a id="virtualization-storage-pool-name" href="#virtualization-storage-pool-name">`virtualization.storage_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization storage pool. [20] | `datastore-ssd-01`; `vsanDatastore`; `FCP-POOL-A` |
+| <a id="virtualization-system-name" href="#virtualization-system-name">`virtualization.system.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtualization system (hypervisor technology) managing this platform. [21] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
+| <a id="virtualization-vm-cpu-count" href="#virtualization-vm-cpu-count">`virtualization.vm.cpu.count`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The number of virtual CPUs (vCPUs) allocated to the virtual machine. [22] | `1`; `2`; `4`; `8` |
+| <a id="virtualization-vm-id" href="#virtualization-vm-id">`virtualization.vm.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual machine instance. [23] | `SSIPLEX1/LINUX01`; `502e7c9a-1b2d-4f3e-8a6b-7c8d9e0f1a2b` |
+| <a id="virtualization-vm-instance-id" href="#virtualization-vm-instance-id">`virtualization.vm.instance_id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The cloud or platform provider's instance identifier for the virtual machine. [24] | `i-0abc123def456789`; `1234567890abcdef0` |
+| <a id="virtualization-vm-machine-type" href="#virtualization-vm-machine-type">`virtualization.vm.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The machine type or hardware profile assigned to the virtual machine. [25] | `n1-standard-2`; `t3.medium`; `9175-ME1` |
+| <a id="virtualization-vm-memory-size" href="#virtualization-vm-memory-size">`virtualization.vm.memory.size`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The amount of memory allocated to the virtual machine, in mebibytes (MiB). [26] | `1024`; `4096`; `16384` |
+| <a id="virtualization-vm-name" href="#virtualization-vm-name">`virtualization.vm.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual machine. [27] | `my-web-server`; `prod-db-01`; `test-vm` |
+| <a id="virtualization-vm-nested-virtualization-enabled" href="#virtualization-vm-nested-virtualization-enabled">`virtualization.vm.nested_virtualization.enabled`</a> | ![Development](https://img.shields.io/badge/-development-blue) | boolean | Indicates whether nested virtualization is enabled on this virtual machine. [28] | |
+| <a id="virtualization-vm-state" href="#virtualization-vm-state">`virtualization.vm.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational state of the virtual machine. | `running`; `stopped`; `paused` |
+| <a id="virtualization-vswitch-id" href="#virtualization-vswitch-id">`virtualization.vswitch.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual network switch. [29] | `3931-45A01/ZVM1/VSWITCH1`; `3931-45A01/104.P0.OSD` |
+| <a id="virtualization-vswitch-name" href="#virtualization-vswitch-name">`virtualization.vswitch.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual network switch. [30] | `VSWITCHA`; `dvSwitch-prod`; `br-internal` |
 
 
-**[1] `virtualization.hypervisor.id`:** Uniquely identifies the hypervisor instance across the management domains in which it is observed.
+**[1] `virtualization.cluster.id`:** Uniquely identifies the cluster across management domains.
+- IBM z/VM: the SSI cluster name. - VMware vSphere: the vCenter instance UUID and the ClusterComputeResource
+  MoRef ID, e.g. `<vCenter UUID>/domain-c7`.
+
+**[2] `virtualization.cluster.name`:** The name as configured in the cluster management interface. For VMware vSphere this is the cluster name shown in vCenter. For IBM Z HMC multi-CPC management domains this corresponds to the HMC ensemble or management domain name.
+
+**[3] `virtualization.hypervisor.id`:** Uniquely identifies the hypervisor instance across the management domains in which it is observed.
 - IBM z/VM: the z/VM system name qualified by the CPC
   (`virtualization.platform.id`), e.g. `3931-45A01/ZVM1`.
 - VMware vSphere: the ESXi host hardware UUID. - KVM / libvirt: the libvirt host UUID.
 
-**[2] `virtualization.hypervisor.type`:** Classifies the hypervisor by its position in the virtualization stack. Type-1 (bare-metal) hypervisors run directly on hardware; Type-2 (hosted) hypervisors run within a host operating system.
+**[4] `virtualization.hypervisor.type`:** Classifies the hypervisor by its position in the virtualization stack. Type-1 (bare-metal) hypervisors run directly on hardware; Type-2 (hosted) hypervisors run within a host operating system.
 
-**[3] `virtualization.hypervisor.version`:** The version as reported by the hypervisor software itself. Format is hypervisor-specific and should be used for informational purposes and correlation with vendor release notes.
+**[5] `virtualization.hypervisor.version`:** The version as reported by the hypervisor software itself. Format is hypervisor-specific and should be used for informational purposes and correlation with vendor release notes.
 
-**[4] `virtualization.partition.cpu.type`:** On IBM Z PR/SM (Processor Resource/Systems Manager) partitions, processor resources are differentiated by specialisation purpose. A partition may receive allocations of different processor types simultaneously. Use `all` to report aggregate utilization or count across all types. On hypervisors that do not differentiate processor types, omit this attribute or use `unknown`.
+**[6] `virtualization.partition.cpu.type`:** On IBM Z PR/SM (Processor Resource/Systems Manager) partitions, processor resources are differentiated by specialisation purpose. A partition may receive allocations of different processor types simultaneously. Use `all` to report aggregate utilization or count across all types. On hypervisors that do not differentiate processor types, omit this attribute or use `unknown`.
 
-**[5] `virtualization.partition.id`:** Identifies the partition within its virtualization platform (`virtualization.platform.id`); the pair identifies it globally. The value MUST be the same for every observer of the partition. On IBM Z and LinuxONE this is the logical partition (LPAR) name, which the HMC Web Services API, z/OS RMF (SMF type 70 `SMF70LPM`) and Linux on IBM Z (`/proc/sysinfo` `LPAR Name`) all report.
+**[7] `virtualization.partition.id`:** Identifies the partition within its virtualization platform (`virtualization.platform.id`); the pair identifies it globally. The value MUST be the same for every observer of the partition. On IBM Z and LinuxONE this is the logical partition (LPAR) name, which the HMC Web Services API, z/OS RMF (SMF type 70 `SMF70LPM`) and Linux on IBM Z (`/proc/sysinfo` `LPAR Name`) all report.
 
-**[6] `virtualization.partition.name`:** The name as configured in the hypervisor management interface, e.g., the HMC (Hardware Management Console) for IBM Z PR/SM partitions. On IBM Z, partition names are 1–8 uppercase alphanumeric characters.
+**[8] `virtualization.partition.name`:** The name as configured in the hypervisor management interface, e.g., the HMC (Hardware Management Console) for IBM Z PR/SM partitions. On IBM Z, partition names are 1–8 uppercase alphanumeric characters.
 
-**[7] `virtualization.partition.number`:** The numeric index identifying the partition within the platform. On IBM Z PR/SM (classic) mode, this corresponds to the LPAR number as reported by the HMC Web Services API.
+**[9] `virtualization.partition.number`:** The numeric index identifying the partition within the platform. On IBM Z PR/SM (classic) mode, this corresponds to the LPAR number as reported by the HMC Web Services API.
 
-**[8] `virtualization.partition.state`:** Reflects the current activation or execution state of the partition as reported by the virtualization platform management interface.
+**[10] `virtualization.partition.state`:** Reflects the current activation or execution state of the partition as reported by the virtualization platform management interface.
 
-**[9] `virtualization.partition.type`:** Classifies the partition by the category of workload it is configured to run. On IBM Z, this maps to the partition type field on the HMC.
+**[11] `virtualization.partition.type`:** Classifies the partition by the category of workload it is configured to run. On IBM Z, this maps to the partition type field on the HMC.
 
-**[10] `virtualization.platform.firmware.version`:** The firmware or microcode version as reported by the platform management interface. For IBM Z this corresponds to the driver or MCL level reported by the HMC. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+**[12] `virtualization.platform.firmware.version`:** The firmware or microcode version as reported by the platform management interface. For IBM Z this corresponds to the driver or MCL level reported by the HMC. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
 
-**[11] `virtualization.platform.id`:** Identifies the physical computing platform. The value MUST be the same for every observer of the platform and MUST NOT change during its lifetime, so names and management-tool internal object IDs are not used.
+**[13] `virtualization.platform.id`:** Identifies the physical computing platform. The value MUST be the same for every observer of the platform and MUST NOT change during its lifetime, so names and management-tool internal object IDs are not used.
 - IBM Z and LinuxONE: `<machine type>-<serial number>` of the Central
   Processing Complex (CPC), with leading zeros removed from the serial,
   e.g. `3931-45A01`. The HMC Web Services API (CPC `machine-type`,
@@ -60,21 +80,56 @@
 - VMware vSphere: the ESXi host hardware UUID. - KVM / libvirt: the host machine ID.
 Equal to `host.id` of the same platform.
 
-**[12] `virtualization.platform.model`:** Identifies the hardware model of the physical platform. For IBM Z systems this is the machine type and model concatenated with a hyphen, e.g., "9175-ME1" for the IBM z16 Model ME1. Alignment with OTel base registry: this attribute is equivalent to `host.type`. The `virtualization.platform` entity uses `host.type` in its description; this attribute is retained for implementations that also populate the platform-specific model string separately or for consumers that expect the virtualization namespace naming.
+**[14] `virtualization.platform.model`:** Identifies the hardware model of the physical platform. For IBM Z systems this is the machine type and model concatenated with a hyphen, e.g., "9175-ME1" for the IBM z16 Model ME1. Alignment with OTel base registry: this attribute is equivalent to `host.type`. The `virtualization.platform` entity uses `host.type` in its description; this attribute is retained for implementations that also populate the platform-specific model string separately or for consumers that expect the virtualization namespace naming.
 
-**[13] `virtualization.platform.name`:** The name as configured in the platform management interface. For IBM Z this is the CPC name as configured on the Hardware Management Console (HMC). Alignment with OTel base registry: this attribute is equivalent to `host.name`, which the `virtualization.platform` entity uses as a descriptive attribute; this attribute is retained for implementations that also populate the platform-specific name separately or for consumers that expect the virtualization namespace naming.
+**[15] `virtualization.platform.name`:** The name as configured in the platform management interface. For IBM Z this is the CPC name as configured on the Hardware Management Console (HMC). Alignment with OTel base registry: this attribute is equivalent to `host.name`, which the `virtualization.platform` entity uses as a descriptive attribute; this attribute is retained for implementations that also populate the platform-specific name separately or for consumers that expect the virtualization namespace naming.
 
-**[14] `virtualization.platform.serial_number`:** The hardware serial number as reported by the platform management interface. Used to uniquely identify a physical system when multiple systems share the same model or name. Alignment with OTel base registry: the base registry does not have a dedicated serial-number attribute. For IBM Z, the CPC serial number is part of `virtualization.platform.id` and `host.id` (`<machine type>-<serial number>`).
+**[16] `virtualization.platform.serial_number`:** The hardware serial number as reported by the platform management interface. Used to uniquely identify a physical system when multiple systems share the same model or name. Alignment with OTel base registry: the base registry does not have a dedicated serial-number attribute. For IBM Z, the CPC serial number is part of `virtualization.platform.id` and `host.id` (`<machine type>-<serial number>`).
 
-**[15] `virtualization.resource_pool.id`:** Uniquely identifies the resource pool across management domains.
+**[17] `virtualization.resource_pool.id`:** Uniquely identifies the resource pool across management domains.
 - IBM Z PR/SM shared processor pools: the processor pool name qualified
   by the CPC (`virtualization.platform.id`), e.g. `3931-45A01/IFLPOOL`.
 - VMware vSphere: the vCenter instance UUID and the ResourcePool MoRef
   ID, e.g. `<vCenter UUID>/resgroup-21`.
 
-**[16] `virtualization.resource_pool.name`:** The name as configured in the hypervisor management interface. For VMware vSphere this is the resource pool name in vCenter. For IBM Z PR/SM this corresponds to the shared processor pool name as reported by the HMC Web Services API.
+**[18] `virtualization.resource_pool.name`:** The name as configured in the hypervisor management interface. For VMware vSphere this is the resource pool name in vCenter. For IBM Z PR/SM this corresponds to the shared processor pool name as reported by the HMC Web Services API.
 
-**[17] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology in use. This attribute allows consumers to correlate platform-specific behaviour and capabilities when multiple virtualization technologies are observed in a mixed environment. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+**[19] `virtualization.storage_pool.id`:** Uniquely identifies the storage pool across management domains.
+- IBM Z DPM: the CPC (`virtualization.platform.id`) and the storage group
+  name, e.g. `3931-45A01/SG-PROD`.
+- VMware vSphere: the datastore UUID. - KVM / libvirt: the storage pool UUID.
+
+**[20] `virtualization.storage_pool.name`:** The name as configured in the hypervisor or storage management interface. For VMware vSphere this is the datastore name in vCenter. For IBM Z DPM mode this corresponds to the storage-group name as reported by the HMC Web Services API.
+
+**[21] `virtualization.system.name`:** Identifies the specific hypervisor or partitioning technology in use. This attribute allows consumers to correlate platform-specific behaviour and capabilities when multiple virtualization technologies are observed in a mixed environment. No equivalent exists in the upstream OTel base registry; this attribute is specific to the virtualization schema.
+
+**[22] `virtualization.vm.cpu.count`:** The number of virtual CPUs visible to the guest operating system. This may differ from the number of physical CPUs on the underlying host.
+
+**[23] `virtualization.vm.id`:** Uniquely identifies the virtual machine across its live-migration domain, so the identity survives vMotion, KVM live migration and z/VM Live Guest Relocation. It never includes the host or hypervisor the VM runs on.
+- IBM z/VM: the SSI cluster name (or the z/VM system name outside an SSI
+  cluster) and the guest user ID, e.g. `SSIPLEX1/LINUX01`.
+- VMware vSphere: the VM `instanceUuid`. - KVM / libvirt: the domain UUID.
+
+**[24] `virtualization.vm.instance_id`:** A provider-assigned instance identifier, distinct from the hypervisor's own identifier (`virtualization.vm.id`). For example, on AWS this would be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition object-id.
+
+**[25] `virtualization.vm.machine_type`:** A string identifying the virtual machine's hardware configuration class as defined by the hypervisor or cloud provider. For IBM Z DPM partitions this corresponds to the partition type profile.
+
+**[26] `virtualization.vm.memory.size`:** The total memory allocation visible to the guest operating system, expressed in mebibytes (MiB). This is the configured allocation, not necessarily the currently consumed amount.
+
+**[27] `virtualization.vm.name`:** The name as configured in the hypervisor management interface. Names are not guaranteed to be unique across hypervisors; use `virtualization.vm.id` for unambiguous identification.
+
+**[28] `virtualization.vm.nested_virtualization.enabled`:** When `true`, the virtual machine is configured to expose virtualization extensions to its guest operating system, allowing a hypervisor to run inside the VM. Not all hypervisors or platforms support this capability.
+
+**[29] `virtualization.vswitch.id`:** Uniquely identifies the virtual switch across management domains. Distributed switches span hosts, so the hypervisor is not part of the identifier for them.
+- IBM z/VM: the hypervisor (`virtualization.hypervisor.id`) and the VSWITCH
+  name, e.g. `3931-45A01/ZVM1/VSWITCH1`.
+- IBM Z DPM: the CPC (`virtualization.platform.id`) and the virtual switch
+  name, e.g. `3931-45A01/104.P0.OSD`.
+- VMware vSphere: the distributed switch UUID; for a standard vSwitch, the
+  host hardware UUID and the switch name.
+- KVM / libvirt: the host machine ID and the bridge or Open vSwitch name.
+
+**[30] `virtualization.vswitch.name`:** The name as configured in the hypervisor management interface. For IBM Z z/VM this is the VSWITCH name defined in the CP directory. For IBM Z DPM mode this is the virtual switch name reported by the HMC Web Services API. For VMware vSphere this is the switch name shown in vCenter.
 
 ---
 
@@ -151,3 +206,19 @@ Equal to `host.id` of the same platform.
 | `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.vm.state` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `failed` | Virtual machine has encountered a fatal error and cannot recover without operator intervention. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `migrating` | Virtual machine is being live-migrated to another host without interruption. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `paused` | Virtual machine is suspended with state preserved in memory. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `running` | Virtual machine is running and processing workloads. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `scheduled` | Virtual machine has been assigned to a host node and is being prepared to start. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `scheduling` | Virtual machine has been requested but is waiting for the scheduler to assign it to a host node. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `stopped` | Virtual machine is stopped and not consuming CPU resources. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `succeeded` | Virtual machine completed its workload and terminated cleanly (applicable to batch or ephemeral VMs). | ![Development](https://img.shields.io/badge/-development-blue) |
+| `unknown` | Virtual machine state is not known or cannot be determined. | ![Development](https://img.shields.io/badge/-development-blue) |
