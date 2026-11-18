@@ -1,0 +1,1 @@
+Add the entities `mainframe.channel`, `mainframe.adapter`, `mainframe.adapter.port` and `mainframe.partition.nic`, each scoped by the Central Processing Complex (`virtualization.platform.id`). Channels are identified by `CSS.CHPID`, adapters by their PCHID (`mainframe.adapter.id`).

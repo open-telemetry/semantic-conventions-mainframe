@@ -1,0 +1,92 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.adapter.id
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: adapter-id
+            mode: all
+    brief: "The physical channel identifier (PCHID) of the I/O adapter."
+    examples: ["014", "15C", "1D8"]
+    note: >
+      The PCHID is the hexadecimal location of the adapter in the Central
+      Processing Complex (CPC) and is unique within one CPC. Reported by the
+      HMC Web Services API adapter object field `adapter-id`.
+
+  - key: mainframe.adapter.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: name
+            mode: all
+    brief: "The name of the I/O adapter as configured on the Hardware Management Console (HMC)."
+    examples: ["Cloud Network 0014 A10B-06", "OSD 0114"]
+    note: >
+      User-assignable, so descriptive only. Reported by the HMC Web Services
+      API adapter object field `name`.
+
+  - key: mainframe.adapter.type
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: type
+            mode: all
+    brief: "The type of the mainframe I/O adapter card."
+    note: >
+      Reported by the HMC Web Services API adapter object field `type`.
+      Used to distinguish network, storage, cryptographic, and accelerator
+      adapters when aggregating per-type utilization metrics.
+    type:
+      members:
+        - id: crypto
+          value: "crypto"
+          brief: "A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management."
+          stability: development
+        - id: flash
+          value: "flash"
+          brief: "A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM)."
+          stability: development
+        - id: roce
+          value: "roce"
+          brief: "A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet."
+          stability: development
+        - id: accelerator
+          value: "accelerator"
+          brief: "An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference."
+          stability: development
+        - id: network
+          value: "network"
+          brief: "A network adapter providing connectivity to external networks."
+          stability: development
+        - id: storage
+          value: "storage"
+          brief: "A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF."
+          stability: development
+
+  - key: mainframe.adapter.owning.partition
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: partitions-assigned-to-adapter
+            mode: dpm
+    brief: "The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions."
+    examples: ["LPAR01", "shared"]
+    note: >
+      Derived from the IBM Z HMC Web Services API adapter object property
+      `partitions-assigned-to-adapter`, an array of assigned-partition-info
+      objects. Set to 'shared' when more than one partition is assigned.

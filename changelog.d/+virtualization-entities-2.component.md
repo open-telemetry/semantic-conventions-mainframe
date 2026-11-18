@@ -1,0 +1,1 @@
+Add the entities `virtualization.vm`, `virtualization.cluster`, `virtualization.vswitch` and `virtualization.storage_pool`, their attributes and the refinement of the `host` entity for virtual machines. Identities use stable identifiers; a VM's identity does not change on live migration.
