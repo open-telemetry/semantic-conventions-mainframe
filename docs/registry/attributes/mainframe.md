@@ -7,5 +7,70 @@
 
 | Key | Stability | Value Type | Description | Example Values |
 | --- | --- | --- | --- | --- |
+| <a id="mainframe-adapter-id" href="#mainframe-adapter-id">`mainframe.adapter.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The physical channel identifier (PCHID) of the I/O adapter. [1] | `014`; `15C`; `1D8` |
+| <a id="mainframe-adapter-name" href="#mainframe-adapter-name">`mainframe.adapter.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O adapter as configured on the Hardware Management Console (HMC). [2] | `Cloud Network 0014 A10B-06`; `OSD 0114` |
+| <a id="mainframe-adapter-owning-partition" href="#mainframe-adapter-owning-partition">`mainframe.adapter.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O adapter when dedicated, or 'shared' when the adapter is shared across partitions. [3] | `LPAR01`; `shared` |
+| <a id="mainframe-adapter-port-id" href="#mainframe-adapter-port-id">`mainframe.adapter.port.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The identifier of the physical port on a mainframe network adapter. [4] | `0`; `1` |
+| <a id="mainframe-adapter-type" href="#mainframe-adapter-type">`mainframe.adapter.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The type of the mainframe I/O adapter card. [5] | `crypto`; `flash`; `roce` |
+| <a id="mainframe-channel-id" href="#mainframe-channel-id">`mainframe.channel.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The channel path identifier (CHPID) in hexadecimal format. [6] | `00`; `2D`; `E3` |
+| <a id="mainframe-channel-mode" href="#mainframe-channel-mode">`mainframe.channel.mode`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operating mode of the I/O channel — either dedicated to a single partition or shared across partitions. | `dedicated`; `shared` |
+| <a id="mainframe-channel-name" href="#mainframe-channel-name">`mainframe.channel.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the I/O channel in the form CSS.Chpid. [7] | `0.00`; `0.2D`; `1.E3` |
+| <a id="mainframe-channel-owning-partition" href="#mainframe-channel-owning-partition">`mainframe.channel.owning.partition`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the logical partition (LPAR) that owns the I/O channel when dedicated, or 'shared' when the channel is shared across partitions. [8] | `LPAR01`; `shared` |
+| <a id="mainframe-channel-type" href="#mainframe-channel-type">`mainframe.channel.type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The protocol and connectivity type of the I/O channel path. [9] | `ficon`; `zhyperlink`; `osa` |
 | <a id="mainframe-lpar-name" href="#mainframe-lpar-name">`mainframe.lpar.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Name of the logical partition that hosts a systems with a mainframe operating system. | `LPAR01` |
+| <a id="mainframe-partition-nic-name" href="#mainframe-partition-nic-name">`mainframe.partition.nic.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface card (NIC) attached to a logical partition (LPAR) in Dynamic Partition Manager (DPM) mode. [10] | `nic-0`; `nic-mgmt`; `nic-prod` |
 
+
+**[1] `mainframe.adapter.id`:** The PCHID is the hexadecimal location of the adapter in the Central Processing Complex (CPC) and is unique within one CPC. Reported by the HMC Web Services API adapter object field `adapter-id`.
+
+**[2] `mainframe.adapter.name`:** User-assignable, so descriptive only. Reported by the HMC Web Services API adapter object field `name`.
+
+**[3] `mainframe.adapter.owning.partition`:** Derived from the IBM Z HMC Web Services API adapter object property `partitions-assigned-to-adapter`, an array of assigned-partition-info objects. Set to 'shared' when more than one partition is assigned.
+
+**[4] `mainframe.adapter.port.id`:** Reported by the HMC Web Services API network-physical-adapter-port metric group field `network-port-id`. In distributed systems terms, this is analogous to the port number on a multi-port NIC.
+
+**[5] `mainframe.adapter.type`:** Reported by the HMC Web Services API adapter object field `type`. Used to distinguish network, storage, cryptographic, and accelerator adapters when aggregating per-type utilization metrics.
+
+**[6] `mainframe.channel.id`:** Reported by the HMC Web Services API channel-path object. In distributed systems terms, this is analogous to a storage HBA port or channel identifier.
+
+**[7] `mainframe.channel.name`:** The channel subsystem (CSS) index and channel path identifier (CHPID) are concatenated with a dot separator, e.g., "0.2D" for CSS 0, CHPID 2D. Reported by the HMC Web Services API channel-path object.
+
+**[8] `mainframe.channel.owning.partition`:** Reported by the IBM Z HMC Web Services API `channel-usage` metric group field `logical-partition-name`. The field is 'shared' when the channel is shared across partitions, and an empty string for channel types that do not expose an owning partition (for example coupling channels).
+
+**[9] `mainframe.channel.type`:** Reported by the IBM Z HMC Web Services API adapter object property `type`, whose values include `ficon`, `osa`, `hipersockets` and `network-express`.
+
+**[10] `mainframe.partition.nic.name`:** Reported by the HMC Web Services API partition-attached-network-interface metric group. In distributed systems terms, this is analogous to a virtual NIC (vNIC) attached to a virtual machine.
+
+---
+
+`mainframe.adapter.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `accelerator` | An accelerator adapter, providing hardware acceleration for specific workloads such as compression or AI inference. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `crypto` | A cryptographic (crypto) adapter, providing hardware-accelerated encryption and key management. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `flash` | A Flash Express adapter, providing solid-state storage for IBM Virtual Flash Memory (VFM). | ![Development](https://img.shields.io/badge/-development-blue) |
+| `network` | A network adapter providing connectivity to external networks. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | A RDMA over Converged Ethernet (RoCE) adapter, providing low-latency RDMA networking over Ethernet. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `storage` | A storage adapter providing connectivity to external storage systems such as SAN or NVMe-oF. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.channel.mode` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `dedicated` | The I/O channel is dedicated to a specific partition and cannot be shared with other partitions. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `shared` | The I/O channel can be shared among multiple partitions and is not dedicated to a specific partition. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`mainframe.channel.type` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `coupling` | Coupling Facility link (Integrated Cluster Bus or Coupling Express) for sysplex communication. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `ficon` | Fibre Channel Connection (FICON) channel path for high-speed DASD and tape storage connectivity. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `osa` | Open Systems Adapter (OSA) channel path for Ethernet LAN connectivity. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `roce` | RDMA over Converged Ethernet (RoCE) channel path for high-speed memory-to-memory data transfers. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `zhyperlink` | zHyperLink express channel path providing ultra-low-latency synchronous PCIe storage access. | ![Development](https://img.shields.io/badge/-development-blue) |
