@@ -165,8 +165,11 @@ generate-docs: $(SC_UPSTREAM_STAMP)
 		docs
 
 # Update reference reports (README.md and reports/) from data.json files.
-generate-reference-reports:
-# TODO:	cd reference && uv run --frozen update-reports
+# The reports list what model/ declares, as weaver resolves it, so the filtered
+# upstream registry must be in place. Weaver runs natively when the pinned
+# release is on PATH (CI), else in the otel/weaver image.
+generate-reference-reports: $(SC_UPSTREAM_STAMP)
+	cd reference && uv run --frozen update-reports
 
 # Run every regeneration the repo owns (weaver-driven + reports).
 # CI checks that all committed outputs match what this target generates.
