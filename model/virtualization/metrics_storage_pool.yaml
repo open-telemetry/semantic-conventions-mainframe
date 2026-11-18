@@ -1,0 +1,70 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # Storage Pool Capacity
+  # ---------------------------------------------------------------------------
+
+  - name: virtualization.storage_pool.used
+    brief: "The amount of storage space currently allocated or in use in the storage pool, in bytes."
+    note: >
+      Reports the total physical or provisioned storage bytes currently consumed
+      by all virtual disks, snapshots, and configuration files allocated within
+      the storage pool. In VMware ESXi/vCenter, this corresponds to
+      `datastore.provisioned` or `datastore.used`. In KVM (libvirt), this maps
+      to `libvirt_pool_info_allocation_bytes` (`virStoragePoolGetInfo`
+      `allocation`). In OpenShift Virtualization / Kubernetes storage backends,
+      this maps to the aggregate used capacity across PersistentVolumes backing
+      the storage pool or StorageClass. In IBM Z DPM mode, this corresponds to
+      the allocated capacity across the storage group.
+    instrument: updowncounter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.storage_pool
+    attributes:
+      - ref: virtualization.storage_pool.name
+        requirement_level: required
+      - ref: virtualization.storage_pool.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the storage pool.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this storage pool.
+
+  - name: virtualization.storage_pool.available
+    brief: "The amount of free storage space available in the storage pool, in bytes."
+    note: >
+      Reports the unallocated storage capacity remaining in the storage pool
+      that is available for provisioning new virtual disks or expanding existing
+      allocations. In VMware ESXi/vCenter, this corresponds to
+      `datastore.freeSpace`. In KVM (libvirt), this maps to
+      `libvirt_pool_info_available_bytes` (`virStoragePoolGetInfo` `available`).
+      In OpenShift Virtualization, this corresponds to available capacity in the
+      underlying CSI/StorageClass pool. In IBM Z DPM mode, this corresponds to the
+      unallocated storage group capacity.
+    instrument: updowncounter
+    unit: "By"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+    entity_associations:
+      - virtualization.storage_pool
+    attributes:
+      - ref: virtualization.storage_pool.name
+        requirement_level: required
+      - ref: virtualization.storage_pool.id
+        requirement_level: recommended
+        note: >
+          The opaque identifier of the storage pool.
+      - ref: virtualization.system.name
+        requirement_level: recommended
+        note: >
+          Identifies the virtualization technology owning this storage pool.
