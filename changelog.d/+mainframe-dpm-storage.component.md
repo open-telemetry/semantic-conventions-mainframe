@@ -1,0 +1,1 @@
+Add the DPM storage entities `mainframe.storage.group` and `mainframe.storage.group.volume`, scoped by the Central Processing Complex, and the metrics `mainframe.storage.group.capacity`, `mainframe.storage.group.usage` and `mainframe.storage.group.volume.capacity` in bytes.
