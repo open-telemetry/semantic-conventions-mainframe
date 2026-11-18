@@ -1,0 +1,119 @@
+file_format: definition/2
+attributes:
+  - key: mainframe.storage.group.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: storage-group
+            field: name
+            mode: dpm
+            min_hmc_version: "2.14.1"
+    brief: "The name of the DPM storage group attached to the Central Processing Complex (CPC)."
+    examples: ["sg-fcp-prod", "sg-nvme-test"]
+    note: >
+      Reported by the HMC Web Services API storage-group resource object field
+      `name` (DPM mode only, HMC ≥ 2.14.1). A storage group aggregates storage
+      volumes of the same connectivity type (FCP, FC, NVMe) that are managed
+      together and can be attached to partitions.
+
+  - key: mainframe.storage.group.type
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: storage-group
+            field: type
+            mode: dpm
+            min_hmc_version: "2.14.1"
+    brief: "The connectivity type of the DPM storage group."
+    note: >
+      Reported by the HMC Web Services API storage-group object field `type`
+      (DPM mode only, HMC ≥ 2.14.1).
+    type:
+      members:
+        - id: fcp
+          value: "fcp"
+          brief: "FCP (Fibre Channel Protocol) storage group — SCSI over Fibre Channel."
+          stability: development
+        - id: fc
+          value: "fc"
+          brief: "FC (native Fibre Channel / ECKD) storage group — IBM ECKD disk format."
+          stability: development
+        - id: nvme
+          value: "nvme"
+          brief: "NVMe storage group — NVMe over Fabrics."
+          stability: development
+
+  - key: mainframe.storage.group.volume.name
+    type: string
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: storage-volume
+            field: name
+            mode: dpm
+            min_hmc_version: "2.14.1"
+    brief: "The name of the DPM storage volume within a storage group."
+    examples: ["vol-boot-0", "vol-data-1"]
+    note: >
+      Reported by the HMC Web Services API storage-volume resource object field
+      `name` (DPM mode only, HMC ≥ 2.14.1). A storage volume is a single
+      logical unit of block storage (LUN / ECKD DASD cylinder set / NVMe
+      namespace) within a storage group.
+
+  - key: mainframe.storage.fulfillment.state
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: storage-group
+            field: fulfillment-state
+            mode: dpm
+            min_hmc_version: "2.14.1"
+    brief: "The fulfillment state of the DPM storage group or storage volume."
+    note: >
+      Reported by the HMC Web Services API storage-group or storage-volume
+      object field `fulfillment-state` (DPM mode only, HMC ≥ 2.14.1).
+      In distributed systems terms, this is analogous to the binding phase
+      of a Kubernetes Persistent Volume Claim.
+    type:
+      members:
+        - id: complete
+          value: "complete"
+          brief: "The storage resource is fully configured and available."
+          stability: development
+        - id: pending
+          value: "pending"
+          brief: "The storage resource is pending configuration by the storage administrator."
+          stability: development
+        - id: pending_with_mismatches
+          value: "pending-with-mismatches"
+          brief: "The storage resource is pending but has configuration mismatches that must be resolved."
+          stability: development
+        - id: checking_migration
+          value: "checking-migration"
+          brief: "The storage resource is being checked for migration eligibility."
+          stability: development
+        - id: incomplete
+          value: "incomplete"
+          brief: "The storage resource is incompletely configured and not fully available."
+          stability: development
+        - id: configuration_error
+          value: "configuration-error"
+          brief: "The storage volume has a configuration error."
+          stability: development
+        - id: deleting
+          value: "deleting"
+          brief: "The storage volume is being deleted."
+          stability: development
+        - id: overprovisioned
+          value: "overprovisioned"
+          brief: "The storage volume is overprovisioned."
+          stability: development

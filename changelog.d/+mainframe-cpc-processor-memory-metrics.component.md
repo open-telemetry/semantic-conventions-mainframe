@@ -1,0 +1,1 @@
+Add Central Processing Complex (CPC) metrics for processor counts by type (including Container Based Processors), processor and channel utilization, memory sizes and Virtual Flash Memory. Memory sizes are in bytes.
