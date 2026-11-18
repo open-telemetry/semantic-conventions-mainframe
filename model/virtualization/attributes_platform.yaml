@@ -138,3 +138,30 @@ attributes:
       reported by the HMC.
       No equivalent exists in the upstream OTel base registry; this attribute
       is specific to the virtualization schema.
+
+  - key: virtualization.platform.vm.state
+    stability: development
+    brief: "The power state of virtual machines used as a dimension to break down platform-level VM count metrics."
+    note: >
+      Used as a discriminating dimension on the `virtualization.platform.vm.count`
+      metric to report counts broken down by VM power state. Use `all` to report
+      the total count across all states. Implementations may omit this attribute
+      and report only the total count when per-state breakdown is not available.
+    type:
+      members:
+        - id: running
+          value: "running"
+          brief: "Virtual machines that are actively running and processing workloads."
+          stability: development
+        - id: stopped
+          value: "stopped"
+          brief: "Virtual machines that are stopped and not consuming CPU or memory resources."
+          stability: development
+        - id: paused
+          value: "paused"
+          brief: "Virtual machines that are paused with their state preserved in memory."
+          stability: development
+        - id: all
+          value: "all"
+          brief: "All virtual machines on the platform regardless of their power state."
+          stability: development
