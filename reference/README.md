@@ -39,8 +39,8 @@ reference/demo.sh emit-continuous 60  # a collection every 60 s until Ctrl-C
 reference/demo.sh stop
 ```
 
-Then query Prometheus at <http://localhost:9090> or Grafana at
-<http://localhost:3000>, for example `{"hw.host.power"}` or
+Then query Prometheus at `http://localhost:9090` or Grafana at
+`http://localhost:3000`, for example `{"hw.host.power"}` or
 `{"mainframe.cpu.utilization", "mainframe.cpu.name"="IFL00"}`.
 
 ## Reports
