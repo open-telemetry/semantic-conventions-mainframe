@@ -9,6 +9,9 @@ description = "Reference scenarios that validate the OpenTelemetry Semantic Conv
 requires-python = ">=3.12"
 dependencies = [
     "pyyaml>=6.0",
+    # The synthetic emitter builds OTLP itself and exports it over gRPC.
+    "grpcio>=1.66,<2",
+    "opentelemetry-proto>=1.27,<2",
 ]
 
 [project.optional-dependencies]
