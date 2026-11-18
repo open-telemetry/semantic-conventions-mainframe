@@ -30,15 +30,19 @@
 | <a id="virtualization-storage-pool-name" href="#virtualization-storage-pool-name">`virtualization.storage_pool.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtualization storage pool. [20] | `datastore-ssd-01`; `vsanDatastore`; `FCP-POOL-A` |
 | <a id="virtualization-system-name" href="#virtualization-system-name">`virtualization.system.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtualization system (hypervisor technology) managing this platform. [21] | `ibm.prsm`; `ibm.zvm`; `ibm.powervm` |
 | <a id="virtualization-vm-cpu-count" href="#virtualization-vm-cpu-count">`virtualization.vm.cpu.count`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The number of virtual CPUs (vCPUs) allocated to the virtual machine. [22] | `1`; `2`; `4`; `8` |
-| <a id="virtualization-vm-id" href="#virtualization-vm-id">`virtualization.vm.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual machine instance. [23] | `SSIPLEX1/LINUX01`; `502e7c9a-1b2d-4f3e-8a6b-7c8d9e0f1a2b` |
-| <a id="virtualization-vm-instance-id" href="#virtualization-vm-instance-id">`virtualization.vm.instance_id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The cloud or platform provider's instance identifier for the virtual machine. [24] | `i-0abc123def456789`; `1234567890abcdef0` |
-| <a id="virtualization-vm-machine-type" href="#virtualization-vm-machine-type">`virtualization.vm.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The machine type or hardware profile assigned to the virtual machine. [25] | `n1-standard-2`; `t3.medium`; `9175-ME1` |
-| <a id="virtualization-vm-memory-size" href="#virtualization-vm-memory-size">`virtualization.vm.memory.size`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The amount of memory allocated to the virtual machine, in mebibytes (MiB). [26] | `1024`; `4096`; `16384` |
-| <a id="virtualization-vm-name" href="#virtualization-vm-name">`virtualization.vm.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual machine. [27] | `my-web-server`; `prod-db-01`; `test-vm` |
-| <a id="virtualization-vm-nested-virtualization-enabled" href="#virtualization-vm-nested-virtualization-enabled">`virtualization.vm.nested_virtualization.enabled`</a> | ![Development](https://img.shields.io/badge/-development-blue) | boolean | Indicates whether nested virtualization is enabled on this virtual machine. [28] | |
+| <a id="virtualization-vm-disk-direction" href="#virtualization-vm-disk-direction">`virtualization.vm.disk.direction`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The direction of disk I/O operations on the virtual machine's storage device. | `read`; `write` |
+| <a id="virtualization-vm-disk-name" href="#virtualization-vm-disk-name">`virtualization.vm.disk.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name or identifier of the virtual disk attached to the virtual machine. [23] | `Hard Disk 1`; `sda`; `vhd-0001.vmdk` |
+| <a id="virtualization-vm-id" href="#virtualization-vm-id">`virtualization.vm.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual machine instance. [24] | `SSIPLEX1/LINUX01`; `502e7c9a-1b2d-4f3e-8a6b-7c8d9e0f1a2b` |
+| <a id="virtualization-vm-instance-id" href="#virtualization-vm-instance-id">`virtualization.vm.instance_id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The cloud or platform provider's instance identifier for the virtual machine. [25] | `i-0abc123def456789`; `1234567890abcdef0` |
+| <a id="virtualization-vm-machine-type" href="#virtualization-vm-machine-type">`virtualization.vm.machine_type`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The machine type or hardware profile assigned to the virtual machine. [26] | `n1-standard-2`; `t3.medium`; `9175-ME1` |
+| <a id="virtualization-vm-memory-size" href="#virtualization-vm-memory-size">`virtualization.vm.memory.size`</a> | ![Development](https://img.shields.io/badge/-development-blue) | int | The amount of memory allocated to the virtual machine, in mebibytes (MiB). [27] | `1024`; `4096`; `16384` |
+| <a id="virtualization-vm-name" href="#virtualization-vm-name">`virtualization.vm.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual machine. [28] | `my-web-server`; `prod-db-01`; `test-vm` |
+| <a id="virtualization-vm-nested-virtualization-enabled" href="#virtualization-vm-nested-virtualization-enabled">`virtualization.vm.nested_virtualization.enabled`</a> | ![Development](https://img.shields.io/badge/-development-blue) | boolean | Indicates whether nested virtualization is enabled on this virtual machine. [29] | |
+| <a id="virtualization-vm-network-interface-name" href="#virtualization-vm-network-interface-name">`virtualization.vm.network.interface.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the virtual network interface (vNIC) attached to the virtual machine. [30] | `Network adapter 1`; `eth0`; `vmxnet3-0` |
+| <a id="virtualization-vm-node-name" href="#virtualization-vm-node-name">`virtualization.vm.node.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The name of the host node on which the virtual machine is currently scheduled to run. [31] | `worker-node-01`; `compute-az1-007`; `rhcos-node-03` |
 | <a id="virtualization-vm-state" href="#virtualization-vm-state">`virtualization.vm.state`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The operational state of the virtual machine. | `running`; `stopped`; `paused` |
-| <a id="virtualization-vswitch-id" href="#virtualization-vswitch-id">`virtualization.vswitch.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual network switch. [29] | `3931-45A01/ZVM1/VSWITCH1`; `3931-45A01/104.P0.OSD` |
-| <a id="virtualization-vswitch-name" href="#virtualization-vswitch-name">`virtualization.vswitch.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual network switch. [30] | `VSWITCHA`; `dvSwitch-prod`; `br-internal` |
+| <a id="virtualization-vswitch-id" href="#virtualization-vswitch-id">`virtualization.vswitch.id`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | Unique identifier for the virtual network switch. [32] | `3931-45A01/ZVM1/VSWITCH1`; `3931-45A01/104.P0.OSD` |
+| <a id="virtualization-vswitch-name" href="#virtualization-vswitch-name">`virtualization.vswitch.name`</a> | ![Development](https://img.shields.io/badge/-development-blue) | string | The human-readable name assigned to the virtual network switch. [33] | `VSWITCHA`; `dvSwitch-prod`; `br-internal` |
 
 
 **[1] `virtualization.cluster.id`:** Uniquely identifies the cluster across management domains.
@@ -105,22 +109,28 @@ Equal to `host.id` of the same platform.
 
 **[22] `virtualization.vm.cpu.count`:** The number of virtual CPUs visible to the guest operating system. This may differ from the number of physical CPUs on the underlying host.
 
-**[23] `virtualization.vm.id`:** Uniquely identifies the virtual machine across its live-migration domain, so the identity survives vMotion, KVM live migration and z/VM Live Guest Relocation. It never includes the host or hypervisor the VM runs on.
+**[23] `virtualization.vm.disk.name`:** The disk name as reported by the hypervisor management API. Used to attribute per-disk I/O metrics to a specific virtual disk when a VM has multiple disks attached. For IBM Z DPM partitions this corresponds to the storage volume name; for VMware ESXi it is the datastore path; for Microsoft Hyper-V it is the virtual hard disk file name.
+
+**[24] `virtualization.vm.id`:** Uniquely identifies the virtual machine across its live-migration domain, so the identity survives vMotion, KVM live migration and z/VM Live Guest Relocation. It never includes the host or hypervisor the VM runs on.
 - IBM z/VM: the SSI cluster name (or the z/VM system name outside an SSI
   cluster) and the guest user ID, e.g. `SSIPLEX1/LINUX01`.
 - VMware vSphere: the VM `instanceUuid`. - KVM / libvirt: the domain UUID.
 
-**[24] `virtualization.vm.instance_id`:** A provider-assigned instance identifier, distinct from the hypervisor's own identifier (`virtualization.vm.id`). For example, on AWS this would be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition object-id.
+**[25] `virtualization.vm.instance_id`:** A provider-assigned instance identifier, distinct from the hypervisor's own identifier (`virtualization.vm.id`). For example, on AWS this would be the EC2 instance ID; on IBM Z HMC DPM mode it would be the partition object-id.
 
-**[25] `virtualization.vm.machine_type`:** A string identifying the virtual machine's hardware configuration class as defined by the hypervisor or cloud provider. For IBM Z DPM partitions this corresponds to the partition type profile.
+**[26] `virtualization.vm.machine_type`:** A string identifying the virtual machine's hardware configuration class as defined by the hypervisor or cloud provider. For IBM Z DPM partitions this corresponds to the partition type profile.
 
-**[26] `virtualization.vm.memory.size`:** The total memory allocation visible to the guest operating system, expressed in mebibytes (MiB). This is the configured allocation, not necessarily the currently consumed amount.
+**[27] `virtualization.vm.memory.size`:** The total memory allocation visible to the guest operating system, expressed in mebibytes (MiB). This is the configured allocation, not necessarily the currently consumed amount.
 
-**[27] `virtualization.vm.name`:** The name as configured in the hypervisor management interface. Names are not guaranteed to be unique across hypervisors; use `virtualization.vm.id` for unambiguous identification.
+**[28] `virtualization.vm.name`:** The name as configured in the hypervisor management interface. Names are not guaranteed to be unique across hypervisors; use `virtualization.vm.id` for unambiguous identification.
 
-**[28] `virtualization.vm.nested_virtualization.enabled`:** When `true`, the virtual machine is configured to expose virtualization extensions to its guest operating system, allowing a hypervisor to run inside the VM. Not all hypervisors or platforms support this capability.
+**[29] `virtualization.vm.nested_virtualization.enabled`:** When `true`, the virtual machine is configured to expose virtualization extensions to its guest operating system, allowing a hypervisor to run inside the VM. Not all hypervisors or platforms support this capability.
 
-**[29] `virtualization.vswitch.id`:** Uniquely identifies the virtual switch across management domains. Distributed switches span hosts, so the hypervisor is not part of the identifier for them.
+**[30] `virtualization.vm.network.interface.name`:** The interface name as reported by the hypervisor management API. Used to attribute per-NIC throughput metrics when a VM has multiple virtual network interfaces. For IBM Z DPM partitions this corresponds to the NIC object name reported by the HMC Web Services API; for VMware ESXi it is the network adapter label; for Microsoft Hyper-V it is the virtual network adapter name.
+
+**[31] `virtualization.vm.node.name`:** In KVM-based environments managed by Kubernetes such as OpenShift Virtualization (KubeVirt), a virtual machine instance (VMI) runs as a pod on a Kubernetes node. This attribute corresponds to the Kubernetes node name (spec.nodeName on the VMI pod) and is equivalent to `k8s.node.name` for standard workloads. It is used to correlate VM performance with the physical host's resource availability. In standalone KVM environments managed by libvirt, this corresponds to the hypervisor hostname. Not applicable on IBM Z PR/SM or cloud hypervisors where VM placement is opaque to the consumer.
+
+**[32] `virtualization.vswitch.id`:** Uniquely identifies the virtual switch across management domains. Distributed switches span hosts, so the hypervisor is not part of the identifier for them.
 - IBM z/VM: the hypervisor (`virtualization.hypervisor.id`) and the VSWITCH
   name, e.g. `3931-45A01/ZVM1/VSWITCH1`.
 - IBM Z DPM: the CPC (`virtualization.platform.id`) and the virtual switch
@@ -129,7 +139,7 @@ Equal to `host.id` of the same platform.
   host hardware UUID and the switch name.
 - KVM / libvirt: the host machine ID and the bridge or Open vSwitch name.
 
-**[30] `virtualization.vswitch.name`:** The name as configured in the hypervisor management interface. For IBM Z z/VM this is the VSWITCH name defined in the CP directory. For IBM Z DPM mode this is the virtual switch name reported by the HMC Web Services API. For VMware vSphere this is the switch name shown in vCenter.
+**[33] `virtualization.vswitch.name`:** The name as configured in the hypervisor management interface. For IBM Z z/VM this is the VSWITCH name defined in the CP directory. For IBM Z DPM mode this is the virtual switch name reported by the HMC Web Services API. For VMware vSphere this is the switch name shown in vCenter.
 
 ---
 
@@ -206,6 +216,15 @@ Equal to `host.id` of the same platform.
 | `vmware.esxi` | VMware ESXi bare-metal hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `vmware.workstation` | VMware Workstation hosted hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
 | `xen` | Xen open-source hypervisor. | ![Development](https://img.shields.io/badge/-development-blue) |
+
+---
+
+`virtualization.vm.disk.direction` has the following list of well-known values. If one of them applies, then the respective value MUST be used; otherwise, a custom value MAY be used.
+
+| Value | Description | Stability |
+| --- | --- | --- |
+| `read` | Data is being read from the virtual disk into the virtual machine. | ![Development](https://img.shields.io/badge/-development-blue) |
+| `write` | Data is being written from the virtual machine to the virtual disk. | ![Development](https://img.shields.io/badge/-development-blue) |
 
 ---
 
