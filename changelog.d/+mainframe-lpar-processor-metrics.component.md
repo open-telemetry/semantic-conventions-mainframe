@@ -1,0 +1,1 @@
+Add logical partition (LPAR) processor metrics: virtual, reserved and absolutely capped processor counts, CPU utilization, processor mode and threads per processor. Absolute caps are reported as fractional processors.

@@ -1,0 +1,1 @@
+Add the `mainframe.cpu` entity, a physical processor of the IBM Z Central Processing Complex (CPC) identified by `virtualization.platform.id` and `mainframe.cpu.name`, and the mainframe refinement of the `host` entity for the CPC, identified by `host.id` (`<machine type>-<serial number>`).
