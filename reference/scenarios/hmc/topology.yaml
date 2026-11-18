@@ -1,0 +1,150 @@
+# One IBM z16 CPC as an HMC-based collector sees it: processors, channels,
+# PCHID adapters and their ports, a z/OS and a z/VM partition, the z/VM
+# hypervisor with its guests and VSWITCH, DPM storage groups, and the
+# processor and storage pools. Identities follow model/:
+#   CPC          virtualization.platform.id = host.id = <machine type>-<serial>
+#   partition    virtualization.partition.id = LPAR name (+ the CPC)
+#   adapter      mainframe.adapter.id = PCHID (+ the CPC)
+#   channel      mainframe.channel.name = CSS.CHPID (+ the CPC)
+#   z/VM         hypervisor <CPC>/<system>, guest <SSI cluster>/<userid>
+# A node takes the attributes its entity declares but does not set from its
+# nearest ancestor (the CPC id, the CPC name as host.name, the system name).
+- entity: virtualization.platform
+  attributes:
+    virtualization.platform.id: 3931-45A01
+    host.id: 3931-45A01
+    host.name: CPC01
+    host.arch: s390x
+    host.type: 3931-A01
+    mainframe.host.machine_type: "3931"
+    mainframe.host.machine_model: A01
+    mainframe.host.serial_number: 000000045A01
+    virtualization.platform.serial_number: 000000045A01
+    virtualization.platform.firmware.version: S72
+    virtualization.system.name: ibm.prsm
+  children:
+    - entity: mainframe.cpu
+      each:
+        - {mainframe.cpu.name: CP00, mainframe.cpu.type: cp}
+        - {mainframe.cpu.name: CP01, mainframe.cpu.type: cp}
+        - {mainframe.cpu.name: IFL00, mainframe.cpu.type: ifl}
+        - {mainframe.cpu.name: IFL01, mainframe.cpu.type: ifl}
+        - {mainframe.cpu.name: zIIP00, mainframe.cpu.type: iip}
+        - {mainframe.cpu.name: ICF00, mainframe.cpu.type: icf}
+        - {mainframe.cpu.name: SAP00, mainframe.cpu.type: sap}
+
+    - entity: mainframe.channel
+      each:
+        - {mainframe.channel.name: "0.1A", mainframe.channel.id: 1A, mainframe.channel.type: ficon,
+           mainframe.channel.mode: shared, mainframe.channel.owning.partition: shared}
+        - {mainframe.channel.name: "0.2D", mainframe.channel.id: 2D, mainframe.channel.type: osa,
+           mainframe.channel.mode: dedicated, mainframe.channel.owning.partition: PRODZOS}
+        - {mainframe.channel.name: "1.E3", mainframe.channel.id: E3, mainframe.channel.type: coupling,
+           mainframe.channel.mode: shared, mainframe.channel.owning.partition: shared}
+
+    # One adapter per type; network adapters with their ports.
+    - entity: mainframe.adapter
+      each:
+        - {mainframe.adapter.id: "014", mainframe.adapter.name: Crypto 0014 A10B-06,
+           mainframe.adapter.type: crypto, mainframe.adapter.owning.partition: shared}
+        - {mainframe.adapter.id: 1D8, mainframe.adapter.name: Flash 01D8,
+           mainframe.adapter.type: flash, mainframe.adapter.owning.partition: shared}
+        - {mainframe.adapter.id: 1E0, mainframe.adapter.name: zEDC 01E0,
+           mainframe.adapter.type: accelerator, mainframe.adapter.owning.partition: PRODZOS}
+        - {mainframe.adapter.id: "120", mainframe.adapter.name: FICON 0120,
+           mainframe.adapter.type: storage, mainframe.adapter.owning.partition: shared}
+    - entity: mainframe.adapter
+      attributes: {mainframe.adapter.id: 15C, mainframe.adapter.name: OSD 015C,
+                   mainframe.adapter.type: network, mainframe.adapter.owning.partition: shared}
+      children:
+        - entity: mainframe.adapter.port
+          each:
+            - {mainframe.adapter.port.id: "0"}
+            - {mainframe.adapter.port.id: "1"}
+    - entity: mainframe.adapter
+      attributes: {mainframe.adapter.id: 17C, mainframe.adapter.name: RoCE 017C,
+                   mainframe.adapter.type: roce, mainframe.adapter.owning.partition: ZVM1}
+      children:
+        - entity: mainframe.adapter.port
+          attributes: {mainframe.adapter.port.id: "0"}
+
+    - entity: virtualization.partition
+      attributes:
+        virtualization.partition.id: PRODZOS
+        virtualization.partition.name: PRODZOS
+        virtualization.partition.number: 1
+        virtualization.partition.type: general_purpose
+        virtualization.partition.state: active
+        mainframe.partition.name: PRODZOS
+        mainframe.partition.number: 1
+        mainframe.partition.type: general_purpose
+
+    - entity: virtualization.partition
+      attributes:
+        virtualization.partition.id: ZVM1
+        virtualization.partition.name: ZVM1
+        virtualization.partition.number: 2
+        virtualization.partition.type: linux_only
+        virtualization.partition.state: active
+        mainframe.partition.name: ZVM1
+        mainframe.partition.number: 2
+        mainframe.partition.type: zvm
+      children:
+        - entity: mainframe.partition.nic
+          attributes: {mainframe.partition.nic.name: nic-0, mainframe.adapter.id: 15C, mainframe.adapter.port.id: "0"}
+        - entity: virtualization.hypervisor
+          attributes:
+            virtualization.hypervisor.id: 3931-45A01/ZVM1
+            virtualization.hypervisor.type: type1
+            virtualization.hypervisor.state: active
+            virtualization.hypervisor.version: 7.4.0
+            virtualization.system.name: ibm.zvm
+            mainframe.zvm.hypervisor.name: ZVM1
+          children:
+            - entity: virtualization.vswitch
+              attributes:
+                virtualization.vswitch.id: 3931-45A01/ZVM1/VSWITCH1
+                virtualization.vswitch.name: VSWITCH1
+                mainframe.vswitch.name: VSWITCH1
+            - entity: virtualization.vm
+              attributes:
+                virtualization.vm.state: running
+                virtualization.vm.machine_type: 3931-A01
+                virtualization.vm.nested_virtualization.enabled: false
+              each:
+                - {virtualization.vm.id: SSIPLEX1/LINUX01, virtualization.vm.name: LINUX01,
+                   mainframe.zvm.guest.userid: LINUX01, virtualization.vm.cpu.count: 4, virtualization.vm.memory.size: 16384}
+                - {virtualization.vm.id: SSIPLEX1/LINUX02, virtualization.vm.name: LINUX02,
+                   mainframe.zvm.guest.userid: LINUX02, virtualization.vm.cpu.count: 2, virtualization.vm.memory.size: 8192}
+
+    # DPM storage groups and their volumes; the FCP group is also seen as a storage pool.
+    - entity: mainframe.storage.group
+      attributes: {mainframe.storage.group.name: sg-fcp-prod, mainframe.storage.group.type: fcp}
+      children:
+        - entity: mainframe.storage.group.volume
+          each:
+            - {mainframe.storage.group.volume.name: vol-boot-0}
+            - {mainframe.storage.group.volume.name: vol-data-1}
+    - entity: mainframe.storage.group
+      attributes: {mainframe.storage.group.name: sg-nvme-test, mainframe.storage.group.type: nvme}
+      children:
+        - entity: mainframe.storage.group.volume
+          attributes: {mainframe.storage.group.volume.name: vol-nvme-0}
+    - entity: virtualization.storage_pool
+      attributes:
+        virtualization.storage_pool.id: 3931-45A01/sg-fcp-prod
+        virtualization.storage_pool.name: sg-fcp-prod
+        mainframe.storage.group.name: sg-fcp-prod
+        mainframe.storage.group.type: fcp
+
+    - entity: virtualization.resource_pool
+      attributes:
+        virtualization.resource_pool.id: 3931-45A01/IFLPOOL
+        virtualization.resource_pool.name: IFLPOOL
+        mainframe.cpu.type: ifl
+
+# The z/VM single system image cluster the guests can relocate within.
+- entity: virtualization.cluster
+  attributes:
+    virtualization.cluster.id: SSIPLEX1
+    virtualization.cluster.name: SSIPLEX1
