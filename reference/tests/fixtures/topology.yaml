@@ -1,0 +1,11 @@
+# One CPC with two processors, against resolved_registry.yaml.
+- entity: virtualization.platform
+  attributes:
+    virtualization.platform.id: "3931-45A01"
+    host.name: CPC01
+    mainframe.host.machine_type: "3931"
+  children:
+    - entity: mainframe.cpu
+      each:
+        - {mainframe.cpu.name: CP00, mainframe.cpu.type: cp}
+        - {mainframe.cpu.name: IFL00, mainframe.cpu.type: ifl}

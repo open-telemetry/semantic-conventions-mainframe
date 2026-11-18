@@ -1,0 +1,17 @@
+# Workload rules for topology.yaml against resolved_registry.yaml.
+- metric: '^mainframe\.host\.cpu\.active\.count$'
+  unit: "{cpu}"
+  generator: {function: constant, value: 12}
+  attributes: {mainframe.cpu.type: [cp, ifl]}
+- metric: '^hw\.host\.power$'
+  unit: W
+  generator: {function: diurnal, base: 6200, amplitude: 1600, noise: 50, min: 4500, max: 8200}
+  attributes: {hw.name: CPC power}
+- metric: '^system\.cpu\.utilization$'
+  unit: "1"
+  generator: {function: gaussian, mean: 0.5, stddev: 0.1, min: 0, max: 1}
+  attributes: {cpu.mode: [user, system]}
+# Any other ratio gauge.
+- unit: "1"
+  instrument: gauge
+  generator: {function: diurnal, base: 0.5, amplitude: 0.3, min: 0, max: 1}
