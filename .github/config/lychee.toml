@@ -23,4 +23,6 @@ exclude = [
   '^https://www\.gnu\.org/software/make/$',
   # The README points at the current GenAI schema version before it is published.
   '^https://opentelemetry\.io/schemas/gen-ai/',
+  # Slack workspace URLs require sign-in and return 403 to automated checks.
+  '^https://cloud-native\.slack\.com/',
 ]
