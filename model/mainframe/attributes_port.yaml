@@ -35,3 +35,39 @@ attributes:
       Reported by the HMC Web Services API partition-attached-network-interface
       metric group. In distributed systems terms, this is analogous to a virtual
       NIC (vNIC) attached to a virtual machine.
+
+  - key: mainframe.adapter.status
+    stability: development
+    annotations:
+      hmc_source:
+        sources:
+          - type: object_property
+            object: adapter
+            field: status
+            mode: dpm
+            min_hmc_version: "2.13.1"
+    brief: "The operational status of the mainframe I/O adapter."
+    note: >
+      Reported by the HMC Web Services API adapter object field `status` (DPM mode).
+    type:
+      members:
+        - id: active
+          value: "active"
+          brief: "The adapter is active and operating normally."
+          stability: development
+        - id: not_active
+          value: "not-active"
+          brief: "The adapter is not active."
+          stability: development
+        - id: not_detected
+          value: "not-detected"
+          brief: "The adapter is not detected by the system."
+          stability: development
+        - id: exceptions
+          value: "exceptions"
+          brief: "The adapter has exceptions that require operator attention."
+          stability: development
+        - id: service
+          value: "service"
+          brief: "The adapter is in service mode."
+          stability: development
