@@ -55,7 +55,13 @@ jobs:
 
       - name: Load shared version pins
         id: versions
-        uses: $/.github/actions/load-version-pins
+        shell: bash
+        run: |
+          weaver_version="$(sed -n 's/^WEAVER_VERSION=v\{0,1\}//p' versions.env)"
+          if [[ -z "$weaver_version" ]]; then
+            echo "Failed to load WEAVER_VERSION from versions.env" >&2; exit 1
+          fi
+          echo "weaver_version=$weaver_version" >> "$GITHUB_OUTPUT"
 
       - name: Install Weaver
         uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
@@ -75,7 +81,13 @@ jobs:
 
       - name: Load shared version pins
         id: versions
-        uses: $/.github/actions/load-version-pins
+        shell: bash
+        run: |
+          weaver_version="$(sed -n 's/^WEAVER_VERSION=v\{0,1\}//p' versions.env)"
+          if [[ -z "$weaver_version" ]]; then
+            echo "Failed to load WEAVER_VERSION from versions.env" >&2; exit 1
+          fi
+          echo "weaver_version=$weaver_version" >> "$GITHUB_OUTPUT"
 
       - name: Install Weaver
         uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
@@ -86,13 +98,14 @@ jobs:
 
       - name: Regenerate and check committed outputs are in sync
         run: |
-          make generate-all
-          if ! git diff --exit-code -- ./docs/registry 'model/gen-ai/gen-ai-*.json'; then
+          rm -rf ./docs/registry
+          make generate-all WEAVER=weaver
+          if ! git diff --exit-code -- ./docs/registry; then
             echo "FAIL: committed generated outputs are out of sync!"
             echo "Run 'make generate-all' and commit the changes."
             exit 1
           fi
-          untracked=$(git ls-files --others --exclude-standard -- ./docs/registry 'model/gen-ai/gen-ai-*.json')
+          untracked=$(git ls-files --others --exclude-standard -- ./docs/registry)
           if [ -n "$untracked" ]; then
             echo "FAIL: untracked files under generated outputs:"
             echo "$untracked"
@@ -100,26 +113,55 @@ jobs:
           fi
           echo "OK: committed generated outputs are up to date"
 
-  # ── Lint / Format ──────────────────────────────────────────────────
-  # reference-python-lint:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   defaults:
-  #     run:
-  #       working-directory: reference
-  #   steps:
-  #     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+  # ── Lint / Format / Unit tests ─────────────────────────────────────
+  reference-python-lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: reference
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-  #     - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
-  #       with:
-  #         enable-cache: true
-  #         cache-dependency-glob: "reference/**/uv.lock"
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          enable-cache: true
+          cache-dependency-glob: "reference/**/uv.lock"
 
-  #     - name: Lint Python
-  #       run: uv tool run --from ruff ruff check src scenarios
+      - name: Lint Python
+        run: uv tool run --from ruff ruff check
 
-  #     - name: Check Python formatting
-  #       run: uv tool run --from ruff ruff format --check src scenarios
+      - name: Check Python formatting
+        run: uv tool run --from ruff ruff format --check
+
+  reference-unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Load shared version pins
+        id: versions
+        uses: ./.github/actions/load-version-pins
+
+      # Scenario tests resolve model/ with weaver.
+      - name: Install Weaver
+        uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
+        with:
+          version: '${{ steps.versions.outputs.weaver_version }}'
+
+      - uses: ./.github/actions/setup-reference-tooling
+
+      - name: Materialize upstream semconv dependency
+        run: make filter-upstream
+
+      - name: Run unit tests
+        working-directory: reference
+        run: uv run --locked --extra dev pytest
 
   author-self-review:
     runs-on: ubuntu-latest
@@ -138,69 +180,108 @@ jobs:
           fi
 
   # ── Discover scenario matrices ─────────────────────────────────────
-  # reference-scenario-matrix:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   outputs:
-  #     matrix: ${{ steps.matrices.outputs.matrix }}
-  #   defaults:
-  #     run:
-  #       working-directory: reference
-  #   steps:
-  #     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+  reference-scenario-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      matrix: ${{ steps.matrices.outputs.matrix }}
+    defaults:
+      run:
+        working-directory: reference
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-  #     - uses: ./.github/actions/setup-reference-tooling
+      - uses: ./.github/actions/setup-reference-tooling
 
-  #     - name: Generate matrices
-  #       id: matrices
-  #       run: echo "matrix=$(uv run run-scenario --print-ci-matrix)" >> "$GITHUB_OUTPUT"
+      - name: Generate matrices
+        id: matrices
+        run: echo "matrix=$(uv run run-scenario --print-ci-matrix)" >> "$GITHUB_OUTPUT"
 
   # ── Scenario Tests ──────────────────────────────────────
-  # reference-scenarios:
-  #   runs-on: ubuntu-latest
-  #   needs: reference-scenario-matrix
-  #   timeout-minutes: 20
-  #   defaults:
-  #     run:
-  #       working-directory: reference
-  #   strategy:
-  #     fail-fast: false
-  #     matrix: ${{ fromJson(needs.reference-scenario-matrix.outputs.matrix) }}
-  #   steps:
-  #     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+  reference-scenarios:
+    runs-on: ubuntu-latest
+    needs: reference-scenario-matrix
+    # An empty matrix is an error, so the job is skipped while there are no scenarios.
+    if: needs.reference-scenario-matrix.outputs.matrix != '{"scenario":[]}'
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: reference
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.reference-scenario-matrix.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-  #     - uses: ./.github/actions/setup-reference-tooling
+      - name: Load shared version pins
+        id: versions
+        uses: ./.github/actions/load-version-pins
 
-  #     - name: Materialize upstream semconv dependency
-  #       working-directory: .
-  #       run: make filter-upstream
+      - name: Install Weaver
+        uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
+        with:
+          version: '${{ steps.versions.outputs.weaver_version }}'
 
-  #     - name: Run implementation scenario
-  #       run: uv run run-scenario "${{ matrix.scenario.lib }}"
+      - uses: ./.github/actions/setup-reference-tooling
 
-  #     - name: Check data file is up to date
-  #       run: |
-  #         git diff --exit-code -- '${{ matrix.scenario.data }}'
-  #         untracked=$(git ls-files --others --exclude-standard -- '${{ matrix.scenario.data }}')
-  #         if [ -n "$untracked" ]; then echo "Untracked data files: $untracked"; exit 1; fi
+      - name: Materialize upstream semconv dependency
+        working-directory: .
+        run: make filter-upstream
+
+      - name: Run implementation scenario
+        env:
+          SCENARIO_LIB: ${{ matrix.scenario.lib }}
+        run: uv run run-scenario "$SCENARIO_LIB" --strict
+
+      - name: Check data file is up to date
+        env:
+          SCENARIO_DATA: ${{ matrix.scenario.data }}
+        run: |
+          git diff --exit-code -- "$SCENARIO_DATA"
+          untracked=$(git ls-files --others --exclude-standard -- "$SCENARIO_DATA")
+          if [ -n "$untracked" ]; then echo "Untracked data files: $untracked"; exit 1; fi
 
   # ── Status Report ───────────────────────────────────────────────────
-  # reference-status-report:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   defaults:
-  #     run:
-  #       working-directory: reference
-  #   steps:
-  #     - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+  reference-status-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: reference
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-  #     - uses: ./.github/actions/setup-reference-tooling
+      - name: Load shared version pins
+        id: versions
+        uses: ./.github/actions/load-version-pins
 
-  #     - name: Generate status report
-  #       run: uv run --locked update-reports
+      # The reports are built from weaver's resolution of model/, which is
+      # resolved on demand rather than committed.
+      - name: Install Weaver
+        uses: open-telemetry/weaver/.github/actions/setup-weaver@f8e1b42fbd1e09df5263c26b7df6011eaafd454d
+        with:
+          version: '${{ steps.versions.outputs.weaver_version }}'
 
-  #     - name: Check status report is up to date
-  #       run: git diff --exit-code -- README.md reports/
+      - uses: ./.github/actions/setup-reference-tooling
+
+      - name: Materialize upstream semconv dependency
+        working-directory: .
+        run: make filter-upstream
+
+      - name: Generate status report
+        run: uv run --locked update-reports
+
+      - name: Check status report is up to date
+        run: |
+          git diff --exit-code -- README.md reports/
+          untracked=$(git ls-files --others --exclude-standard -- reports/)
+          if [ -n "$untracked" ]; then echo "Untracked report pages: $untracked"; exit 1; fi
 
   # ── Aggregate gate for branch protection ───────────────────────────
   required-status-check:
@@ -209,15 +290,26 @@ jobs:
       - links
       - policies
       - generated-docs
-  #    - reference-python-lint
+      - reference-python-lint
+      - reference-unit-tests
       - author-self-review
-  #    - reference-scenario-matrix
-  #    - reference-scenarios
-  #    - reference-status-report
+      - reference-scenario-matrix
+      - reference-scenarios
+      - reference-status-report
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Fail if any dependency did not pass
-        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped')
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+        # reference-scenarios is skipped, not failed, while reference/scenarios/
+        # holds no scenario; a failed matrix job is caught on its own.
         run: |
-          exit 1
+          not_passed=$(jq -r 'to_entries[]
+            | select(.value.result != "success")
+            | select(.key != "reference-scenarios" or .value.result != "skipped")
+            | "\(.key): \(.value.result)"' <<<"$NEEDS")
+          if [ -n "$not_passed" ]; then
+            echo "$not_passed"
+            exit 1
+          fi
