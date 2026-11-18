@@ -1,0 +1,278 @@
+file_format: definition/2
+metrics:
+  # ---------------------------------------------------------------------------
+  # CPU virtual count (from partition object properties)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.virtual.count
+    brief: "The number of virtual processors of the specified type allocated to the logical partition (LPAR)."
+    note: >
+      Reported by the IBM Z HMC Web Services API partition object properties
+      `processor-count-<type>` (all modes). Use the `mainframe.cpu.type`
+      attribute to select the processor type (cp, ifl, iip, icf). In
+      distributed systems terms, this is analogous to the vCPU count of a
+      virtual machine.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: number-general-purpose-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-ifl-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-icf-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-ziip-processors
+            mode: classic
+          - type: object_property
+            object: partition
+            field: cp-processors
+            mode: dpm
+          - type: object_property
+            object: partition
+            field: ifl-processors
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - name: mainframe.partition.cpu.reserved.count
+    brief: "The number of processors of the specified type reserved for the logical partition (LPAR)."
+    note: >
+      Reserved processors are allocated to the partition but not yet in active
+      use and are available for dynamic activation. Reported by the IBM Z HMC
+      Web Services API partition object properties `processor-count-<type>-reserved`
+      (all modes). In distributed systems terms, this is analogous to pre-allocated
+      but idle vCPUs.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-general-purpose-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-ifl-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-icf-processors
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: number-reserved-ziip-processors
+            mode: classic
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  - name: mainframe.partition.cpu.capped.count
+    brief: "The absolute capping limit of the logical partition (LPAR) for the specified processor type, in processors; 0 when absolute capping is not enabled."
+    note: >
+      Classic mode: the logical-partition object properties
+      `absolute-processing-capping` (`cp`), `absolute-ifl-capping` (`ifl`),
+      `absolute-cf-capping` (`icf`), `absolute-ziip-capping` (`iip`) and
+      `absolute-aap-capping` (`aap`). Each is an object with `type` and `value`;
+      `value` is reported when `type` is `processors`, otherwise 0.
+      DPM mode: the partition object properties
+      `cp-absolute-processor-capping-value` (`cp`) and
+      `ifl-absolute-processor-capping-value` (`ifl`), reported when
+      `cp-absolute-processor-capping` or `ifl-absolute-processor-capping` is
+      true, otherwise 0.
+      Caps can be fractional: a cap of half a processor is reported as 0.5.
+      A configured cap is always greater than 0, so 0 means no absolute capping.
+    instrument: updowncounter
+    unit: "{cpu}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: object_property
+            object: logical-partition
+            field: absolute-processing-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-ifl-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-cf-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-ziip-capping
+            mode: classic
+          - type: object_property
+            object: logical-partition
+            field: absolute-aap-capping
+            mode: classic
+          - type: object_property
+            object: partition
+            field: cp-absolute-processor-capping-value
+            mode: dpm
+          - type: object_property
+            object: partition
+            field: ifl-absolute-processor-capping-value
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+  # ---------------------------------------------------------------------------
+  # Partition CPU utilization (from logical-partition-usage / partition-usage)
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.utilization
+    brief: "The fraction of time processors of the specified type allocated to the logical partition (LPAR) were busy, as a ratio from 0 (idle) to 1 (fully utilised)."
+    note: >
+      Reported by the IBM Z HMC Web Services API logical-partition-usage metric
+      group (classic mode) fields `cp-processor-usage`, `ifl-processor-usage`,
+      `icf-processor-usage` and `iip-processor-usage` — select with the
+      `mainframe.cpu.type` attribute. In DPM mode the partition-usage metric
+      group (HMC >= 2.13.1) reports only an aggregate `processor-usage` field
+      with no per-type breakdown, so `mainframe.cpu.type` is not set there.
+      The HMC reports an integer percentage (0-100), which is divided by 100
+      to yield the 0-1 ratio this metric declares. In distributed systems
+      terms, this is analogous to the per-type CPU utilization of a virtual
+      machine.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: double
+      hmc_source:
+        sources:
+          - type: metric_group
+            name: logical-partition-usage
+            field: cp-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: ifl-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: icf-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: logical-partition-usage
+            field: iip-processor-usage
+            mode: classic
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+          - type: metric_group
+            name: partition-usage
+            field: processor-usage
+            mode: dpm
+            min_hmc_version: "2.13.1"
+            unit_transformation:
+              hmc_unit: "%"
+              otel_unit: "1"
+              formula: "value / 100"
+              multiplier: 0.01
+    entity_associations:
+      - virtualization.partition
+    attributes:
+      - ref: mainframe.cpu.type
+        requirement_level:
+          conditionally_required: >
+            Required in classic mode, where logical-partition-usage reports one
+            field per processor type. Not set in DPM mode, where partition-usage
+            reports a single aggregate processor-usage field.
+
+  # ---------------------------------------------------------------------------
+  # DPM-specific partition metrics
+  # ---------------------------------------------------------------------------
+  - name: mainframe.partition.cpu.mode
+    brief: "The processor allocation mode of the DPM partition as a numeric code (0=shared, 1=dedicated)."
+    note: >
+      Reported by the IBM Z HMC Web Services API `partition` object property
+      `processor-mode` (DPM mode only). In shared mode, processor
+      cycles are shared across partitions; in dedicated mode, processors are
+      exclusively assigned to the partition.
+    instrument: gauge
+    unit: "1"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: processor-mode
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
+
+  - name: mainframe.partition.cpu.threads_per_processor
+    brief: "The number of simultaneous multithreading (SMT) hardware threads per processor configured for the DPM partition."
+    note: >
+      Reported by the IBM Z HMC Web Services API `partition` object property
+      `threads-per-processor` (DPM mode only). Typical values
+      are 1 (SMT disabled) or 2 (SMT enabled with two hardware threads per
+      physical processor).
+    instrument: gauge
+    unit: "{thread}"
+    stability: development
+    requirement_level: recommended
+    annotations:
+      code_generation:
+        metric_value_type: int
+      hmc_source:
+        sources:
+          - type: object_property
+            object: partition
+            field: threads-per-processor
+            mode: dpm
+    entity_associations:
+      - virtualization.partition
