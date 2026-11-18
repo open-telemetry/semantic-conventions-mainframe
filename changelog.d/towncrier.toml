@@ -1,0 +1,41 @@
+[tool.towncrier]
+# Path to the main changelog file.
+filename = "CHANGELOG.md"
+# Directory that contains the fragment files.
+directory = "changelog.d"
+# Anchor towncrier uses to insert rendered fragments into CHANGELOG.md.
+start_string = "<!-- towncrier release notes start -->\n"
+# Template for the version header rendered into CHANGELOG.md.
+title_format = "## {version}"
+# Omit the "no significant changes" line when there are fragments.
+underlines = ["", "", ""]
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name     = "Breaking Changes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "deprecation"
+name     = "Deprecations"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "component"
+name     = "New Components"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "enhancement"
+name     = "Enhancements"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "bugfix"
+name     = "Bug Fixes"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "clarification"
+name     = "Clarifications"
+showcontent = true
