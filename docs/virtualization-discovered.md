@@ -501,3 +501,296 @@ classDiagram
   switch UUID. Per-host switches are qualified by their host or hypervisor, for example the
   host hardware UUID and switch name for a standard vSwitch, or `3931-45A01/ZVM1/VSWITCH1` for an
   IBM z/VM VSWITCH.
+
+---
+
+## 6. Cross-Platform Topology Lineage
+
+This diagram shows how each enterprise virtualization platform maps its native constructs to the
+unified virtualization schema. All paths converge on the same eight entity types and the same
+`model/virtualization/` metric definitions. Edge labels show how the identifying attribute is
+filled.
+
+```mermaid
+flowchart TD
+    subgraph IBM_Z_PRSM ["IBM Z — PR/SM (classic and DPM)"]
+        Z1["CPC<br/>(Central Processing Complex)"]
+        Z2["LPAR<br/>(Logical Partition)"]
+        Z3["Shared Processor Pool"]
+        Z4["Storage Group<br/>(DPM)"]
+    end
+
+    subgraph IBM_Z_ZVM ["IBM Z — z/VM"]
+        ZV1["z/VM Hypervisor Instance"]
+        ZV2["z/VM Guest<br/>(Virtual Machine)"]
+        ZV3["VSWITCH<br/>(z/VM Virtual Switch)"]
+    end
+
+    subgraph VMware ["VMware vSphere / ESXi"]
+        VS1["ESXi Host<br/>(HostSystem)"]
+        VS2["Virtual Machine<br/>(VirtualMachine)"]
+        VS3["Resource Pool<br/>(ResourcePool)"]
+        VS4["Datastore<br/>(Datastore)"]
+        VS5["Cluster<br/>(ClusterComputeResource)"]
+        VS6["dvSwitch<br/>(DistributedVirtualSwitch)"]
+    end
+
+    subgraph KVM_libvirt ["KVM / libvirt"]
+        KV1["Linux KVM Host"]
+        KV2["libvirt Domain<br/>(virDomain)"]
+        KV3["Linux Bridge / OVS bridge"]
+        KV4["libvirt Storage Pool<br/>(virStoragePool)"]
+        KV5["libvirt Daemon<br/>(virtqemud)"]
+    end
+
+    subgraph OCP_Virt ["OpenShift Virtualization / KubeVirt"]
+        OC1["OpenShift Worker Node"]
+        OC2["VirtualMachineInstance"]
+        OC3["K8s Namespace ResourceQuota"]
+        OC4["PVC / StorageClass<br/>(CSI pool)"]
+        OC5["OpenShift Cluster"]
+        OC6["virt-handler DaemonSet"]
+        OC7["OVN-Kubernetes Network"]
+    end
+
+    subgraph OTel_Entities ["OTel Virtualization Entities<br/>(model/virtualization/)"]
+        direction TB
+        E1["virtualization.platform<br/>ibm.prsm / kvm / vmware.esxi"]
+        E2["virtualization.partition<br/>ibm.prsm"]
+        E3["virtualization.hypervisor<br/>ibm.zvm / kvm / vmware.esxi / openshift_virtualization"]
+        E4["virtualization.vm<br/>ibm.zvm / kvm / vmware.esxi / openshift_virtualization"]
+        E5["virtualization.cluster"]
+        E6["virtualization.resource_pool<br/>ibm.prsm / vmware.esxi / openshift_virtualization"]
+        E7["virtualization.vswitch<br/>ibm.zvm / kvm / vmware.esxi"]
+        E8["virtualization.storage_pool<br/>ibm.prsm / vmware.esxi / kvm / openshift_virtualization"]
+    end
+
+    %% IBM Z PR/SM mappings
+    Z1  -->|"virtualization.platform.id = machine type-serial, e.g. 3931-45A01<br/>host.name = CPC name"| E1
+    Z2  -->|"virtualization.partition.id = LPAR name<br/>virtualization.platform.id = CPC key"| E2
+    Z3  -->|"virtualization.resource_pool.id = CPC key/pool name"| E6
+    Z4  -->|"virtualization.storage_pool.id = CPC key/storage group name"| E8
+
+    %% IBM z/VM mappings
+    ZV1 -->|"virtualization.hypervisor.id = CPC key/z/VM system name"| E3
+    ZV2 -->|"virtualization.vm.id = SSI cluster or system name/userid"| E4
+    ZV3 -->|"virtualization.vswitch.id = hypervisor id/VSWITCH name"| E7
+
+    %% VMware vSphere mappings
+    VS1 -->|"virtualization.platform.id = host hardware UUID"| E1
+    VS1 -->|"virtualization.hypervisor.id = host hardware UUID"| E3
+    VS2 -->|"virtualization.vm.id = instanceUuid"| E4
+    VS3 -->|"virtualization.resource_pool.id = vCenter UUID/ResourcePool MoRef"| E6
+    VS4 -->|"virtualization.storage_pool.id = datastore UUID"| E8
+    VS5 -->|"virtualization.cluster.id = vCenter UUID/cluster MoRef"| E5
+    VS6 -->|"virtualization.vswitch.id = dvSwitch UUID"| E7
+
+    %% KVM / libvirt mappings
+    KV1 -->|"virtualization.platform.id = host machine ID"| E1
+    KV2 -->|"virtualization.vm.id = domain UUID"| E4
+    KV3 -->|"virtualization.vswitch.id = host machine ID/bridge name"| E7
+    KV4 -->|"virtualization.storage_pool.id = pool UUID"| E8
+    KV5 -->|"virtualization.hypervisor.id = libvirt host UUID"| E3
+
+    %% OpenShift Virtualization mappings (no identifier fill rules defined yet)
+    OC1 -->|"virtualization.system.name = kvm"| E1
+    OC2 -->|"virtualization.system.name = openshift_virtualization"| E4
+    OC3 -->|"virtualization.system.name = openshift_virtualization"| E6
+    OC4 -->|"virtualization.system.name = openshift_virtualization"| E8
+    OC5 --> E5
+    OC6 -->|"virtualization.system.name = openshift_virtualization"| E3
+    OC7 -->|"virtualization.system.name = openshift_virtualization"| E7
+```
+
+The attribute definitions give identifier fill rules for IBM Z, VMware vSphere and KVM/libvirt.
+For OpenShift Virtualization the diagram shows which native object corresponds to each entity;
+identifier fill rules for it are not defined yet.
+
+---
+
+## 7. Entity Identity & Discriminator Reference
+
+| Entity Type | Identity Attributes | `virtualization.system.name` values | How the identifier is filled |
+| --- | --- | --- | --- |
+| `virtualization.platform` | `virtualization.platform.id` | `ibm.prsm`, `kvm`, `vmware.esxi`, `ibm.powervm`, `hyperv` | IBM Z: `<machine type>-<serial number>` of the CPC, leading zeros removed from the serial, e.g. `3931-45A01`. vSphere: ESXi host hardware UUID. KVM: host machine ID. `host.id` carries the same value. |
+| `virtualization.partition` | `virtualization.partition.id` + `virtualization.platform.id` | `ibm.prsm` | IBM Z: LPAR name, unique within the CPC. |
+| `virtualization.hypervisor` | `virtualization.hypervisor.id` | `ibm.zvm`, `kvm`, `openshift_virtualization`, `vmware.esxi` | z/VM: system name qualified by the CPC key, e.g. `3931-45A01/ZVM1`. vSphere: ESXi host hardware UUID. KVM: libvirt host UUID. |
+| `virtualization.vm` | `virtualization.vm.id` | `ibm.zvm`, `kvm`, `vmware.esxi`, `openshift_virtualization`, `kubevirt`, `hyperv`, `xen` | z/VM: SSI cluster name (or system name outside an SSI cluster) and guest user ID, e.g. `SSIPLEX1/LINUX01`. vSphere: VM `instanceUuid`. KVM: domain UUID. Unique across the live-migration domain. |
+| `virtualization.cluster` | `virtualization.cluster.id` | any | z/VM: SSI cluster name. vSphere: vCenter instance UUID + cluster MoRef, e.g. `<vCenter UUID>/domain-c7`. |
+| `virtualization.resource_pool` | `virtualization.resource_pool.id` | `ibm.prsm`, `vmware.esxi`, `openshift_virtualization` | IBM Z: CPC key + processor pool name, e.g. `3931-45A01/IFLPOOL`. vSphere: vCenter instance UUID + ResourcePool MoRef. |
+| `virtualization.vswitch` | `virtualization.vswitch.id` | `ibm.zvm`, `kvm`, `vmware.esxi`, `openshift_virtualization` | z/VM: hypervisor ID + VSWITCH name, e.g. `3931-45A01/ZVM1/VSWITCH1`. IBM Z DPM: CPC key + virtual switch name. vSphere: distributed switch UUID (standard vSwitch: host hardware UUID + switch name). KVM: host machine ID + bridge or Open vSwitch name. |
+| `virtualization.storage_pool` | `virtualization.storage_pool.id` | `ibm.prsm`, `vmware.esxi`, `kvm`, `openshift_virtualization` | IBM Z DPM: CPC key + storage group name, e.g. `3931-45A01/SG-PROD`. vSphere: datastore UUID. KVM: storage pool UUID. |
+
+Identifying values MUST be the same for every observer of the entity and MUST NOT change during
+its lifetime. On IBM Z the CPC key and the LPAR name are reported by the HMC Web Services API,
+z/OS RMF (SMF type 70) and Linux on IBM Z (`/proc/sysinfo`) alike; HMC object IDs are visible to
+HMC API clients only and are therefore not used as identifiers. The corresponding `*.name`
+attributes, `host.name` and `virtualization.vm.instance_id` are descriptive.
+
+---
+
+## 8. `virtualization.partition.cpu.type` Attribute Dimension
+
+The `virtualization.partition.cpu.type` attribute is the IBM Z-specific dimension in the
+virtualization metrics. It is used by two refinements of upstream metrics and by three net-new
+partition metrics:
+
+```mermaid
+classDiagram
+    %% ── Metrics that carry this dimension ─────────────────────────────────
+    class M_cpu_time["system.cpu.time"] {
+        <<refinement>>
+        +instrument counter
+        +unit s
+        +dim partition_cpu_type_opt_in
+    }
+    class M_cpu_util["system.cpu.utilization"] {
+        <<refinement>>
+        +instrument gauge
+        +unit ratio
+        +dim partition_cpu_type_opt_in
+    }
+    class M_part_util["virtualization.partition.cpu.utilization"] {
+        <<net-new>>
+        +instrument gauge
+        +unit ratio
+        +dim partition_cpu_type
+    }
+    class M_part_time["virtualization.partition.cpu.time"] {
+        <<net-new>>
+        +instrument counter
+        +unit s
+        +dim partition_cpu_type
+    }
+    class M_part_count["virtualization.partition.cpu.count"] {
+        <<net-new>>
+        +instrument updowncounter
+        +unit vcpu
+        +dim partition_cpu_type
+    }
+
+    note for M_cpu_time "refinement.virtualization.system.cpu.time\nentities: platform, partition, vm"
+    note for M_cpu_util "refinement.virtualization.system.cpu.utilization\nentities: platform, partition, vm"
+    note for M_part_count "entity: virtualization.partition"
+
+    %% ── Enum values of virtualization.partition.cpu.type ──────────────────
+    class CpuType["virtualization.partition.cpu.type"] {
+        <<attribute enum>>
+        +cp Central Processor
+        +ifl Integrated Facility for Linux
+        +icf Internal Coupling Facility
+        +iip z Integrated Information Processor
+        +cbp Container Based Processor
+        +aap Application Assist Processor
+        +all aggregate across all types
+        +unknown not differentiated
+    }
+
+    note for CpuType "cp: general-purpose processor\nifl: Linux workloads\nicf: sysplex coupling\niip: zIIP, eligible Java and Db2 work\ncbp: SE 2.14.0 to 2.15.0 only\naap: zAAP, deprecated in z13 and later\nall: aggregate across all types\nunknown: platform does not differentiate"
+
+    M_cpu_time   -- CpuType : split by
+    M_cpu_util   -- CpuType : split by
+    M_part_util  -- CpuType : split by
+    M_part_time  -- CpuType : split by
+    M_part_count -- CpuType : split by
+```
+
+On platforms that do not differentiate processor types (VMware, KVM, OpenShift Virtualization),
+`virtualization.partition.cpu.type` is omitted or set to `unknown`. Unified dashboards therefore
+work across platforms while still providing the IBM Z processor-type breakdown. Use `all` to
+report a value aggregated across all processor types.
+
+---
+
+## 9. `virtualization.vm.disk.direction` Splitting Pattern
+
+The VM disk metrics use the `virtualization.vm.disk.direction` attribute to split read and write
+measurements into separate time series:
+
+```mermaid
+classDiagram
+    %% ── Enum values ───────────────────────────────────────────────────────
+    class dir_read["read"] {
+        <<enum value>>
+        +desc data read from virtual disk
+    }
+    class dir_write["write"] {
+        <<enum value>>
+        +desc data written to virtual disk
+    }
+
+    %% ── Metrics split by this dimension ───────────────────────────────────
+    class M_disk_io["virtualization.vm.disk.io"] {
+        <<net-new>>
+        +instrument counter
+        +unit By
+        +dim disk_direction_required
+    }
+    class M_disk_ops["virtualization.vm.disk.operations"] {
+        <<net-new>>
+        +instrument counter
+        +unit operation
+        +dim disk_direction_required
+    }
+    class M_disk_lat["virtualization.vm.disk.latency.time"] {
+        <<net-new>>
+        +instrument counter
+        +unit s
+        +dim disk_direction_required
+    }
+    class M_disk_err["virtualization.vm.disk.errors"] {
+        <<net-new>>
+        +instrument counter
+        +unit error
+        +dim disk_direction_recommended
+    }
+
+    note for M_disk_io "attrs: virtualization.vm.id (required),\nvirtualization.vm.disk.name (recommended)"
+    note for M_disk_ops "attrs: virtualization.vm.id (required),\nvirtualization.vm.disk.name (recommended)"
+    note for M_disk_lat "avg latency = rate(latency.time) / rate(operations)\nattrs: virtualization.vm.id, virtualization.vm.disk.name"
+    note for M_disk_err "attrs: virtualization.vm.id (required),\nvirtualization.vm.disk.name (recommended)"
+
+    %% ── Each metric is split by read and write ────────────────────────────
+    dir_read  .. M_disk_io
+    dir_write .. M_disk_io
+
+    dir_read  .. M_disk_ops
+    dir_write .. M_disk_ops
+
+    dir_read  .. M_disk_lat
+    dir_write .. M_disk_lat
+
+    dir_read  .. M_disk_err
+    dir_write .. M_disk_err
+```
+
+`virtualization.vm.disk.direction` is required on `virtualization.vm.disk.io`,
+`virtualization.vm.disk.operations` and `virtualization.vm.disk.latency.time`, and recommended on
+`virtualization.vm.disk.errors`, because some platforms report errors without a direction.
+
+---
+
+## 10. Multi-tenant Isolation Patterns
+
+When deploying virtualization observability in multi-tenant environments, use the following
+filters to isolate telemetry by platform and tenant. Filter on identifiers rather than names:
+names can change and are not unique across management domains.
+
+| Isolation dimension | Prometheus label filter | OTel attribute |
+| --- | --- | --- |
+| IBM Z PR/SM only | `{virtualization_system_name="ibm.prsm"}` | `virtualization.system.name` |
+| IBM z/VM guests only | `{virtualization_system_name="ibm.zvm"}` | `virtualization.system.name` |
+| VMware ESXi only | `{virtualization_system_name="vmware.esxi"}` | `virtualization.system.name` |
+| KVM VMs only | `{virtualization_system_name="kvm"}` | `virtualization.system.name` |
+| OpenShift VMs only | `{virtualization_system_name="openshift_virtualization"}` | `virtualization.system.name` |
+| Single vSphere cluster | `{virtualization_cluster_id="1b9c0e2a-6f4d-4a52-9d3e-0c7d1e2f3a4b/domain-c7"}` | `virtualization.cluster.id` |
+| Single CPC (IBM Z) | `{virtualization_platform_id="3931-45A01"}` | `virtualization.platform.id` |
+| Single LPAR | `{virtualization_platform_id="3931-45A01", virtualization_partition_id="PRODZ"}` | `virtualization.platform.id`, `virtualization.partition.id` |
+| K8s namespace VMs | `{k8s_namespace_name="my-team"}` | `k8s.namespace.name` |
+| Specific resource pool | `{virtualization_resource_pool_id="3931-45A01/IFLPOOL"}` | `virtualization.resource_pool.id` |
+
+The label names assume that Prometheus translates attribute names by replacing dots with
+underscores; with UTF-8 metric and label names the attribute names are used unchanged. Identity
+attributes are resource attributes: they appear as series labels only if Prometheus promotes them
+(`promote_resource_attributes` in its OTLP configuration) or the collector copies them to the data
+points; otherwise they are available on the `target_info` series.
