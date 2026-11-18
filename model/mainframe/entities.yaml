@@ -1,0 +1,119 @@
+file_format: definition/2
+entities:
+  - type: mainframe.channel
+    brief: >
+      A mainframe I/O channel, representing a physical channel path that
+      connects the Central Processing Complex (CPC) to peripheral devices
+      — the mainframe equivalent of a network or storage interface card port.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the channel belongs to.
+      - ref: mainframe.channel.name
+        note: >
+          `CSS.CHPID` is unique within one CPC; the bare CHPID is not, because
+          it repeats across channel subsystems.
+    description:
+      - ref: mainframe.channel.mode
+        requirement_level: required
+      - ref: mainframe.channel.id
+        requirement_level: recommended
+      - ref: mainframe.channel.type
+        requirement_level: recommended
+      - ref: mainframe.channel.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.adapter
+    brief: >
+      A mainframe I/O adapter card, representing a physical PCIe adapter that
+      connects the Central Processing Complex (CPC) to networks, storage, or
+      provides cryptographic and acceleration services.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the adapter is installed in.
+      - ref: mainframe.adapter.id
+    description:
+      - ref: mainframe.adapter.name
+        requirement_level: recommended
+      - ref: mainframe.adapter.type
+        requirement_level: required
+      - ref: mainframe.adapter.owning.partition
+        requirement_level: recommended
+
+  - type: mainframe.cpu
+    brief: >
+      A physical mainframe processor within the Central Processing Complex (CPC)
+      — the mainframe equivalent of a CPU core in a distributed server.
+    stability: development
+    requirement_level: recommended
+    identity:
+      - ref: virtualization.platform.id
+        note: >
+          The Central Processing Complex (CPC) the processor belongs to;
+          processor names such as `CP02` repeat on every CPC.
+      - ref: mainframe.cpu.name
+    description:
+      - ref: mainframe.cpu.type
+        requirement_level: required
+
+entity_refinements:
+  # mainframe.host refines the generic 'host' entity — a mainframe CPC is
+  # physically a bare-metal host server. Using host as the base ensures that
+  # cross-platform consumers that understand the OTel host entity can also
+  # navigate mainframe CPC data. The refinement identifies the CPC by host.id
+  # (machine type and serial number) and describes it with host.name,
+  # host.type and host.arch, so it stays aligned with the host entity.
+  - id: refinement.mainframe.host
+    ref: host
+    brief: >
+      Mainframe refinement of the generic host entity for the IBM Z Central
+      Processing Complex (CPC). A CPC is a physical bare-metal server — the
+      mainframe equivalent of any host. The IBM Z-specific attributes
+      (serial number, machine type, machine model) extend the generic host
+      description while preserving full compatibility with consumers that
+      understand the base host entity.
+    stability: development
+    identity:
+      - ref: host.id
+        note: >
+          `<machine type>-<serial number>` of the Central Processing Complex
+          (CPC), with leading zeros removed from the serial, e.g. `3931-45A01`;
+          equal to `virtualization.platform.id`. The HMC Web Services API (CPC
+          `machine-type`, `cpc-serial-number`), z/OS RMF (SMF type 70) and
+          Linux on IBM Z (`/proc/sysinfo`) all report it.
+    description:
+      - ref: host.name
+        requirement_level: recommended
+        note: >
+          The name of the Central Processing Complex (CPC) as configured on
+          the HMC (CPC object field `name`). Descriptive only: a CPC can be
+          renamed without becoming a different CPC.
+      - ref: host.type
+        requirement_level: recommended
+        note: >
+          SHOULD be the concatenation of the IBM machine type and model of the
+          Central Processing Complex (CPC), e.g., "9175-ME1".
+      - ref: host.arch
+        requirement_level: recommended
+        note: >
+          SHOULD be set to "s390x" for IBM Z and LinuxONE systems.
+      - ref: mainframe.host.serial_number
+        requirement_level: recommended
+        note: >
+          Mainframe-specific serial number of the CPC; also part of host.id.
+      - ref: mainframe.host.machine_type
+        requirement_level: recommended
+        note: >
+          IBM four-digit machine type (e.g. "9175"). Consumers that understand
+          only the base host entity should use host.type instead.
+      - ref: mainframe.host.machine_model
+        requirement_level: recommended
+        note: >
+          IBM machine model tier (e.g. "ME1"). Combined with
+          mainframe.host.machine_type this forms the full type-model string
+          that populates host.type.
